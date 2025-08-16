@@ -1,0 +1,227 @@
+baseURL = 'https://zachquintana.com/'
+languageCode = 'en-us'
+title = 'Zach Quintana'
+theme = 'hugo-profile'
+
+enableRobotsTXT = true
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+  page = ["HTML", "RSS"]
+
+[pagination]
+  pagerSize = 3
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+
+[[Menus.main]]
+  identifier = "blog"
+  name = "Blog"
+  title = "Blog posts"
+  url = "/blogs"
+  weight = 1
+
+[params]
+  title = "Zach Quintana"
+  description = "Software Engineer & Technology Enthusiast"
+  favicon = "/favicon.ico"
+  
+  useBootstrapCDN = false
+  mathjax = false
+  animate = true
+
+  [params.font]
+    fontSize = "1rem"
+    fontWeight = 400
+    lineHeight = 1.5
+    textAlign = "left"
+
+  [params.navbar]
+    align = "ms-auto"
+    brandName = "Zach Quintana"
+    disableSearch = false
+    [params.navbar.stickyNavBar]
+      enable = true
+      showOnScrollUp = true
+    enableSeparator = false
+    [params.navbar.menus]
+      disableAbout = false
+      disableExperience = false
+      disableEducation = true
+      disableProjects = true
+      disableAchievements = true
+      disableContact = false
+
+  [params.hero]
+    enable = true
+    intro = "Hi, my name is"
+    title = "Zachary Quintana."
+    subtitle = "Senior Lead Software Engineer"
+    content = "Accomplished Lead Software Engineer with 10+ years of experience in developing, architecting, and leading sophisticated software solutions in healthcare, digital gifting, and AI-driven customer engagement. Expert in producing and executing CI/CD pipelines and driving technological innovations."
+    image = "/images/profile.jpg"
+    [params.hero.bottomImage]
+      enable = true
+    [params.hero.button]
+      enable = true
+      name = "Resume"
+      url = "#"
+      download = true
+      newPage = false
+    [[params.hero.socialLinks.fontAwesomeIcons]]
+      icon = "fab fa-github"
+      url = "https://github.com/zquintana"
+    [[params.hero.socialLinks.fontAwesomeIcons]]
+      icon = "fab fa-linkedin"
+      url = "https://www.linkedin.com/in/zachary-quintana-3bb77b68/"
+
+  [params.about]
+    enable = true
+    title = "About Me"
+    image = "/images/profile.jpg"
+    content = """
+Accomplished Lead Software Engineer with 10+ years of experience in developing, architecting, and leading sophisticated software solutions in healthcare, digital gifting, and AI-driven customer engagement. Proficient in a diverse array of programming languages and frameworks across various operating systems.
+
+Proven leadership in managing complex AWS migrations, enhancing core applications, and driving technological innovations. Adept at cultivating engineering teams, fostering a culture of technical excellence, and enhancing system scalability, reliability, and efficiency. Dedicated to utilizing technology to address business problems and enhance product quality and service delivery.
+    """
+    [params.about.skills]
+      enable = true
+      title = "Core Technologies & Skills:"
+      items = [
+        "Python",
+        "GoLang", 
+        "PHP",
+        "Node.js/TypeScript",
+        "JavaScript",
+        "React",
+        "Docker/Kubernetes",
+        "AWS/Terraform",
+        "CI/CD Pipelines",
+        "MySQL/PostgreSQL",
+        "Microservices Architecture"
+      ]
+
+  [params.experience]
+    enable = true
+
+  [[params.experience.items]]
+    job = "Lead Engineer"
+    company = "Proposal Technologies"
+    companyUrl = "https://proposaltechnologies.com"
+    date = "Dec 2022 - May 2025"
+    content = """
+Enhanced industry-leading RFP issuing and management software for the healthcare benefits sector. Led software modernization, team growth, and strategic initiatives.
+
+- Innovated RFP software search functionality by integrating ML-LLVM technology, achieving 99.67% improvement in search performance
+- Led data center migration from colocated solution to AWS backed by Kubernetes (EKS) with full infrastructure automation using Terraform
+- Championed adoption of Scrum methodologies and developed Golang-based microservices including authentication service for multi-tenant SSO
+- Played key role as CTO-level leader, driving engineering team growth and leading multiple SOC2 audits
+"""
+
+  [[params.experience.items]]
+    job = "Senior Software Engineer/Software Architect"
+    company = "Wolfe LLC"
+    companyUrl = "https://giftya.com"
+    date = "Jun 2021 - Dec 2022"
+    content = """
+Developed and enhanced GiftYa, a digital gifting solution transforming the traditional gift card market. Spearheaded architectural initiatives across the organization.
+
+- Introduced unit, integration, and functional testing into CI/CD pipelines boosting software reliability and deployment efficiency
+- Established best practices for AWS organization patterns, standardizing cloud operations across all business units
+- Led migration of environments to Kubernetes (EKS), unifying deployment practices and improving scalability
+- Contributed to company's recognition as Pittsburgh's fastest-growing private company in 2022 with 741% revenue increase
+"""
+
+  [[params.experience.items]]
+    job = "Senior Software Engineer/Software Architect"
+    company = "Zingle - Acquired by Medallia"
+    companyUrl = "https://medallia.com"
+    date = "Mar 2017 - Jun 2021"
+    content = """
+Developed and architected a business messaging platform facilitating enhanced customer interactions across hospitality and healthcare sectors. Handled robust platform processing 4-5 million messages monthly. Led technical initiatives through company's acquisition by Medallia, continuing as a key technical leader in the expanded organization.
+
+**Pre-Acquisition (2017-2020):**
+- Achieved 100x performance improvement in message processing through comprehensive code refactoring
+- Standardized development practices across teams, significantly elevating product quality and consistency  
+- Spearheaded integration of testing and quality checks into CI/CD pipelines, enhancing deployment reliability
+- Led design and implementation of asynchronous microservice architecture, improving system resilience and scalability
+- Expanded code testing coverage eightfold, maintaining over 90% coverage on microservices
+- Actively recruited and mentored engineering talent, doubling team size
+
+**Post-Acquisition (2020-2021):**
+- Orchestrated shift to Kafka-based event-driven microservice architecture, boosting system scalability and message processing
+- Implemented Docker to standardize local development environments, cutting setup time to less than five minutes
+- Executed rapid VPS to Kubernetes cluster migration using Helm, achieving full deployment within two weeks
+- Reengineered product framework to integrate organizational structures for Medallia's enterprise customer base
+"""
+
+  [[params.experience.items]]
+    job = "Symfony PHP Developer"
+    company = "CBS Interactive"
+    companyUrl = "https://cbsinteractive.com"
+    date = "Oct 2015 - Mar 2017"
+    content = """
+Lead engineer on new fitness video streaming platform, then modernized legacy business applications.
+
+- Successfully led new product development with small team, completing project in 4 months
+- Led technical implementation of various APIs for mobile platforms
+- Modernized legacy business product focusing on operational efficiency and user experience
+- Established engineering standards and best practices to improve team cohesiveness and software quality
+"""
+
+  [params.education]
+    enable = false
+    index = false
+    items = []
+
+  [params.achievements]
+    enable = false
+    items = []
+
+  [params.projects]
+    enable = false
+    items = []
+
+  [params.contact]
+    enable = true
+    content = "My inbox is always open. Whether you have a question or just want to say hi, I'll try my best to get back to you!"
+    btnName = "Mail me"
+    btnLink = "mailto:zach.quintana@gmail.com"
+
+  [params.footer]
+    [params.footer.recentPosts]
+      path = "blogs"
+      count = 3
+      title = "Recent Posts"
+      enable = true
+      disableFeaturedImage = false
+    [params.footer.socialNetworks]
+      github = "https://github.com/zquintana"
+      linkedin = "https://www.linkedin.com/in/zachary-quintana-3bb77b68/"
+
+  [params.listPages]
+    disableFeaturedImage = false
+
+  [params.singlePages]
+    socialShare = true
+    [params.singlePages.readTime]
+      enable = true
+      content = "min read"
+    [params.singlePages.scrollprogress]
+      enable = true
+    [params.singlePages.tags]
+      openInNewTab = true
+
+  [params.terms]
+    read = "Read"
+    toc = "Table Of Contents"
+    copyright = "All rights reserved"
+    pageNotFound = "Page not found"
+    emailText = "Check out this site"
+
+  [params.datesFormat]
+    article = "Jan 2, 2006"
+    articleList = "Jan 2, 2006"
+    articleRecent = "Jan 2, 2006"
