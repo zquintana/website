@@ -27,7 +27,7 @@ enableRobotsTXT = true
 [params]
   title = "Zach Quintana"
   description = "Software Engineer & Technology Enthusiast"
-  favicon = "/favicon.ico"
+  favicon = "/favicon.png"
   
   useBootstrapCDN = false
   mathjax = false
