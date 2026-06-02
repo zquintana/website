@@ -56,7 +56,7 @@ const technologies = ['Go', 'Python', 'AWS', 'EKS', 'Terraform', 'Docker', 'Kube
 ---
 
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -90,15 +90,6 @@ const technologies = ['Go', 'Python', 'AWS', 'EKS', 'Terraform', 'Docker', 'Kube
         <a href="#results">Results</a>
         <a href="#about">About</a>
         <a href="#contact">Contact</a>
-        <button class="theme-toggle" type="button" aria-label="Toggle theme">
-          <svg class="icon icon-sun" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M12 4V2m0 20v-2m8-8h2M2 12h2m13.66-5.66 1.42-1.42M4.92 19.08l1.42-1.42m11.32 0 1.42 1.42M4.92 4.92l1.42 1.42" />
-            <circle cx="12" cy="12" r="4" />
-          </svg>
-          <svg class="icon icon-moon" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M21 13.2A8.5 8.5 0 1 1 10.8 3a6.7 6.7 0 0 0 10.2 10.2Z" />
-          </svg>
-        </button>
       </div>
     </nav>
 
@@ -229,21 +220,9 @@ const technologies = ['Go', 'Python', 'AWS', 'EKS', 'Terraform', 'Docker', 'Kube
     </footer>
 
     <script is:inline>
-      const root = document.documentElement;
-      const storedTheme = localStorage.getItem('theme');
-      const preferredTheme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-      root.dataset.theme = storedTheme || preferredTheme;
-
       const nav = document.querySelector('.site-nav');
       const menuToggle = document.querySelector('.menu-toggle');
       const navLinks = document.querySelector('#nav-links');
-      const themeToggle = document.querySelector('.theme-toggle');
-
-      themeToggle?.addEventListener('click', () => {
-        const nextTheme = root.dataset.theme === 'dark' ? 'light' : 'dark';
-        root.dataset.theme = nextTheme;
-        localStorage.setItem('theme', nextTheme);
-      });
 
       menuToggle?.addEventListener('click', () => {
         const isOpen = menuToggle.getAttribute('aria-expanded') === 'true';
@@ -322,22 +301,6 @@ const technologies = ['Go', 'Python', 'AWS', 'EKS', 'Terraform', 'Docker', 'Kube
       Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     font-feature-settings: "kern";
     scroll-behavior: smooth;
-  }
-
-  :root[data-theme='light'] {
-    color-scheme: light;
-    --bg: #f4efe5;
-    --bg-soft: #fffaf1;
-    --panel: rgba(10, 12, 14, 0.055);
-    --panel-strong: rgba(10, 12, 14, 0.09);
-    --text: #151515;
-    --muted: #5d5850;
-    --faint: rgba(10, 12, 14, 0.08);
-    --line: rgba(10, 12, 14, 0.15);
-    --accent: #111;
-    --accent-soft: rgba(17, 17, 17, 0.11);
-    --accent-ink: #fffaf1;
-    --shadow: 0 24px 70px rgba(77, 56, 25, 0.12);
   }
 
   * {
@@ -445,8 +408,7 @@ const technologies = ['Go', 'Python', 'AWS', 'EKS', 'Terraform', 'Docker', 'Kube
     gap: 8px;
   }
 
-  .nav-links a,
-  .theme-toggle {
+  .nav-links a {
     border: 1px solid transparent;
     border-radius: 999px;
     color: var(--muted);
@@ -454,45 +416,16 @@ const technologies = ['Go', 'Python', 'AWS', 'EKS', 'Terraform', 'Docker', 'Kube
     padding: 9px 12px;
   }
 
-  .nav-links a:hover,
-  .theme-toggle:hover {
+  .nav-links a:hover {
     border-color: var(--line);
     color: var(--text);
     background: var(--panel);
   }
 
-  .theme-toggle,
   .menu-toggle {
     cursor: pointer;
     background: transparent;
     color: inherit;
-  }
-
-  .theme-toggle {
-    display: grid;
-    place-items: center;
-    width: 42px;
-    height: 42px;
-    padding: 0;
-  }
-
-  .icon {
-    width: 18px;
-    height: 18px;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.8;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-  }
-
-  .icon-sun,
-  :root[data-theme='light'] .icon-moon {
-    display: none;
-  }
-
-  :root[data-theme='light'] .icon-sun {
-    display: block;
   }
 
   .menu-toggle {
@@ -969,8 +902,7 @@ const technologies = ['Go', 'Python', 'AWS', 'EKS', 'Terraform', 'Docker', 'Kube
       display: grid;
     }
 
-    .nav-links a,
-    .theme-toggle {
+    .nav-links a {
       justify-content: flex-start;
       width: 100%;
     }
