@@ -9,7 +9,7 @@ Secondary relationships:
 - Cybersecurity
 - Governance and Risk Management
 
-Current migrated questions:
+Pilot questions:
 - `iam-offboarding` — removal of former employee and contractor access
 
-This capability is still part of the demonstration methodology and should be reviewed before being treated as finalized advisory methodology.
+Readiness: Pilot. The module has authored questions, findings, recommendations, and standards mappings, but remains demonstration methodology until owner/SME review and evidence validation are complete. Unknown answers produce a high-severity visibility finding; the critical condition is reserved for a reported delayed/manual offboarding process.

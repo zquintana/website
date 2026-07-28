@@ -97,7 +97,7 @@ test('unknown-answer behavior supports visibility findings and provisional score
   const backupTest = backupRecoveryModule.questions.find((question) => question.id === 'bcdr-backup-test');
   const recoveryOwner = backupRecoveryModule.questions.find((question) => question.id === 'bcdr-recovery-owner');
 
-  assert.deepEqual(backupTest?.unknownBehavior, { type: 'visibility-finding', findingId: 'backup-restore-untested' });
+  assert.deepEqual(backupTest?.unknownBehavior, { type: 'visibility-finding', findingId: 'backup-restore-visibility' });
   assert.equal(recoveryOwner?.unknownBehavior?.type, 'provisional-score');
 });
 
@@ -110,8 +110,18 @@ test('modular finding evaluator supports authored conditions and missing-answer 
   const findings = evaluateMethodologyFindings(activeAssessmentVersion, answers);
   assert.ok(findings.some((finding) => finding.id === 'admin-mfa-missing'));
   assert.ok(findings.some((finding) => finding.id === 'shared-admin-accounts-used'));
-  assert.ok(findings.some((finding) => finding.id === 'backup-restore-untested'));
+  assert.ok(findings.some((finding) => finding.id === 'backup-restore-visibility'));
+  assert.ok(!findings.some((finding) => finding.id === 'backup-restore-untested'));
   assert.ok(!findings.some((finding) => finding.id === 'recovery-ownership-undefined'));
+});
+
+test('pilot modules separate confirmed critical conditions from visibility gaps', () => {
+  const findings = evaluateMethodologyFindings(activeAssessmentVersion, {});
+  assert.ok(findings.some((finding) => finding.id === 'backup-restore-visibility'));
+  assert.ok(findings.some((finding) => finding.id === 'access-offboarding-visibility'));
+  assert.ok(findings.some((finding) => finding.id === 'admin-mfa-visibility'));
+  assert.ok(findings.every((finding) => !['backup-restore-untested', 'admin-mfa-missing'].includes(finding.id)));
+  assert.equal(findings.find((finding) => finding.id === 'backup-restore-visibility')?.severity, 'high');
 });
 
 test('modular finding evaluator supports all/any, unknown, not-applicable, and numeric operators', () => {

@@ -14,7 +14,7 @@ export const identityLifecycleCapability: AssessmentCapability = {
   ],
   scoringModel: 'process-maturity',
   questionIds: ['iam-offboarding'],
-  findingIds: ['access-offboarding-delayed'],
+  findingIds: ['access-offboarding-delayed', 'access-offboarding-visibility'],
   recommendationIds: ['tighten-access-offboarding'],
   standardMappingIds: ['identity-lifecycle-cis', 'identity-lifecycle-entra', 'identity-lifecycle-google'],
 };

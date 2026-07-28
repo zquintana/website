@@ -10,8 +10,8 @@ Secondary relationships:
 - Governance and Risk Management
 - Business Continuity and Disaster Recovery
 
-Current migrated questions:
+Pilot questions:
 - `cyber-admin-mfa` — multi-factor authentication for administrative access
 - `iam-shared-admin` — shared administrator account usage
 
-This capability is still part of the demonstration methodology and should be reviewed before being treated as finalized advisory methodology.
+Readiness: Pilot. The module has authored questions, findings, recommendations, and standards mappings, but remains demonstration methodology until owner/SME review and evidence validation are complete. Unknown MFA or shared-account answers produce visibility findings and do not become critical findings without an explicit negative answer.

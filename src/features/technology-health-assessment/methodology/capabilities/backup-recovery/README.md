@@ -9,8 +9,8 @@ Secondary relationships:
 - Technology Operations
 - Governance and Risk Management
 
-Current migrated questions:
+Pilot questions:
 - `bcdr-backup-test` — last successful test of restoring critical business data from backup
 - `bcdr-recovery-owner` — named owner and written recovery process for critical systems
 
-This capability is still part of the demonstration methodology and should be reviewed before being treated as finalized advisory methodology.
+Readiness: Pilot. The module has authored questions, findings, recommendations, and standards mappings, but remains demonstration methodology until owner/SME review and evidence validation are complete. Unknown answers produce a high-severity visibility finding; they do not assert that backups are absent. The critical finding is reserved for an explicit `Never` restore-test answer.

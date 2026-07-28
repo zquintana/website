@@ -8,11 +8,17 @@ export const backupRecoveryFindings: FindingDefinition[] = [
     summary: 'Recovery capability has not been demonstrated through a successful restore test.',
     businessImpact: 'Confirms the business can recover data before an outage or ransomware event forces the issue.',
     severity: 'critical',
-    conditionMode: 'any',
-    conditions: [
-      { questionId: 'bcdr-backup-test', operator: 'equals', value: 'never' },
-      { questionId: 'bcdr-backup-test', operator: 'unknown' },
-    ],
+    conditions: [{ questionId: 'bcdr-backup-test', operator: 'equals', value: 'never' }],
+    recommendationIds: ['establish-recovery-testing'],
+  },
+  {
+    id: 'backup-restore-visibility',
+    capabilityId: 'recovery-capability',
+    title: 'Backup restoration evidence is not available',
+    summary: 'The assessment could not confirm whether critical business data has been restored successfully from backup.',
+    businessImpact: 'Creates a visibility gap that should be resolved before recovery is needed in a real incident.',
+    severity: 'high',
+    conditions: [{ questionId: 'bcdr-backup-test', operator: 'unknown' }],
     recommendationIds: ['establish-recovery-testing'],
   },
   {

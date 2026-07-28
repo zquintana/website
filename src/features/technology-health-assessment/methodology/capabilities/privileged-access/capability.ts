@@ -15,7 +15,7 @@ export const privilegedAccessCapability: AssessmentCapability = {
   ],
   scoringModel: 'control-status',
   questionIds: ['cyber-admin-mfa', 'iam-shared-admin'],
-  findingIds: ['admin-mfa-missing', 'shared-admin-accounts-used'],
+  findingIds: ['admin-mfa-missing', 'admin-mfa-visibility', 'shared-admin-accounts-used', 'shared-admin-visibility'],
   recommendationIds: ['require-admin-mfa', 'eliminate-shared-admin-accounts'],
   standardMappingIds: ['privileged-access-cis', 'privileged-access-entra', 'privileged-access-iso27001'],
 };

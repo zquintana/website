@@ -14,7 +14,7 @@ export const identityLifecycleQuestions: CapabilityQuestion[] = [
       { id: 'automated', label: 'Checklist or automation with verification', maturityScore: 5 },
     ],
     allowUnknown: true,
-    unknownBehavior: { type: 'visibility-finding', findingId: 'access-offboarding-delayed' },
+    unknownBehavior: { type: 'visibility-finding', findingId: 'access-offboarding-visibility' },
     importance: 5,
     severity: 'critical',
     foundational: true,

@@ -14,7 +14,7 @@ export const backupRecoveryCapability: AssessmentCapability = {
   ],
   scoringModel: 'business-capability',
   questionIds: ['bcdr-backup-test', 'bcdr-recovery-owner'],
-  findingIds: ['backup-restore-untested', 'recovery-ownership-undefined'],
+  findingIds: ['backup-restore-untested', 'backup-restore-visibility', 'recovery-ownership-undefined'],
   recommendationIds: ['establish-recovery-testing', 'document-recovery-ownership'],
   standardMappingIds: ['recovery-capability-iso-22301', 'recovery-capability-aws-wa', 'recovery-capability-itil'],
 };

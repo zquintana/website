@@ -14,7 +14,7 @@ export const backupRecoveryQuestions: CapabilityQuestion[] = [
       { id: 'routine', label: 'Tested routinely with documented results', maturityScore: 5 },
     ],
     allowUnknown: true,
-    unknownBehavior: { type: 'visibility-finding', findingId: 'backup-restore-untested' },
+    unknownBehavior: { type: 'visibility-finding', findingId: 'backup-restore-visibility' },
     importance: 5,
     severity: 'critical',
     foundational: true,
