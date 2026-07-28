@@ -5,5 +5,6 @@ export * from './lib/scoring.ts';
 export * from './lib/findings.ts';
 export * from './lib/confidence.ts';
 export * from './lib/confidence-labels.ts';
+export * from './lib/applicability.ts';
 export * from './lib/storage.ts';
 export * from './lib/analytics.ts';

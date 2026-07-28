@@ -60,7 +60,7 @@ Implement the architecture required for every capability module.
 - Implement capability-level health, risk, and confidence results.
 - Define one primary-category aggregation rule and prevent secondary double counting.
 - Decide and test foundational capability effects.
-- Add applicability and conditional-question evaluation.
+- Add applicability and conditional-question evaluation. (The typed business-profile applicability evaluator is now present; wiring and authored rules remain.)
 - Remove or isolate the temporary legacy read-model adapter.
 - Make browser and library scoring use one shared implementation. (Implemented through `scoring-core.ts`; integration tests remain.)
 

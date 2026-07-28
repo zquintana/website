@@ -3,6 +3,9 @@ export type EvidenceLevel = 'self-reported' | 'documentation-reviewed' | 'manual
 export type ExecutiveConfidenceLabel = 'reported' | 'observed' | 'verified';
 export type EvidenceSource = 'questionnaire' | 'interview' | 'documentation' | 'screenshot' | 'manual-review' | 'integration';
 export type ResponseType = 'single-choice' | 'multi-choice' | 'yes-no' | 'numeric-range' | 'text';
+export type ApplicabilityRule =
+  | { type: 'always' }
+  | { type: 'business-profile'; field: keyof BusinessProfile; operator: 'exists' | 'equals' | 'in'; value?: string; values?: string[] };
 
 export type StandardReference = {
   name: string;
@@ -40,6 +43,7 @@ export type AssessmentQuestion = {
   description?: string;
   businessImpact?: string;
   responseType: ResponseType;
+  applicability?: ApplicabilityRule;
   options?: AssessmentOption[];
   allowUnknown?: boolean;
   allowNotApplicable?: boolean;

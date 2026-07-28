@@ -1,4 +1,4 @@
-import type { AssessmentCategory, AssessmentOption, AssessmentQuestion, RecommendationDefinition, Severity, StandardReference } from '../types.ts';
+import type { ApplicabilityRule, AssessmentCategory, AssessmentOption, AssessmentQuestion, RecommendationDefinition, Severity, StandardReference } from '../types.ts';
 
 export type CategoryId = string;
 export type DomainId = string;
@@ -91,6 +91,7 @@ export type AssessmentCapability = {
   foundational?: boolean;
   categoryContributions?: Array<{ categoryId: CategoryId; contribution: number }>;
   scoringModel: ScoringModel;
+  applicability?: ApplicabilityRule;
   questionIds: QuestionId[];
   findingIds: FindingId[];
   recommendationIds: RecommendationId[];

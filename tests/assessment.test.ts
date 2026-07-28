@@ -5,6 +5,7 @@ import { assessmentCategories, categoryWeightTotal } from '../src/features/techn
 import { assessmentQuestions } from '../src/features/technology-health-assessment/data/questions.ts';
 import { evidenceConfidence } from '../src/features/technology-health-assessment/lib/confidence.ts';
 import { getExecutiveConfidenceLabel } from '../src/features/technology-health-assessment/lib/confidence-labels.ts';
+import { evaluateApplicability } from '../src/features/technology-health-assessment/lib/applicability.ts';
 import { generateFindings } from '../src/features/technology-health-assessment/lib/findings.ts';
 import { calculatePriorityScore, calculateScores, scoreQuestion } from '../src/features/technology-health-assessment/lib/scoring.ts';
 import { parseAssessment, serializeAssessment, createAssessmentState } from '../src/features/technology-health-assessment/lib/storage.ts';
@@ -136,4 +137,14 @@ test('technical evidence levels map to executive confidence labels', () => {
   assert.equal(getExecutiveConfidenceLabel('documentation-reviewed'), 'observed');
   assert.equal(getExecutiveConfidenceLabel('manually-verified'), 'observed');
   assert.equal(getExecutiveConfidenceLabel('automatically-verified'), 'verified');
+});
+
+test('applicability rules evaluate business profile context', () => {
+  const profile = { businessName: 'Example Co', respondentName: 'Alex', respondentEmail: 'alex@example.com', employeeCount: '11-50', productivityPlatform: 'Microsoft 365' };
+  assert.equal(evaluateApplicability(undefined, profile), true);
+  assert.equal(evaluateApplicability({ type: 'always' }, profile), true);
+  assert.equal(evaluateApplicability({ type: 'business-profile', field: 'employeeCount', operator: 'exists' }, profile), true);
+  assert.equal(evaluateApplicability({ type: 'business-profile', field: 'employeeCount', operator: 'equals', value: '11-50' }, profile), true);
+  assert.equal(evaluateApplicability({ type: 'business-profile', field: 'productivityPlatform', operator: 'in', values: ['Google Workspace', 'Microsoft 365'] }, profile), true);
+  assert.equal(evaluateApplicability({ type: 'business-profile', field: 'productivityPlatform', operator: 'equals', value: 'Other' }, profile), false);
 });

@@ -2,6 +2,16 @@ import { z } from 'zod';
 import type { AssessmentVersion } from './types.ts';
 
 const severitySchema = z.enum(['low', 'moderate', 'high', 'critical']);
+const applicabilitySchema = z.union([
+  z.object({ type: z.literal('always') }),
+  z.object({
+    type: z.literal('business-profile'),
+    field: z.string().min(1),
+    operator: z.enum(['exists', 'equals', 'in']),
+    value: z.string().optional(),
+    values: z.array(z.string()).optional(),
+  }),
+]);
 
 const categorySchema = z.object({
   id: z.string().min(1),
@@ -30,6 +40,7 @@ const assessmentVersionSchema = z.object({
     primaryCategoryId: z.string().min(1),
     secondaryCategoryIds: z.array(z.string()).optional(),
     implementationStatus: z.enum(['cataloged', 'implemented']),
+    applicability: applicabilitySchema.optional(),
     readiness: z.object({
       status: z.enum(['proposed', 'structured', 'draft-questions', 'pilot', 'active', 'deprecated']),
       owner: z.string().nullable(),
@@ -47,6 +58,7 @@ const assessmentVersionSchema = z.object({
     findingIds: z.array(z.string()),
     recommendationIds: z.array(z.string()),
     standardMappingIds: z.array(z.string()),
+    applicability: applicabilitySchema.optional(),
   }).passthrough()),
   questions: z.array(z.object({
     id: z.string().min(1),
@@ -55,6 +67,7 @@ const assessmentVersionSchema = z.object({
     options: z.array(optionSchema).optional(),
     importance: z.number().int().min(1).max(5),
     severity: severitySchema,
+    applicability: applicabilitySchema.optional(),
   }).passthrough()),
   findings: z.array(z.object({
     id: z.string().min(1),

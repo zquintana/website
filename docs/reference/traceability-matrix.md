@@ -18,3 +18,4 @@
 | All catalog capabilities have explicit readiness status | [Assessment platform roadmap](../development/assessment-platform-roadmap.md) | `methodology/types.ts`, `capabilities/catalog.ts`, `methodology/readiness.ts` | readiness coverage and activation-gate tests | Implemented |
 | Internal evidence maps to executive confidence language | [Evidence and confidence](../methodology/evidence-and-confidence.md) | `lib/confidence-labels.ts`, answer types | confidence mapping tests | Implemented |
 | Browser and library scoring use one implementation | [Scoring model](../methodology/scoring-model.md) | `lib/scoring-core.ts`, browser import | serialized read-model scoring test and build | Implemented; UI E2E pending |
+| Applicability is explicitly evaluated | [Assessment runtime](../architecture/assessment-runtime.md) | `lib/applicability.ts`, `ApplicabilityRule` | profile-rule unit tests and manifest schema | Partial; current UI defaults to applicable |
