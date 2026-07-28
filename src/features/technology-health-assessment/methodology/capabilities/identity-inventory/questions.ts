@@ -9,7 +9,6 @@ export const identityInventoryQuestions: CapabilityQuestion[] = [
     responseType: 'single-choice',
     evidenceRequirements: [{ id: 'identity-inventory', label: 'Identity inventory', description: 'A current report or record covering relevant human, administrative, service, and external identities.', preferredSource: 'documentation' }],
     options: [
-      { id: 'unknown', label: 'Not known', maturityScore: 1 },
       { id: 'informal', label: 'Known informally or across disconnected systems', maturityScore: 2 },
       { id: 'partial', label: 'Inventory covers the main workforce and systems', maturityScore: 3 },
       { id: 'reviewed', label: 'Inventory is centralized and reviewed', maturityScore: 4 },
@@ -29,7 +28,6 @@ export const identityInventoryQuestions: CapabilityQuestion[] = [
     responseType: 'single-choice',
     evidenceRequirements: [{ id: 'identity-ownership-record', label: 'Identity ownership record', description: 'A record showing who owns identity providers, administrative accounts, service accounts, and access decisions.', preferredSource: 'documentation' }],
     options: [
-      { id: 'unknown', label: 'Not known', maturityScore: 1 },
       { id: 'informal', label: 'Ownership depends on individual knowledge', maturityScore: 2 },
       { id: 'partial', label: 'Owners are recorded for the most important identities and systems', maturityScore: 3 },
       { id: 'reviewed', label: 'Owners are recorded and reviewed', maturityScore: 4 },
@@ -49,7 +47,6 @@ export const identityInventoryQuestions: CapabilityQuestion[] = [
     responseType: 'single-choice',
     evidenceRequirements: [{ id: 'identity-inventory-review', label: 'Identity review record', description: 'A recent review showing dormant, orphaned, duplicate, or unexpected identities and resulting actions.', preferredSource: 'manual-review' }],
     options: [
-      { id: 'unknown', label: 'Not reviewed or not known', maturityScore: 1 },
       { id: 'informal', label: 'Issues are handled when noticed', maturityScore: 2 },
       { id: 'partial', label: 'Reviews happen for some systems or account types', maturityScore: 3 },
       { id: 'reviewed', label: 'Reviews occur on a defined schedule', maturityScore: 4 },

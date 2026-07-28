@@ -9,7 +9,6 @@ export const recoveryRequirementsQuestions: CapabilityQuestion[] = [
     responseType: 'single-choice',
     evidenceRequirements: [{ id: 'recovery-objectives-record', label: 'Recovery objectives record', description: 'Business-approved recovery time and data-loss tolerances for the most critical services.', preferredSource: 'documentation' }],
     options: [
-      { id: 'unknown', label: 'Not defined or not known', maturityScore: 1 },
       { id: 'informal', label: 'Discussed informally without written targets', maturityScore: 2 },
       { id: 'partial', label: 'Written for some critical services', maturityScore: 3 },
       { id: 'reviewed', label: 'Written and approved by business owners', maturityScore: 4 },
@@ -30,7 +29,6 @@ export const recoveryRequirementsQuestions: CapabilityQuestion[] = [
     responseType: 'single-choice',
     evidenceRequirements: [{ id: 'recovery-validation-record', label: 'Recovery validation record', description: 'A restore, failover, or service review showing actual results compared with approved recovery targets.', preferredSource: 'documentation' }],
     options: [
-      { id: 'unknown', label: 'Not compared or not known', maturityScore: 1 },
       { id: 'informal', label: 'Assumed based on vendor or technical expectations', maturityScore: 2 },
       { id: 'partial', label: 'Compared for some critical services', maturityScore: 3 },
       { id: 'reviewed', label: 'Compared through documented testing or review', maturityScore: 4 },

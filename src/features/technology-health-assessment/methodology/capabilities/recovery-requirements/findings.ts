@@ -8,7 +8,8 @@ export const recoveryRequirementsFindings: FindingDefinition[] = [
     summary: 'The business has not consistently documented how quickly critical services must recover or how much data loss is acceptable.',
     businessImpact: 'Recovery investments may not match actual business needs, increasing either outage impact or unnecessary cost.',
     severity: 'high',
-    conditions: [{ questionId: 'recovery-objectives-documented', operator: 'in', values: ['unknown', 'informal'] }],
+    conditionMode: 'any',
+    conditions: [{ questionId: 'recovery-objectives-documented', operator: 'in', values: ['informal'] }, { questionId: 'recovery-objectives-documented', operator: 'unknown' }],
     recommendationIds: ['document-recovery-objectives'],
   },
   {
@@ -18,7 +19,8 @@ export const recoveryRequirementsFindings: FindingDefinition[] = [
     summary: 'Approved recovery targets have not been compared with actual restore, failover, or provider performance.',
     businessImpact: 'The business may believe it can recover within an acceptable window without evidence that the target is achievable.',
     severity: 'high',
-    conditions: [{ questionId: 'recovery-objectives-validated', operator: 'in', values: ['unknown', 'informal'] }],
+    conditionMode: 'any',
+    conditions: [{ questionId: 'recovery-objectives-validated', operator: 'in', values: ['informal'] }, { questionId: 'recovery-objectives-validated', operator: 'unknown' }],
     recommendationIds: ['validate-recovery-objectives'],
   },
 ];

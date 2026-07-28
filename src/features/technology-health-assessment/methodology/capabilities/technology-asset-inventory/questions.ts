@@ -9,7 +9,6 @@ export const technologyAssetInventoryQuestions: CapabilityQuestion[] = [
     responseType: 'single-choice',
     evidenceRequirements: [{ id: 'technology-inventory', label: 'Technology inventory', description: 'A current list of major technology assets and services in business scope.', preferredSource: 'documentation' }],
     options: [
-      { id: 'unknown', label: 'Not known', maturityScore: 1 },
       { id: 'informal', label: 'Known informally or across disconnected lists', maturityScore: 2 },
       { id: 'partial', label: 'Inventory covers the most important technology', maturityScore: 3 },
       { id: 'reviewed', label: 'Inventory is centralized and reviewed', maturityScore: 4 },
@@ -29,7 +28,6 @@ export const technologyAssetInventoryQuestions: CapabilityQuestion[] = [
     responseType: 'single-choice',
     evidenceRequirements: [{ id: 'technology-ownership-record', label: 'Technology ownership record', description: 'Inventory fields or a responsibility record showing business and operational owners for important assets.', preferredSource: 'documentation' }],
     options: [
-      { id: 'unknown', label: 'Not known', maturityScore: 1 },
       { id: 'informal', label: 'Ownership depends on individual knowledge', maturityScore: 2 },
       { id: 'partial', label: 'Owners are recorded for some important assets', maturityScore: 3 },
       { id: 'reviewed', label: 'Owners are recorded and reviewed for important assets', maturityScore: 4 },
@@ -49,7 +47,6 @@ export const technologyAssetInventoryQuestions: CapabilityQuestion[] = [
     responseType: 'single-choice',
     evidenceRequirements: [{ id: 'technology-inventory-review', label: 'Inventory review record', description: 'A recent review showing stale, unsupported, duplicate, or unmanaged technology and planned actions.', preferredSource: 'documentation' }],
     options: [
-      { id: 'unknown', label: 'Not reviewed or not known', maturityScore: 1 },
       { id: 'informal', label: 'Issues are handled when they become visible', maturityScore: 2 },
       { id: 'partial', label: 'Reviews happen for some technology areas', maturityScore: 3 },
       { id: 'reviewed', label: 'Inventory is reviewed on a defined schedule', maturityScore: 4 },

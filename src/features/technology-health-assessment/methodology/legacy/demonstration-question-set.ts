@@ -12,5 +12,6 @@ export const migratedQuestionIds: QuestionId[] = [
 
 export const legacyDemonstrationQuestionSet: LegacyQuestionSet = {
   label: `${legacyAssessment.questionSetLabel} Remaining unmigrated questions are retained as legacy demonstration data.`,
-  questions: (legacyAssessment.questions as AssessmentQuestion[]).filter((question) => !migratedQuestionIds.includes(question.id)),
+  retiredQuestionIds: ['ops-system-inventory'],
+  questions: (legacyAssessment.questions as AssessmentQuestion[]).filter((question) => !migratedQuestionIds.includes(question.id) && question.id !== 'ops-system-inventory'),
 };

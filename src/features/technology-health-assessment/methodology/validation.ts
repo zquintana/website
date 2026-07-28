@@ -101,7 +101,7 @@ const assessmentVersionSchema = z.object({
     capabilityId: z.string().min(1),
     standardId: z.string().min(1),
   }).passthrough()),
-  legacyQuestionSet: z.object({ questions: z.array(z.any()), label: z.string() }),
+  legacyQuestionSet: z.object({ questions: z.array(z.any()), label: z.string(), retiredQuestionIds: z.array(z.string()).optional() }),
 });
 
 function duplicateIds(items: Array<{ id: string }>): string[] {

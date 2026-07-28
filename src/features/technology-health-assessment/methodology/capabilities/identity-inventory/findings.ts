@@ -8,7 +8,8 @@ export const identityInventoryFindings: FindingDefinition[] = [
     summary: 'The business cannot reliably identify all people and non-human identities that can access important systems.',
     businessImpact: 'Unknown identities can increase account takeover, insider, and recovery risk.',
     severity: 'high',
-    conditions: [{ questionId: 'identity-inventory-coverage', operator: 'in', values: ['unknown', 'informal'] }],
+    conditionMode: 'any',
+    conditions: [{ questionId: 'identity-inventory-coverage', operator: 'in', values: ['informal'] }, { questionId: 'identity-inventory-coverage', operator: 'unknown' }],
     recommendationIds: ['establish-identity-inventory'],
   },
   {
@@ -18,7 +19,8 @@ export const identityInventoryFindings: FindingDefinition[] = [
     summary: 'Important identities or identity systems do not have consistently recorded owners.',
     businessImpact: 'Access decisions and incident response may stall because accountability is unclear.',
     severity: 'high',
-    conditions: [{ questionId: 'identity-inventory-ownership', operator: 'in', values: ['unknown', 'informal'] }],
+    conditionMode: 'any',
+    conditions: [{ questionId: 'identity-inventory-ownership', operator: 'in', values: ['informal'] }, { questionId: 'identity-inventory-ownership', operator: 'unknown' }],
     recommendationIds: ['assign-identity-owners'],
   },
   {
@@ -28,7 +30,8 @@ export const identityInventoryFindings: FindingDefinition[] = [
     summary: 'Dormant, orphaned, duplicate, or unexpected identities are not consistently identified and addressed.',
     businessImpact: 'Unnecessary access may persist until it becomes a security or operational problem.',
     severity: 'high',
-    conditions: [{ questionId: 'identity-inventory-review', operator: 'in', values: ['unknown', 'informal'] }],
+    conditionMode: 'any',
+    conditions: [{ questionId: 'identity-inventory-review', operator: 'in', values: ['informal'] }, { questionId: 'identity-inventory-review', operator: 'unknown' }],
     recommendationIds: ['review-identity-inventory'],
   },
 ];

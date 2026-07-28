@@ -9,7 +9,6 @@ export const criticalDataInventoryQuestions: CapabilityQuestion[] = [
     responseType: 'single-choice',
     evidenceRequirements: [{ id: 'critical-data-register', label: 'Critical-data register', description: 'A current record of important data sets, their business purpose, and where they are stored or processed.', preferredSource: 'documentation' }],
     options: [
-      { id: 'unknown', label: 'Not known', maturityScore: 1 },
       { id: 'informal', label: 'Known informally by business or technical staff', maturityScore: 2 },
       { id: 'partial', label: 'Inventory covers the most important data', maturityScore: 3 },
       { id: 'reviewed', label: 'Inventory is documented and reviewed with business owners', maturityScore: 4 },
@@ -29,7 +28,6 @@ export const criticalDataInventoryQuestions: CapabilityQuestion[] = [
     responseType: 'single-choice',
     evidenceRequirements: [{ id: 'critical-data-ownership-record', label: 'Data ownership record', description: 'A record showing business owners for important data sets and decisions they are accountable for.', preferredSource: 'documentation' }],
     options: [
-      { id: 'unknown', label: 'Not known', maturityScore: 1 },
       { id: 'informal', label: 'Ownership depends on individual knowledge', maturityScore: 2 },
       { id: 'partial', label: 'Owners are recorded for some critical data', maturityScore: 3 },
       { id: 'reviewed', label: 'Owners are recorded and reviewed', maturityScore: 4 },
@@ -49,7 +47,6 @@ export const criticalDataInventoryQuestions: CapabilityQuestion[] = [
     responseType: 'single-choice',
     evidenceRequirements: [{ id: 'critical-data-review', label: 'Data inventory review', description: 'A recent review showing new storage locations, duplicate copies, ownership changes, or unresolved data risks.', preferredSource: 'manual-review' }],
     options: [
-      { id: 'unknown', label: 'Not reviewed or not known', maturityScore: 1 },
       { id: 'informal', label: 'Issues are handled when noticed', maturityScore: 2 },
       { id: 'partial', label: 'Reviews happen for some data areas', maturityScore: 3 },
       { id: 'reviewed', label: 'Reviews occur on a defined schedule', maturityScore: 4 },

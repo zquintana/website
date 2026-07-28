@@ -81,7 +81,11 @@ const methodologyCapabilities = activeAssessmentVersion.capabilities;
         try {
           const parsed = JSON.parse(raw);
           if (!parsed || parsed.version !== version || !parsed.assessmentId || !parsed.businessProfile || !parsed.answers) return null;
-          return parsed;
+          const answers = Object.fromEntries(Object.entries(parsed.answers).map(([id, answer]) => {
+            const values = Array.isArray(answer.value) ? answer.value : [answer.value];
+            return [id, !answer.isUnknown && !answer.isNotApplicable && values.includes('unknown') ? { ...answer, value: undefined, isUnknown: true } : answer];
+          }));
+          return { ...parsed, answers };
         } catch {
           return null;
         }

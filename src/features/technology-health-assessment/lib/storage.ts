@@ -3,6 +3,14 @@ import type { AssessmentState, BusinessProfile } from '../types.ts';
 export const assessmentVersion = 'mvp-1';
 export const storageKey = 'technology-health-assessment:v1';
 
+/** Convert the former normal option value into the explicit unknown state. */
+export function normalizeLegacyUnknownAnswer(answer: AssessmentState['answers'][string]): AssessmentState['answers'][string] {
+  if (!answer || answer.isUnknown || answer.isNotApplicable) return answer;
+  const values = Array.isArray(answer.value) ? answer.value : [answer.value];
+  if (!values.includes('unknown')) return answer;
+  return { ...answer, value: undefined, isUnknown: true };
+}
+
 const emptyProfile: BusinessProfile = {
   businessName: '',
   respondentName: '',
@@ -31,7 +39,7 @@ export function parseAssessment(raw: string | null): AssessmentState | null {
   try {
     const parsed = JSON.parse(raw) as AssessmentState;
     if (!parsed || parsed.version !== assessmentVersion || !parsed.assessmentId || !parsed.answers || !parsed.businessProfile) return null;
-    return parsed;
+    return { ...parsed, answers: Object.fromEntries(Object.entries(parsed.answers).map(([id, answer]) => [id, normalizeLegacyUnknownAnswer(answer)])) };
   } catch {
     return null;
   }

@@ -122,6 +122,7 @@ export type CapabilityModule = {
 export type LegacyQuestionSet = {
   label: string;
   questions: AssessmentQuestion[];
+  retiredQuestionIds?: QuestionId[];
 };
 
 export type AssessmentVersion = {

@@ -8,7 +8,7 @@ import { getExecutiveConfidenceLabel } from '../src/features/technology-health-a
 import { evaluateApplicability } from '../src/features/technology-health-assessment/lib/applicability.ts';
 import { generateFindings } from '../src/features/technology-health-assessment/lib/findings.ts';
 import { calculatePriorityScore, calculateScores, scoreQuestion } from '../src/features/technology-health-assessment/lib/scoring.ts';
-import { parseAssessment, serializeAssessment, createAssessmentState } from '../src/features/technology-health-assessment/lib/storage.ts';
+import { parseAssessment, serializeAssessment, createAssessmentState, normalizeLegacyUnknownAnswer } from '../src/features/technology-health-assessment/lib/storage.ts';
 import { activeAssessmentVersion } from '../src/features/technology-health-assessment/methodology/index.ts';
 import type { AssessmentAnswer } from '../src/features/technology-health-assessment/types.ts';
 
@@ -131,6 +131,12 @@ test('local-storage serialization and recovery handle invalid data safely', () =
   assert.equal(parsed?.assessmentId, state.assessmentId);
   assert.equal(parseAssessment('{not-json'), null);
   assert.equal(parseAssessment(JSON.stringify({ version: 'old' })), null);
+});
+
+test('legacy unknown option values migrate to explicit unknown status', () => {
+  const normalized = normalizeLegacyUnknownAnswer({ questionId: 'legacy', value: 'unknown', evidenceLevel: 'self-reported' });
+  assert.equal(normalized.isUnknown, true);
+  assert.equal(normalized.value, undefined);
 });
 
 test('technical evidence levels map to executive confidence labels', () => {

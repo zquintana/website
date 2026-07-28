@@ -8,7 +8,8 @@ export const businessServiceCriticalityFindings: FindingDefinition[] = [
     summary: 'The business cannot consistently identify which services should receive priority during a disruption.',
     businessImpact: 'Technology and recovery decisions may protect the wrong systems or delay restoration of services that matter most.',
     severity: 'high',
-    conditions: [{ questionId: 'business-critical-services', operator: 'in', values: ['unknown', 'informal'] }],
+    conditionMode: 'any',
+    conditions: [{ questionId: 'business-critical-services', operator: 'in', values: ['informal'] }, { questionId: 'business-critical-services', operator: 'unknown' }],
     recommendationIds: ['identify-critical-business-services'],
   },
   {
@@ -18,7 +19,8 @@ export const businessServiceCriticalityFindings: FindingDefinition[] = [
     summary: 'Important services cannot be traced reliably to their major technology, vendor, people, and data dependencies.',
     businessImpact: 'Recovery planning and incident decisions may miss a dependency that prevents the service from operating.',
     severity: 'high',
-    conditions: [{ questionId: 'business-service-dependencies', operator: 'in', values: ['unknown', 'informal'] }],
+    conditionMode: 'any',
+    conditions: [{ questionId: 'business-service-dependencies', operator: 'in', values: ['informal'] }, { questionId: 'business-service-dependencies', operator: 'unknown' }],
     recommendationIds: ['document-service-dependencies'],
   },
   {
@@ -28,7 +30,8 @@ export const businessServiceCriticalityFindings: FindingDefinition[] = [
     summary: 'Acceptable interruption times and recovery priorities are not consistently approved for critical services.',
     businessImpact: 'Teams may disagree about what to restore first or accept avoidable business impact during an outage.',
     severity: 'high',
-    conditions: [{ questionId: 'business-recovery-priorities', operator: 'in', values: ['unknown', 'informal'] }],
+    conditionMode: 'any',
+    conditions: [{ questionId: 'business-recovery-priorities', operator: 'in', values: ['informal'] }, { questionId: 'business-recovery-priorities', operator: 'unknown' }],
     recommendationIds: ['define-business-recovery-priorities'],
   },
 ];

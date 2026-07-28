@@ -25,7 +25,7 @@ Audited 2026-07-27 against the working tree, TypeScript modules, Astro client ru
 2. `AssessmentVersion` contains versioned findings and condition modes. The browser now uses the shared evaluator for modular and compatibility findings, while legacy question-level critical presentation rules remain for unmigrated content.
 3. `getMethodologyHash()` returns a placeholder string. Documentation calls the hash an identifier only and marks historical reproducibility as unimplemented.
 4. `AssessmentPage.astro` still owns inline report presentation and persistence, but now imports shared scoring and finding cores. Documentation records the remaining inline boundaries rather than claiming full duplication.
-5. The framework has 142 catalog entries but only three implemented modules and 20 UI questions. Documentation distinguishes taxonomy inclusion, implementation, validation, and activation.
+5. The framework has 142 catalog entries but only eight pilot modules and 33 active UI questions. Documentation distinguishes taxonomy inclusion, implementation, validation, retirement, and activation.
 
 ## Existing documents retained
 

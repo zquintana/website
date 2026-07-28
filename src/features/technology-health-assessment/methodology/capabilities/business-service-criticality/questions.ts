@@ -9,7 +9,6 @@ export const businessServiceCriticalityQuestions: CapabilityQuestion[] = [
     responseType: 'single-choice',
     evidenceRequirements: [{ id: 'critical-service-register', label: 'Critical-service register', description: 'A reviewed list of critical business services with owners and relative priority.', preferredSource: 'documentation' }],
     options: [
-      { id: 'unknown', label: 'Not tracked', maturityScore: 1 },
       { id: 'informal', label: 'Known informally by a few leaders', maturityScore: 2 },
       { id: 'partial', label: 'Documented for some major services', maturityScore: 3 },
       { id: 'reviewed', label: 'Documented and reviewed with business owners', maturityScore: 4 },
@@ -29,7 +28,6 @@ export const businessServiceCriticalityQuestions: CapabilityQuestion[] = [
     responseType: 'single-choice',
     evidenceRequirements: [{ id: 'service-dependency-map', label: 'Service dependency map', description: 'A current record connecting critical services to their major applications, vendors, data, infrastructure, and owners.', preferredSource: 'documentation' }],
     options: [
-      { id: 'unknown', label: 'Not known', maturityScore: 1 },
       { id: 'informal', label: 'Known informally or only by technical staff', maturityScore: 2 },
       { id: 'partial', label: 'Documented for the most important services', maturityScore: 3 },
       { id: 'reviewed', label: 'Documented and reviewed after significant changes', maturityScore: 4 },
@@ -45,15 +43,14 @@ export const businessServiceCriticalityQuestions: CapabilityQuestion[] = [
   {
     id: 'business-recovery-priorities',
     capabilityId: 'business-service-criticality',
-    prompt: 'Are acceptable interruption times and recovery priorities defined for the most critical services?',
+    prompt: 'Are the most critical business services assigned clear priority tiers based on business impact?',
     responseType: 'single-choice',
     evidenceRequirements: [{ id: 'recovery-priority-record', label: 'Recovery priority record', description: 'Business-approved recovery priorities or time objectives for critical services.', preferredSource: 'documentation' }],
     options: [
-      { id: 'unknown', label: 'Not defined', maturityScore: 1 },
-      { id: 'informal', label: 'Discussed only when an outage occurs', maturityScore: 2 },
-      { id: 'partial', label: 'Defined for some critical services', maturityScore: 3 },
-      { id: 'reviewed', label: 'Defined and approved by business owners', maturityScore: 4 },
-      { id: 'tested', label: 'Defined, approved, and validated through exercises', maturityScore: 5 },
+      { id: 'informal', label: 'Discussed informally when an outage occurs', maturityScore: 2 },
+      { id: 'partial', label: 'Priority tiers exist for some critical services', maturityScore: 3 },
+      { id: 'reviewed', label: 'Priority tiers are documented and approved by business owners', maturityScore: 4 },
+      { id: 'tested', label: 'Priority tiers are approved and used in continuity exercises', maturityScore: 5 },
     ],
     allowUnknown: true,
     unknownBehavior: { type: 'visibility-finding', findingId: 'business-recovery-priorities-undefined' },

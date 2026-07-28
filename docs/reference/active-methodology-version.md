@@ -7,7 +7,7 @@
 - Hash: `methodology-0.1.0-hash-placeholder` (placeholder, not reproducibility-grade)
 - Catalog: 142 capabilities across 14 domains
 - Implemented modules: `business-service-criticality`, `recovery-requirements`, `technology-asset-inventory`, `identity-inventory`, `critical-data-inventory`, `recovery-capability`, `identity-lifecycle`, `privileged-access`
-- UI/read-model questions: 34 total, 19 migrated and 15 legacy
+- UI/read-model questions: 33 total, 19 modular and 14 legacy; `ops-system-inventory` is retained in the historical source but retired from the active read model because it duplicates Technology Asset Inventory coverage
 - Intended use: pilot/demo advisory workflow only
 - Foundational treatment: `metadata-only`; foundational flags are displayed as metadata and do not alter scoring or automatically create findings
 

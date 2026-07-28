@@ -8,7 +8,8 @@ export const technologyAssetInventoryFindings: FindingDefinition[] = [
     summary: 'The business cannot reliably identify the technology it depends on.',
     businessImpact: 'Unknown or unmanaged technology can create security exposure, recovery gaps, duplicate spending, and avoidable operational surprises.',
     severity: 'high',
-    conditions: [{ questionId: 'technology-asset-coverage', operator: 'in', values: ['unknown', 'informal'] }],
+    conditionMode: 'any',
+    conditions: [{ questionId: 'technology-asset-coverage', operator: 'in', values: ['informal'] }, { questionId: 'technology-asset-coverage', operator: 'unknown' }],
     recommendationIds: ['establish-technology-asset-inventory'],
   },
   {
@@ -18,7 +19,8 @@ export const technologyAssetInventoryFindings: FindingDefinition[] = [
     summary: 'Important technology assets or services do not have reliably recorded business or operational owners.',
     businessImpact: 'Incidents, renewals, changes, and risk decisions may stall because nobody is clearly accountable.',
     severity: 'high',
-    conditions: [{ questionId: 'technology-asset-ownership', operator: 'in', values: ['unknown', 'informal'] }],
+    conditionMode: 'any',
+    conditions: [{ questionId: 'technology-asset-ownership', operator: 'in', values: ['informal'] }, { questionId: 'technology-asset-ownership', operator: 'unknown' }],
     recommendationIds: ['assign-technology-asset-owners'],
   },
   {
@@ -28,7 +30,8 @@ export const technologyAssetInventoryFindings: FindingDefinition[] = [
     summary: 'Unsupported, duplicate, or unmanaged technology is not consistently identified and addressed.',
     businessImpact: 'The business may carry avoidable cost and risk or discover lifecycle problems only after they cause disruption.',
     severity: 'moderate',
-    conditions: [{ questionId: 'technology-asset-review', operator: 'in', values: ['unknown', 'informal'] }],
+    conditionMode: 'any',
+    conditions: [{ questionId: 'technology-asset-review', operator: 'in', values: ['informal'] }, { questionId: 'technology-asset-review', operator: 'unknown' }],
     recommendationIds: ['review-technology-asset-inventory'],
   },
 ];

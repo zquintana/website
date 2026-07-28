@@ -11,7 +11,6 @@ export const identityLifecycleQuestions: CapabilityQuestion[] = [
       { id: 'lifecycle-process', label: 'Lifecycle process', description: 'Joiner, mover, and leaver procedure or workflow description.', preferredSource: 'documentation' },
     ],
     options: [
-      { id: 'unknown', label: 'Not tracked', maturityScore: 1 },
       { id: 'manual', label: 'Manual, often delayed', maturityScore: 2 },
       { id: 'same-week', label: 'Usually within the same week', maturityScore: 3 },
       { id: 'same-day', label: 'Same day for core systems', maturityScore: 4 },

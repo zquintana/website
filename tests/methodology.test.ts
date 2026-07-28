@@ -103,6 +103,10 @@ test('pilot questions define evidence expectations', () => {
   }
 });
 
+test('modular questions use explicit unknown status instead of an unknown option', () => {
+  assert.ok(activeAssessmentVersion.questions.every((question) => !question.options?.some((option) => option.id === 'unknown')));
+});
+
 test('unknown-answer behavior supports visibility findings and provisional scores', () => {
   const backupTest = backupRecoveryModule.questions.find((question) => question.id === 'bcdr-backup-test');
   const recoveryOwner = backupRecoveryModule.questions.find((question) => question.id === 'bcdr-recovery-owner');
@@ -165,7 +169,7 @@ test('modular finding evaluator supports all/any, unknown, not-applicable, and n
 
 test('legacy demonstration findings use the shared finding contract', () => {
   const records = createLegacyFindingRecords(activeAssessmentVersion.legacyQuestionSet.questions);
-  assert.equal(records.length, 15);
+  assert.equal(records.length, 14);
   assert.ok(records.every((record) => record.finding.id.startsWith('legacy-')));
   assert.ok(records.every((record) => record.finding.conditions.length > 0));
 
@@ -208,6 +212,7 @@ test('compatibility read model preserves category order and stable question IDs'
 
 test('active read model remains consumable by existing UI adapters', () => {
   assert.equal(assessmentReadModel.categories.length, 10);
-  assert.equal(assessmentReadModel.questions.length, 34);
+  assert.equal(assessmentReadModel.questions.length, 33);
+  assert.equal(assessmentReadModel.questions.some((question) => question.id === 'ops-system-inventory'), false);
   assert.ok(assessmentReadModel.questions.every((question) => question.categoryId));
 });

@@ -48,6 +48,6 @@ export function createAssessmentReadModel(version: AssessmentVersion): Assessmen
     methodologyHash: version.methodologyHash,
     questionSetLabel: version.legacyQuestionSet.label,
     categories: version.categories,
-    questions: [...migratedQuestions, ...version.legacyQuestionSet.questions],
+    questions: [...migratedQuestions, ...version.legacyQuestionSet.questions.filter((question) => !version.legacyQuestionSet.retiredQuestionIds?.includes(question.id))],
   };
 }
