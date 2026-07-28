@@ -57,10 +57,10 @@ Implement the architecture required for every capability module.
 - Replace the flat question-first findings path with a capability-aware runtime.
 - Evaluate modular finding condition operators and `all`/`any` modes.
 - Attach findings and recommendations through stable IDs.
-- Implement capability-level health, risk, and confidence results. (Implemented in `methodology/capability-results.ts`; browser report adoption remains.)
-- Define one primary-category aggregation rule and prevent secondary double counting. (Implemented for capability results; browser report adoption remains.)
-- Decide and test foundational capability effects.
-- Add applicability and conditional-question evaluation. (The typed business-profile applicability evaluator is now present; wiring and authored rules remain.)
+- Implement capability-level health, risk, and confidence results. (Implemented in `methodology/capability-results.ts` and exposed in the browser report.)
+- Define one primary-category aggregation rule and prevent secondary double counting. (Implemented for capability results and browser report calculations.)
+- Decide and test foundational capability effects. (Active version explicitly uses `metadata-only`; score floors and automatic penalties remain intentionally unimplemented.)
+- Add applicability and conditional-question evaluation. (The evaluator is wired into questionnaire and scoring paths; authored rules remain to be added.)
 - Remove or isolate the temporary legacy read-model adapter.
 - Make browser and library scoring use one shared implementation. (Implemented through `scoring-core.ts`; integration tests remain.)
 

@@ -1,5 +1,6 @@
-import type { AssessmentAnswer, AssessmentCategory, CategoryScore } from '../types.ts';
+import type { AssessmentAnswer, AssessmentCategory, BusinessProfile, CategoryScore } from '../types.ts';
 import { averageConfidence } from '../lib/confidence.ts';
+import { evaluateApplicability } from '../lib/applicability.ts';
 import { scoreQuestion } from '../lib/scoring-core.ts';
 import type { AssessmentCapability, AssessmentQuestion, AssessmentVersion, CapabilityResult } from './types.ts';
 
@@ -8,8 +9,9 @@ export function scoreCapability(
   questions: AssessmentQuestion[],
   answers: Record<string, AssessmentAnswer>,
   findings = 0,
+  profile?: BusinessProfile,
 ): CapabilityResult {
-  const ownedQuestions = questions.filter((question) => capability.questionIds.includes(question.id));
+  const ownedQuestions = questions.filter((question) => capability.questionIds.includes(question.id) && evaluateApplicability(question.applicability, profile ?? { businessName: '', respondentName: '', respondentEmail: '' }, answers));
   const scores = ownedQuestions.map((question) => ({ question, score: scoreQuestion(question, answers[question.id]) })).filter((item) => item.score.applicable);
   const questionWeight = scores.reduce((total, item) => total + item.question.importance, 0);
   const weightedScore = scores.reduce((total, item) => total + item.score.normalizedScore * item.question.importance, 0);
@@ -32,8 +34,9 @@ export function calculateCapabilityResults(
   version: AssessmentVersion,
   answers: Record<string, AssessmentAnswer>,
   findingsByCapability: Record<string, number> = {},
+  profile?: BusinessProfile,
 ): CapabilityResult[] {
-  return version.capabilities.map((capability) => scoreCapability(capability, version.questions, answers, findingsByCapability[capability.id] ?? 0));
+  return version.capabilities.map((capability) => scoreCapability(capability, version.questions, answers, findingsByCapability[capability.id] ?? 0, profile));
 }
 
 /** Aggregate each capability exactly once through its primary category. */

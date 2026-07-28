@@ -12,6 +12,7 @@ import { validateAssessmentVersion } from '../validation.ts';
 export const assessmentV010 = validateAssessmentVersion(defineAssessmentVersion({
   version: '0.1.0',
   status: 'demonstration',
+  foundationalTreatment: 'metadata-only',
   domains,
   categories,
   capabilityCatalog,

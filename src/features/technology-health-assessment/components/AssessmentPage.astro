@@ -21,6 +21,7 @@ const methodologyFindings = activeAssessmentVersion.findings.map((finding) => ({
       return { name: standard?.name ?? mapping.standardId, reference: mapping.reference };
     }),
 }));
+const methodologyCapabilities = activeAssessmentVersion.capabilities;
 ---
 
 <!doctype html>
@@ -51,16 +52,20 @@ const methodologyFindings = activeAssessmentVersion.findings.map((finding) => ({
 
     <script type="application/json" id="assessment-categories" set:html={JSON.stringify(assessmentCategories)}></script>
     <script type="application/json" id="assessment-questions" set:html={JSON.stringify(assessmentQuestions)}></script>
+    <script type="application/json" id="assessment-capabilities" set:html={JSON.stringify(methodologyCapabilities)}></script>
     <script type="application/json" id="assessment-methodology-findings" set:html={JSON.stringify(methodologyFindings)}></script>
     <script type="application/json" id="assessment-legacy-findings" set:html={JSON.stringify(legacyFindingRecords)}></script>
     <script>
       import { evaluateFindingDefinition } from '../methodology/findings.ts';
+      import { aggregateCapabilityResults, scoreCapability } from '../methodology/capability-results.ts';
+      import { evaluateApplicability } from '../lib/applicability.ts';
       import { calculatePriorityScore, calculateScores, getMaturityLabel, scoreQuestion } from '../lib/scoring-core.ts';
 
       const maturityLabel = getMaturityLabel;
 
       const categories = JSON.parse(document.querySelector('#assessment-categories').textContent);
       const questions = JSON.parse(document.querySelector('#assessment-questions').textContent);
+      const capabilities = JSON.parse(document.querySelector('#assessment-capabilities').textContent);
       const methodologyFindings = JSON.parse(document.querySelector('#assessment-methodology-findings').textContent);
       const legacyFindingRecords = JSON.parse(document.querySelector('#assessment-legacy-findings').textContent);
       const root = document.querySelector('#assessment-root');
@@ -123,6 +128,7 @@ const methodologyFindings = activeAssessmentVersion.findings.map((finding) => ({
           return {
             id: `finding-${finding.id}`,
             questionId: primaryQuestion?.id ?? conditionQuestionIds[0],
+            capabilityId: finding.capabilityId,
             categoryId: primaryQuestion?.categoryId ?? 'technology-operations',
             title: finding.title,
             businessImpact: finding.businessImpact,
@@ -175,10 +181,12 @@ const methodologyFindings = activeAssessmentVersion.findings.map((finding) => ({
         return [...modularFindings, ...legacyFindings].sort((a, b) => Number(b.critical) - Number(a.critical) || b.priorityScore - a.priorityScore);
       }
 
-      function calculateAssessmentScores(answers) {
+      function calculateAssessmentScores(answers, profile) {
         const findings = generateFindings(answers);
         const findingsByCategory = findings.reduce((counts, finding) => ({ ...counts, [finding.categoryId]: (counts[finding.categoryId] ?? 0) + 1 }), {});
-        return { ...calculateScores(answers, findingsByCategory, questions, categories), findings };
+        const findingsByCapability = findings.reduce((counts, finding) => finding.capabilityId ? ({ ...counts, [finding.capabilityId]: (counts[finding.capabilityId] ?? 0) + 1 }) : counts, {});
+        const capabilityResults = capabilities.map((capability) => scoreCapability(capability, questions, answers, findingsByCapability[capability.id] ?? 0, profile));
+        return { ...calculateScores(answers, findingsByCategory, questions, categories, profile), capabilityResults, capabilityCategoryScores: aggregateCapabilityResults(categories, capabilities, capabilityResults), findings };
       }
 
       function getStrengths(answers) {
@@ -262,7 +270,7 @@ const methodologyFindings = activeAssessmentVersion.findings.map((finding) => ({
         let index = Math.max(0, categories.findIndex((category) => category.id === (state.currentCategoryId ?? categories[0].id)));
         const renderCategory = () => {
           const category = categories[index];
-          const categoryQuestions = questions.filter((question) => question.categoryId === category.id);
+          const categoryQuestions = questions.filter((question) => question.categoryId === category.id && evaluateApplicability(question.applicability, state.businessProfile, state.answers));
           root.innerHTML = `<section class="page-heading"><p class="kicker">Section ${index + 1} of ${categories.length}</p><h1>${index + 1}. ${escapeHtml(category.name)}</h1><p class="lede">${escapeHtml(category.businessExplanation)}</p><div class="progress"><span style="width:${((index + 1) / categories.length) * 100}%"></span></div></section><form class="question-form" id="question-form">${categoryQuestions.map((question, questionIndex) => questionHtml(question, state.answers[question.id], index + 1, questionIndex + 1)).join('')}<div class="actions"><button class="button ghost" type="button" id="back-step">Back</button><button class="button primary" type="submit">${index === categories.length - 1 ? 'Complete assessment' : 'Save and continue'}</button><button class="button danger" type="button" id="restart">Restart</button></div></form>`;
           document.querySelectorAll('[data-answer-option]').forEach((option) => {
             option.addEventListener('change', (event) => {
@@ -314,12 +322,12 @@ const methodologyFindings = activeAssessmentVersion.findings.map((finding) => ({
       function renderResults(printMode = false) {
         const state = loadState();
         if (!state) { location.href = '/assessment/start'; return; }
-        const results = calculateAssessmentScores(state.answers);
+        const results = calculateAssessmentScores(state.answers, state.businessProfile);
         const strengths = getStrengths(state.answers);
         const criticalCount = results.findings.filter((finding) => finding.critical).length;
         const highCount = results.findings.filter((finding) => finding.priorityLevel === 'high').length;
         const grouped = ['Immediate Attention', 'Next 30 Days', 'Next 90 Days', 'Longer-Term Improvements'].map((group) => [group, results.findings.filter((finding) => finding.timeframe === group)]);
-        root.innerHTML = `<section class="page-heading report-heading"><p class="kicker">Preliminary Technology Health Report</p><h1>${escapeHtml(state.businessProfile.businessName || 'Technology Health Assessment')}</h1><p class="lede">Assessment ID: ${escapeHtml(state.assessmentId)}</p><div class="actions print-hidden"><button class="button primary" onclick="window.print()">Print report</button><a class="button secondary" href="/assessment/report">Printable view</a><a class="button ghost" href="/assessment/questionnaire">Update answers</a></div></section><section class="score-grid"><article class="score-card major"><span>Technology Health Score</span><strong>${results.overallScore}</strong><em>${maturityLabel(results.overallScore)}</em></article><article class="score-card"><span>Assessment confidence</span><strong>${Math.round(results.overallConfidence * 100)}%</strong><em>Evidence quality</em></article><article class="score-card"><span>Critical risks</span><strong>${criticalCount}</strong><em>Immediate attention</em></article><article class="score-card"><span>High-priority recommendations</span><strong>${highCount}</strong><em>Next 30 days</em></article></section><section class="panel"><h2>Executive Summary</h2><p>This preliminary assessment indicates a ${maturityLabel(results.overallScore).toLowerCase()} technology posture. Confidence is shown separately because low confidence means more evidence is needed, not necessarily that technology is unhealthy.</p><p class="muted">This report is advisory guidance, not a certification, legal opinion, compliance attestation, penetration test, or formal security audit.</p></section><section class="category-summary"><h2>Category Summary</h2>${categories.map((category) => { const score = results.categoryScores.find((item) => item.categoryId === category.id); return `<article><div><h3>${escapeHtml(category.name)}</h3><p>${escapeHtml(category.shortDescription)}</p></div><strong>${score?.score ?? 0}</strong><span>${maturityLabel(score?.score ?? 0)} · ${category.weight}% weight · ${Math.round((score?.confidence ?? 0) * 100)}% confidence · ${score?.findings ?? 0} findings</span></article>`; }).join('')}</section><section class="findings"><h2>Priority Findings</h2>${grouped.map(([group, findings]) => `<div class="finding-group"><h3>${group}</h3>${findings.length ? findings.map(findingHtml).join('') : '<p class="muted">No findings in this group.</p>'}</div>`).join('')}</section><section class="panel"><h2>Strengths</h2>${strengths.length ? `<ul>${strengths.map((item) => `<li>${escapeHtml(item.question.prompt)} <span class="muted">(${Math.round(item.score.confidence * 100)}% confidence)</span></li>`).join('')}</ul>` : '<p class="muted">Strengths will appear as more answers are verified at higher maturity levels.</p>'}</section><section class="panel cta print-hidden"><h2>Review these results with a Fractional Technology Partner.</h2><p>Use this preliminary report to prioritize the next conversation about risk, resilience, cost, and practical next steps.</p><form class="consult-form" id="consult-form"><input name="name" placeholder="Name" value="${escapeHtml(state.businessProfile.respondentName)}"><input name="email" placeholder="Email" value="${escapeHtml(state.businessProfile.respondentEmail)}"><input name="company" placeholder="Company" value="${escapeHtml(state.businessProfile.businessName)}"><textarea name="message" placeholder="Optional message" rows="3"></textarea><button class="button primary" type="submit">Request consultation</button></form></section>`;
+        root.innerHTML = `<section class="page-heading report-heading"><p class="kicker">Preliminary Technology Health Report</p><h1>${escapeHtml(state.businessProfile.businessName || 'Technology Health Assessment')}</h1><p class="lede">Assessment ID: ${escapeHtml(state.assessmentId)}</p><div class="actions print-hidden"><button class="button primary" onclick="window.print()">Print report</button><a class="button secondary" href="/assessment/report">Printable view</a><a class="button ghost" href="/assessment/questionnaire">Update answers</a></div></section><section class="score-grid"><article class="score-card major"><span>Technology Health Score</span><strong>${results.overallScore}</strong><em>${maturityLabel(results.overallScore)}</em></article><article class="score-card"><span>Assessment confidence</span><strong>${Math.round(results.overallConfidence * 100)}%</strong><em>Evidence quality</em></article><article class="score-card"><span>Critical risks</span><strong>${criticalCount}</strong><em>Immediate attention</em></article><article class="score-card"><span>High-priority recommendations</span><strong>${highCount}</strong><em>Next 30 days</em></article></section><section class="panel"><h2>Executive Summary</h2><p>This preliminary assessment indicates a ${maturityLabel(results.overallScore).toLowerCase()} technology posture. Confidence is shown separately because low confidence means more evidence is needed, not necessarily that technology is unhealthy.</p><p class="muted">This report is advisory guidance, not a certification, legal opinion, compliance attestation, penetration test, or formal security audit.</p></section><section class="category-summary"><h2>Category Summary</h2>${categories.map((category) => { const score = results.categoryScores.find((item) => item.categoryId === category.id); return `<article><div><h3>${escapeHtml(category.name)}</h3><p>${escapeHtml(category.shortDescription)}</p></div><strong>${score?.score ?? 0}</strong><span>${maturityLabel(score?.score ?? 0)} · ${category.weight}% weight · ${Math.round((score?.confidence ?? 0) * 100)}% confidence · ${score?.findings ?? 0} findings</span></article>`; }).join('')}</section><section class="category-summary capability-summary"><h2>Capability Detail</h2>${results.capabilityResults.length ? results.capabilityResults.map((result) => { const capability = capabilities.find((item) => item.id === result.capabilityId); return `<article><div><h3>${escapeHtml(capability?.name ?? result.capabilityId)}${result.foundational ? ' · Foundational' : ''}</h3><p>${result.applicable ? `${result.applicable} applicable question${result.applicable === 1 ? '' : 's'} · ${result.findings} finding${result.findings === 1 ? '' : 's'}` : 'Not currently applicable or not answered'}</p></div><strong>${result.score}</strong><span>${maturityLabel(result.score)} · ${Math.round(result.confidence * 100)}% confidence</span></article>`; }).join('') : '<p class="muted">No modular capability results are active in this assessment version.</p>'}</section><section class="findings"><h2>Priority Findings</h2>${grouped.map(([group, findings]) => `<div class="finding-group"><h3>${group}</h3>${findings.length ? findings.map(findingHtml).join('') : '<p class="muted">No findings in this group.</p>'}</div>`).join('')}</section><section class="panel"><h2>Strengths</h2>${strengths.length ? `<ul>${strengths.map((item) => `<li>${escapeHtml(item.question.prompt)} <span class="muted">(${Math.round(item.score.confidence * 100)}% confidence)</span></li>`).join('')}</ul>` : '<p class="muted">Strengths will appear as more answers are verified at higher maturity levels.</p>'}</section><section class="panel cta print-hidden"><h2>Review these results with a Fractional Technology Partner.</h2><p>Use this preliminary report to prioritize the next conversation about risk, resilience, cost, and practical next steps.</p><form class="consult-form" id="consult-form"><input name="name" placeholder="Name" value="${escapeHtml(state.businessProfile.respondentName)}"><input name="email" placeholder="Email" value="${escapeHtml(state.businessProfile.respondentEmail)}"><input name="company" placeholder="Company" value="${escapeHtml(state.businessProfile.businessName)}"><textarea name="message" placeholder="Optional message" rows="3"></textarea><button class="button primary" type="submit">Request consultation</button></form></section>`;
         document.querySelector('#consult-form')?.addEventListener('submit', (event) => {
           event.preventDefault();
           const form = new FormData(event.currentTarget);

@@ -10,6 +10,7 @@ export type StandardId = string;
 export type StandardMappingId = string;
 
 export type ScoringModel = 'control-status' | 'process-maturity' | 'business-capability';
+export type FoundationalTreatment = 'metadata-only';
 export type FindingOperator = 'equals' | 'in' | 'unknown' | 'not-applicable' | 'lte' | 'gte';
 export type CapabilityReadinessStatus = 'proposed' | 'structured' | 'draft-questions' | 'pilot' | 'active' | 'deprecated';
 
@@ -126,6 +127,7 @@ export type LegacyQuestionSet = {
 export type AssessmentVersion = {
   version: string;
   status: 'demonstration' | 'draft' | 'published';
+  foundationalTreatment: FoundationalTreatment;
   methodologyHash: string;
   domains: CapabilityDomain[];
   categories: AssessmentCategory[];

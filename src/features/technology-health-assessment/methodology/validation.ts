@@ -11,6 +11,13 @@ const applicabilitySchema = z.union([
     value: z.string().optional(),
     values: z.array(z.string()).optional(),
   }),
+  z.object({
+    type: z.literal('answer'),
+    questionId: z.string().min(1),
+    operator: z.enum(['equals', 'in', 'unknown', 'not-applicable']),
+    value: z.union([z.string(), z.number()]).optional(),
+    values: z.array(z.union([z.string(), z.number()])).optional(),
+  }),
 ]);
 
 const categorySchema = z.object({
@@ -31,6 +38,7 @@ const optionSchema = z.object({
 const assessmentVersionSchema = z.object({
   version: z.string().min(1),
   status: z.enum(['demonstration', 'draft', 'published']),
+  foundationalTreatment: z.literal('metadata-only'),
   methodologyHash: z.string().min(1),
   domains: z.array(z.object({ id: z.string().min(1), name: z.string().min(1), order: z.number().int().positive() }).passthrough()),
   categories: z.array(categorySchema),
@@ -161,12 +169,18 @@ export function validateAssessmentVersion(version: AssessmentVersion): Assessmen
     for (const findingId of capability.findingIds) if (!findingIds.has(findingId)) errors.push(`Capability ${capability.id} references missing finding ${findingId}`);
     for (const recommendationId of capability.recommendationIds) if (!recommendationIds.has(recommendationId)) errors.push(`Capability ${capability.id} references missing recommendation ${recommendationId}`);
     for (const mappingId of capability.standardMappingIds) if (!mappingIds.has(mappingId)) errors.push(`Capability ${capability.id} references missing standard mapping ${mappingId}`);
+    if (capability.applicability?.type === 'answer' && !questionIds.has(capability.applicability.questionId)) {
+      errors.push(`Capability ${capability.id} applicability references missing question ${capability.applicability.questionId}`);
+    }
   }
 
   for (const question of version.questions) {
     if (!capabilityIds.has(question.capabilityId)) errors.push(`Question ${question.id} references missing capability ${question.capabilityId}`);
     for (const option of question.options ?? []) {
       if (typeof option.maturityScore === 'number' && (option.maturityScore < 0 || option.maturityScore > 5)) errors.push(`Question ${question.id} option ${option.id} has invalid maturity score ${option.maturityScore}`);
+    }
+    if (question.applicability?.type === 'answer' && !questionIds.has(question.applicability.questionId)) {
+      errors.push(`Question ${question.id} applicability references missing question ${question.applicability.questionId}`);
     }
   }
 

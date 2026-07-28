@@ -1,5 +1,6 @@
-import type { AssessmentAnswer, AssessmentCategory, AssessmentQuestion, AssessmentScores, CategoryScore, QuestionScore, Severity } from '../types.ts';
+import type { AssessmentAnswer, AssessmentCategory, AssessmentQuestion, AssessmentScores, BusinessProfile, CategoryScore, QuestionScore, Severity } from '../types.ts';
 import { averageConfidence, getAnswerConfidence } from './confidence.ts';
+import { evaluateApplicability } from './applicability.ts';
 
 export const severityMultiplier: Record<Severity, number> = {
   low: 1,
@@ -80,9 +81,9 @@ export function scoreQuestion(question: AssessmentQuestion, answer?: AssessmentA
   };
 }
 
-export function scoreCategory(category: AssessmentCategory, answers: Record<string, AssessmentAnswer>, questions: AssessmentQuestion[], findingsCount = 0): CategoryScore {
+export function scoreCategory(category: AssessmentCategory, answers: Record<string, AssessmentAnswer>, questions: AssessmentQuestion[], findingsCount = 0, profile?: BusinessProfile): CategoryScore {
   const questionScores = questions
-    .filter((question) => question.categoryId === category.id)
+    .filter((question) => question.categoryId === category.id && evaluateApplicability(question.applicability, profile ?? { businessName: '', respondentName: '', respondentEmail: '' }, answers))
     .map((question) => scoreQuestion(question, answers[question.id]))
     .filter((score) => score.applicable);
 
@@ -101,7 +102,7 @@ export function scoreCategory(category: AssessmentCategory, answers: Record<stri
     score: categoryScore,
     maturityScore: categoryScore / 20,
     confidence: averageConfidence(questionScores.map((score) => score.confidence)),
-    answered: questions.filter((question) => question.categoryId === category.id && answers[question.id]).length,
+    answered: questions.filter((question) => question.categoryId === category.id && evaluateApplicability(question.applicability, profile ?? { businessName: '', respondentName: '', respondentEmail: '' }, answers) && answers[question.id]).length,
     applicable: questionScores.length,
     findings: findingsCount,
   };
@@ -112,9 +113,11 @@ export function calculateScores(
   findingsByCategory: Record<string, number>,
   questions: AssessmentQuestion[],
   categories: AssessmentCategory[],
+  profile?: BusinessProfile,
 ): AssessmentScores {
-  const questionScores = questions.map((question) => scoreQuestion(question, answers[question.id]));
-  const categoryScores = categories.map((category) => scoreCategory(category, answers, questions, findingsByCategory[category.id] ?? 0));
+  const applicableQuestions = questions.filter((question) => evaluateApplicability(question.applicability, profile ?? { businessName: '', respondentName: '', respondentEmail: '' }, answers));
+  const questionScores = applicableQuestions.map((question) => scoreQuestion(question, answers[question.id]));
+  const categoryScores = categories.map((category) => scoreCategory(category, answers, applicableQuestions, findingsByCategory[category.id] ?? 0, profile));
   const weightedOverall = categoryScores.reduce((total, score) => {
     const category = categories.find((item) => item.id === score.categoryId);
     return total + score.score * (category?.weight ?? 0);

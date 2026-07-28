@@ -9,6 +9,7 @@ import { evaluateApplicability } from '../src/features/technology-health-assessm
 import { generateFindings } from '../src/features/technology-health-assessment/lib/findings.ts';
 import { calculatePriorityScore, calculateScores, scoreQuestion } from '../src/features/technology-health-assessment/lib/scoring.ts';
 import { parseAssessment, serializeAssessment, createAssessmentState } from '../src/features/technology-health-assessment/lib/storage.ts';
+import { activeAssessmentVersion } from '../src/features/technology-health-assessment/methodology/index.ts';
 import type { AssessmentAnswer } from '../src/features/technology-health-assessment/types.ts';
 
 test('category weights total 100', () => {
@@ -147,4 +148,23 @@ test('applicability rules evaluate business profile context', () => {
   assert.equal(evaluateApplicability({ type: 'business-profile', field: 'employeeCount', operator: 'equals', value: '11-50' }, profile), true);
   assert.equal(evaluateApplicability({ type: 'business-profile', field: 'productivityPlatform', operator: 'in', values: ['Google Workspace', 'Microsoft 365'] }, profile), true);
   assert.equal(evaluateApplicability({ type: 'business-profile', field: 'productivityPlatform', operator: 'equals', value: 'Other' }, profile), false);
+});
+
+test('answer applicability distinguishes answered, unknown, and not-applicable states', () => {
+  const profile = { businessName: 'Example Co', respondentName: 'Alex', respondentEmail: 'alex@example.com' };
+  const answers: Record<string, AssessmentAnswer> = {
+    trigger: { questionId: 'trigger', value: 'yes', evidenceLevel: 'self-reported' },
+    unknown: { questionId: 'unknown', isUnknown: true, evidenceLevel: 'self-reported' },
+    excluded: { questionId: 'excluded', isNotApplicable: true, evidenceLevel: 'self-reported' },
+  };
+  assert.equal(evaluateApplicability({ type: 'answer', questionId: 'trigger', operator: 'equals', value: 'yes' }, profile, answers), true);
+  assert.equal(evaluateApplicability({ type: 'answer', questionId: 'trigger', operator: 'in', values: ['no', 'yes'] }, profile, answers), true);
+  assert.equal(evaluateApplicability({ type: 'answer', questionId: 'unknown', operator: 'unknown' }, profile, answers), true);
+  assert.equal(evaluateApplicability({ type: 'answer', questionId: 'excluded', operator: 'not-applicable' }, profile, answers), true);
+  assert.equal(evaluateApplicability({ type: 'answer', questionId: 'trigger', operator: 'unknown' }, profile, answers), false);
+});
+
+test('active methodology declares foundational treatment explicitly', () => {
+  assert.equal(activeAssessmentVersion.foundationalTreatment, 'metadata-only');
+  assert.equal(activeAssessmentVersion.capabilityCatalog.some((item) => item.foundational), true);
 });

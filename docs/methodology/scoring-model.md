@@ -10,6 +10,8 @@ normalized question score = round((maturity score / 5) × 100)
 
 Missing answers use the question’s unknown maturity score, defaulting to 1, are applicable, marked unknown, and have confidence 0. An explicit unknown uses the same question-specific behavior. N/A is excluded only if `allowNotApplicable` is true. Current questions do not expose N/A. Unknown is therefore not automatically absent, but the default/provisional score can reduce health.
 
+Applicability rules are evaluated before scoring. A question with a business-profile or prior-answer rule that evaluates false is omitted from the question and category denominator. The active version has no authored conditional rules yet, so this currently behaves like the legacy all-applicable flow.
+
 For category `c`:
 
 ```text
@@ -29,4 +31,4 @@ Severity multipliers are low 1, moderate 1.5, high 2, critical 3. Finding levels
 
 Example: a maturity-4 answer normalizes to 80. A manually verified answer has confidence 0.8. A critical MFA question at maturity 0 in cybersecurity has priority `(5×5×3×18)=1350`, which is critical if its rule triggers.
 
-Foundational flags are metadata today. They do not suppress an overall score, impose a floor, or automatically add a finding. Such semantics require a versioned decision and tests.
+Foundational treatment in active version `0.1.0` is explicitly `metadata-only`. Foundational flags do not suppress an overall score, impose a floor, or automatically add a finding. Any future change requires a versioned decision and tests.

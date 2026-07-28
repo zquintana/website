@@ -5,7 +5,13 @@ export function getMethodologyHash(version: string): string {
 }
 
 export function defineAssessmentVersion(input: Omit<AssessmentVersion, 'methodologyHash'> & { capabilityModules: CapabilityModule[] }): AssessmentVersion {
-  const capabilities = input.capabilityModules.map((module) => module.capability);
+  const capabilities = input.capabilityModules.map((module) => {
+    const catalogEntry = input.capabilityCatalog.find((entry) => entry.id === module.capability.id);
+    return {
+      ...module.capability,
+      foundational: module.capability.foundational ?? catalogEntry?.foundational,
+    };
+  });
   const questions = input.capabilityModules.flatMap((module) => module.questions);
   const findings = input.capabilityModules.flatMap((module) => module.findings);
   const recommendations = input.capabilityModules.flatMap((module) => module.recommendations);
@@ -14,6 +20,7 @@ export function defineAssessmentVersion(input: Omit<AssessmentVersion, 'methodol
   return {
     version: input.version,
     status: input.status,
+    foundationalTreatment: input.foundationalTreatment,
     methodologyHash: getMethodologyHash(input.version),
     domains: input.domains,
     categories: input.categories,

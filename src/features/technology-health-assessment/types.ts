@@ -5,7 +5,8 @@ export type EvidenceSource = 'questionnaire' | 'interview' | 'documentation' | '
 export type ResponseType = 'single-choice' | 'multi-choice' | 'yes-no' | 'numeric-range' | 'text';
 export type ApplicabilityRule =
   | { type: 'always' }
-  | { type: 'business-profile'; field: keyof BusinessProfile; operator: 'exists' | 'equals' | 'in'; value?: string; values?: string[] };
+  | { type: 'business-profile'; field: keyof BusinessProfile; operator: 'exists' | 'equals' | 'in'; value?: string; values?: string[] }
+  | { type: 'answer'; questionId: string; operator: 'equals' | 'in' | 'unknown' | 'not-applicable'; value?: string | number; values?: Array<string | number> };
 
 export type StandardReference = {
   name: string;
