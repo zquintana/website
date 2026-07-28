@@ -1,5 +1,6 @@
 ---
 import { assessmentCategories, assessmentQuestions } from '../index';
+import { activeAssessmentVersion } from '../methodology/index.ts';
 import AssessmentLanding from './AssessmentLanding.astro';
 import BusinessProfileWizard from './BusinessProfileWizard.astro';
 
@@ -7,6 +8,19 @@ type PageKind = 'landing' | 'start' | 'questionnaire' | 'results' | 'report';
 
 const { page = 'landing' } = Astro.props as { page?: PageKind };
 const title = page === 'landing' ? 'Technology Health Assessment' : `Technology Health Assessment | ${page[0].toUpperCase()}${page.slice(1)}`;
+const modularQuestionIds = activeAssessmentVersion.questions.map((question) => question.id);
+const methodologyFindings = activeAssessmentVersion.findings.map((finding) => ({
+  ...finding,
+  recommendations: finding.recommendationIds
+    .map((recommendationId) => activeAssessmentVersion.recommendations.find((recommendation) => recommendation.id === recommendationId))
+    .filter((recommendation): recommendation is NonNullable<typeof recommendation> => Boolean(recommendation)),
+  standards: activeAssessmentVersion.standardMappings
+    .filter((mapping) => mapping.capabilityId === finding.capabilityId)
+    .map((mapping) => {
+      const standard = activeAssessmentVersion.standards.find((item) => item.id === mapping.standardId);
+      return { name: standard?.name ?? mapping.standardId, reference: mapping.reference };
+    }),
+}));
 ---
 
 <!doctype html>
@@ -37,9 +51,13 @@ const title = page === 'landing' ? 'Technology Health Assessment' : `Technology 
 
     <script type="application/json" id="assessment-categories" set:html={JSON.stringify(assessmentCategories)}></script>
     <script type="application/json" id="assessment-questions" set:html={JSON.stringify(assessmentQuestions)}></script>
+    <script type="application/json" id="assessment-methodology-findings" set:html={JSON.stringify(methodologyFindings)}></script>
+    <script type="application/json" id="assessment-modular-question-ids" set:html={JSON.stringify(modularQuestionIds)}></script>
     <script>
       const categories = JSON.parse(document.querySelector('#assessment-categories').textContent);
       const questions = JSON.parse(document.querySelector('#assessment-questions').textContent);
+      const methodologyFindings = JSON.parse(document.querySelector('#assessment-methodology-findings').textContent);
+      const modularQuestionIds = new Set(JSON.parse(document.querySelector('#assessment-modular-question-ids').textContent));
       const root = document.querySelector('#assessment-root');
       const page = document.body.dataset.assessmentPage;
       const storageKey = 'technology-health-assessment:v1';
@@ -107,8 +125,65 @@ const title = page === 'landing' ? 'Technology Health Assessment' : `Technology 
         return (5 - maturityScore) * question.importance * severityMultiplier[question.severity] * categoryWeight;
       }
 
+      function findingAnswerValues(answer) {
+        if (Array.isArray(answer?.value)) return answer.value;
+        return answer?.value === undefined ? [] : [answer.value];
+      }
+
+      function evaluateMethodologyCondition(condition, answers) {
+        const answer = answers[condition.questionId];
+        if (condition.operator === 'unknown') return !answer || answer.isUnknown === true;
+        if (condition.operator === 'not-applicable') return answer?.isNotApplicable === true;
+        if (!answer || answer.isUnknown || answer.isNotApplicable) return false;
+        const values = findingAnswerValues(answer);
+        if (condition.operator === 'equals') return values.includes(condition.value);
+        if (condition.operator === 'in') return values.some((value) => (condition.values ?? []).includes(value));
+        const numericValues = values.filter((value) => typeof value === 'number');
+        if (condition.operator === 'lte' && typeof condition.value === 'number') return numericValues.some((value) => value <= condition.value);
+        if (condition.operator === 'gte' && typeof condition.value === 'number') return numericValues.some((value) => value >= condition.value);
+        return false;
+      }
+
+      function evaluateMethodologyFinding(finding, answers) {
+        const results = finding.conditions.map((condition) => evaluateMethodologyCondition(condition, answers));
+        return results.length > 0 && (finding.conditionMode === 'all' ? results.every(Boolean) : results.some(Boolean));
+      }
+
+      function generateMethodologyFindings(answers) {
+        return methodologyFindings.filter((finding) => evaluateMethodologyFinding(finding, answers)).map((finding) => {
+          const conditionQuestionIds = [...new Set(finding.conditions.map((condition) => condition.questionId))];
+          const relatedQuestions = questions.filter((question) => conditionQuestionIds.includes(question.id));
+          const relatedScores = relatedQuestions.map((question) => scoreQuestion(question, answers[question.id]));
+          const primaryQuestion = relatedQuestions[0] ?? questions.find((question) => question.capabilityId === finding.capabilityId) ?? questions[0];
+          const category = categories.find((item) => item.id === primaryQuestion?.categoryId);
+          const maturityScore = relatedScores.length ? relatedScores.reduce((total, score) => total + score.maturityScore, 0) / relatedScores.length : 0;
+          const confidence = relatedScores.length ? relatedScores.reduce((total, score) => total + score.confidence, 0) / relatedScores.length : 0;
+          const critical = finding.severity === 'critical';
+          const calculatedPriority = (5 - maturityScore) * (primaryQuestion?.importance ?? 1) * severityMultiplier[finding.severity] * (category?.weight ?? 1);
+          const priorityLevel = critical ? 'critical' : calculatedPriority >= 240 ? 'high' : calculatedPriority >= 120 ? 'medium' : 'low';
+          const timeframe = priorityLevel === 'critical' ? 'Immediate Attention' : priorityLevel === 'high' ? 'Next 30 Days' : priorityLevel === 'medium' ? 'Next 90 Days' : 'Longer-Term Improvements';
+          const recommendation = finding.recommendations[0];
+          return {
+            id: `finding-${finding.id}`,
+            questionId: primaryQuestion?.id ?? conditionQuestionIds[0],
+            categoryId: primaryQuestion?.categoryId ?? 'technology-operations',
+            title: finding.title,
+            businessImpact: finding.businessImpact,
+            currentMaturity: maturityScore,
+            recommendedAction: recommendation?.actions?.join(' ') ?? recommendation?.summary ?? 'Review this finding with a technology advisor.',
+            priorityScore: calculatedPriority,
+            priorityLevel,
+            timeframe,
+            standards: finding.standards,
+            requiresVerification: confidence < 0.65 || relatedScores.some((score) => score.unknown),
+            critical,
+          };
+        });
+      }
+
       function generateFindings(answers) {
-        return questions.flatMap((question) => {
+        const modularFindings = generateMethodologyFindings(answers);
+        const legacyFindings = questions.filter((question) => !modularQuestionIds.has(question.id)).flatMap((question) => {
           const answer = answers[question.id];
           const score = scoreQuestion(question, answer);
           if (!score.applicable || score.maturityScore >= 4 || !question.recommendation) return [];
@@ -135,7 +210,8 @@ const title = page === 'landing' ? 'Technology Health Assessment' : `Technology 
             requiresVerification: score.confidence < 0.65 || score.unknown,
             critical,
           }];
-        }).sort((a, b) => Number(b.critical) - Number(a.critical) || b.priorityScore - a.priorityScore);
+        });
+        return [...modularFindings, ...legacyFindings].sort((a, b) => Number(b.critical) - Number(a.critical) || b.priorityScore - a.priorityScore);
       }
 
       function calculateScores(answers) {
