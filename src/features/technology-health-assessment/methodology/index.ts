@@ -6,6 +6,7 @@ export const assessmentReadModel = createAssessmentReadModel(activeAssessmentVer
 
 export { createAssessmentReadModel } from './read-model.ts';
 export { evaluateFindingCondition, evaluateFindingDefinition, evaluateMethodologyFindings } from './findings.ts';
+export { createLegacyFindingRecords } from './legacy/findings.ts';
 export { validateAssessmentVersion } from './validation.ts';
 export { capabilityReadinessStatuses, getCapabilityReadinessSummary, isCapabilityReadyForActivation } from './readiness.ts';
 export type * from './types.ts';

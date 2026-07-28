@@ -11,7 +11,7 @@
 | Manifest references are valid | [Data model](../architecture/assessment-data-model.md) | `validation.ts` | duplicate/reference/weight tests | Implemented |
 | Published versions are immutable/reproducible | [Versioning](../methodology/methodology-versioning.md) | `v0.1.0` assembly | no hash/history tests | Missing |
 | Saved sessions retain compatible version | [Persistence](../architecture/persistence-and-compatibility.md) | `storage.ts`, inline browser storage | parse/serialization test | Partial; exact reject only |
-| Modular finding conditions execute | [Risk/findings](../methodology/risk-and-findings.md) | `methodology/findings.ts`, shared browser import | operator, all/any, unknown, N/A, and methodology finding tests | Partial; legacy findings remain for unmigrated questions |
+| Modular finding conditions execute | [Risk/findings](../methodology/risk-and-findings.md) | `methodology/findings.ts`, legacy compatibility adapter, shared browser import | operator, all/any, unknown, N/A, and methodology/legacy finding tests | Implemented for current content; legacy content remains |
 | Evidence dates/sources are retained | [Evidence/confidence](../methodology/evidence-and-confidence.md) | answer level/notes only | none | Missing |
 | Report distinguishes claims and verification | [Reporting architecture](../architecture/reporting-architecture.md) | inline report language | no report contract test | Partial |
 | Capability changes are reviewable | [Change checklist](../development/assessment-change-checklist.md) | PR template, AGENTS.md | reviewer process | Implemented as guidance |

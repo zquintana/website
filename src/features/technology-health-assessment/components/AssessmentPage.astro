@@ -1,6 +1,6 @@
 ---
 import { assessmentCategories, assessmentQuestions } from '../index';
-import { activeAssessmentVersion } from '../methodology/index.ts';
+import { activeAssessmentVersion, createLegacyFindingRecords } from '../methodology/index.ts';
 import AssessmentLanding from './AssessmentLanding.astro';
 import BusinessProfileWizard from './BusinessProfileWizard.astro';
 
@@ -8,7 +8,7 @@ type PageKind = 'landing' | 'start' | 'questionnaire' | 'results' | 'report';
 
 const { page = 'landing' } = Astro.props as { page?: PageKind };
 const title = page === 'landing' ? 'Technology Health Assessment' : `Technology Health Assessment | ${page[0].toUpperCase()}${page.slice(1)}`;
-const modularQuestionIds = activeAssessmentVersion.questions.map((question) => question.id);
+const legacyFindingRecords = createLegacyFindingRecords(activeAssessmentVersion.legacyQuestionSet.questions);
 const methodologyFindings = activeAssessmentVersion.findings.map((finding) => ({
   ...finding,
   recommendations: finding.recommendationIds
@@ -52,14 +52,14 @@ const methodologyFindings = activeAssessmentVersion.findings.map((finding) => ({
     <script type="application/json" id="assessment-categories" set:html={JSON.stringify(assessmentCategories)}></script>
     <script type="application/json" id="assessment-questions" set:html={JSON.stringify(assessmentQuestions)}></script>
     <script type="application/json" id="assessment-methodology-findings" set:html={JSON.stringify(methodologyFindings)}></script>
-    <script type="application/json" id="assessment-modular-question-ids" set:html={JSON.stringify(modularQuestionIds)}></script>
+    <script type="application/json" id="assessment-legacy-findings" set:html={JSON.stringify(legacyFindingRecords)}></script>
     <script>
       import { evaluateFindingDefinition } from '../methodology/findings.ts';
 
       const categories = JSON.parse(document.querySelector('#assessment-categories').textContent);
       const questions = JSON.parse(document.querySelector('#assessment-questions').textContent);
       const methodologyFindings = JSON.parse(document.querySelector('#assessment-methodology-findings').textContent);
-      const modularQuestionIds = new Set(JSON.parse(document.querySelector('#assessment-modular-question-ids').textContent));
+      const legacyFindingRecords = JSON.parse(document.querySelector('#assessment-legacy-findings').textContent);
       const root = document.querySelector('#assessment-root');
       const page = document.body.dataset.assessmentPage;
       const storageKey = 'technology-health-assessment:v1';
@@ -159,12 +159,11 @@ const methodologyFindings = activeAssessmentVersion.findings.map((finding) => ({
         });
       }
 
-      function generateFindings(answers) {
-        const modularFindings = generateMethodologyFindings(answers);
-        const legacyFindings = questions.filter((question) => !modularQuestionIds.has(question.id)).flatMap((question) => {
+      function generateLegacyFindings(answers) {
+        return legacyFindingRecords.filter((record) => evaluateFindingDefinition(record.finding, answers)).map((record) => {
+          const question = record.question;
           const answer = answers[question.id];
           const score = scoreQuestion(question, answer);
-          if (!score.applicable || score.maturityScore >= 4 || !question.recommendation) return [];
           const category = categories.find((item) => item.id === question.categoryId);
           const selected = Array.isArray(answer?.value) ? answer.value : [answer?.value];
           const optionCritical = question.criticalFindingRule?.optionIds?.some((id) => selected.includes(id));
@@ -173,22 +172,27 @@ const methodologyFindings = activeAssessmentVersion.findings.map((finding) => ({
           const calculatedPriority = priorityScore(question, score.maturityScore, category?.weight ?? 1);
           const priorityLevel = critical ? 'critical' : calculatedPriority >= 240 ? 'high' : calculatedPriority >= 120 ? 'medium' : 'low';
           const timeframe = priorityLevel === 'critical' ? 'Immediate Attention' : priorityLevel === 'high' ? 'Next 30 Days' : priorityLevel === 'medium' ? 'Next 90 Days' : 'Longer-Term Improvements';
-          return [{
+          return {
             id: `finding-${question.id}`,
             questionId: question.id,
             categoryId: question.categoryId,
-            title: critical ? question.criticalFindingRule?.findingTitle ?? question.recommendation.title : question.recommendation.title,
-            businessImpact: question.recommendation.businessImpact || question.businessImpact || 'This issue can increase business risk or reduce operating resilience.',
+            title: critical ? question.criticalFindingRule?.findingTitle ?? record.recommendation.title : record.recommendation.title,
+            businessImpact: record.finding.businessImpact,
             currentMaturity: score.maturityScore,
-            recommendedAction: question.recommendation.action,
+            recommendedAction: record.recommendation.action,
             priorityScore: calculatedPriority,
             priorityLevel,
             timeframe,
             standards: question.standards,
             requiresVerification: score.confidence < 0.65 || score.unknown,
             critical,
-          }];
+          };
         });
+      }
+
+      function generateFindings(answers) {
+        const modularFindings = generateMethodologyFindings(answers);
+        const legacyFindings = generateLegacyFindings(answers);
         return [...modularFindings, ...legacyFindings].sort((a, b) => Number(b.critical) - Number(a.critical) || b.priorityScore - a.priorityScore);
       }
 

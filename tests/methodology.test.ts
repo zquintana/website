@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 
 import { backupRecoveryModule } from '../src/features/technology-health-assessment/methodology/capabilities/backup-recovery/index.ts';
-import { activeAssessmentVersion, assessmentReadModel, createAssessmentReadModel, evaluateFindingCondition, evaluateFindingDefinition, evaluateMethodologyFindings, getCapabilityReadinessSummary, isCapabilityReadyForActivation, validateAssessmentVersion } from '../src/features/technology-health-assessment/methodology/index.ts';
+import { activeAssessmentVersion, assessmentReadModel, createAssessmentReadModel, createLegacyFindingRecords, evaluateFindingCondition, evaluateFindingDefinition, evaluateMethodologyFindings, getCapabilityReadinessSummary, isCapabilityReadyForActivation, validateAssessmentVersion } from '../src/features/technology-health-assessment/methodology/index.ts';
 import type { AssessmentAnswer } from '../src/features/technology-health-assessment/types.ts';
 import type { FindingDefinition } from '../src/features/technology-health-assessment/methodology/types.ts';
 
@@ -141,6 +141,22 @@ test('modular finding evaluator supports all/any, unknown, not-applicable, and n
 
   assert.equal(evaluateFindingDefinition(allFinding, answers), true);
   assert.equal(evaluateFindingDefinition(anyFinding, answers), true);
+});
+
+test('legacy demonstration findings use the shared finding contract', () => {
+  const records = createLegacyFindingRecords(activeAssessmentVersion.legacyQuestionSet.questions);
+  assert.equal(records.length, 15);
+  assert.ok(records.every((record) => record.finding.id.startsWith('legacy-')));
+  assert.ok(records.every((record) => record.finding.conditions.length > 0));
+
+  const patching = records.find((record) => record.question.id === 'cyber-device-patching');
+  assert.ok(patching);
+  assert.equal(evaluateFindingDefinition(patching.finding, {
+    'cyber-device-patching': { questionId: 'cyber-device-patching', value: 'managed', evidenceLevel: 'self-reported' },
+  }), false);
+  assert.equal(evaluateFindingDefinition(patching.finding, {
+    'cyber-device-patching': { questionId: 'cyber-device-patching', value: 'manual', evidenceLevel: 'self-reported' },
+  }), true);
 });
 
 test('compatibility read model preserves category order and stable question IDs', () => {
