@@ -6,6 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is an Astro static site for zachquintana.com.
 
+The repository includes a modular Technology Health Assessment demonstration. Before changing assessment behavior, read `AGENTS.md`, `docs/methodology/methodology-overview.md`, `docs/architecture/system-overview.md`, and `docs/development/assessment-change-checklist.md`. The active methodology is `0.1.0` with status `demonstration`; do not imply certification, compliance attestation, or finalized methodology.
+
 ## Development Commands
 
 ### Building and Serving
@@ -20,6 +22,8 @@ This is an Astro static site for zachquintana.com.
 - `dist/` - Generated production build output, excluded from git
 - `astro.config.mjs` - Astro configuration
 - `amplify.yml` - AWS Amplify build and deployment configuration
+- `docs/` - Product, methodology, architecture, development, and reference governance
+- `AGENTS.md` - Concise implementation-agent rules
 
 ## Deployment
 

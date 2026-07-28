@@ -1,0 +1,1111 @@
+{
+  "version": "mvp-1",
+  "questionSetLabel": "MVP demonstration question set. Questions should be reviewed and expanded before being presented as a finalized methodology.",
+  "categories": [
+    {
+      "id": "cybersecurity",
+      "name": "Cybersecurity",
+      "shortDescription": "Protection against common security threats and business disruption.",
+      "businessExplanation": "Cybersecurity health reflects how well the business protects sensitive data, accounts, devices, and systems from preventable compromise.",
+      "weight": 18,
+      "standards": [
+        {
+          "name": "NIST Cybersecurity Framework 2.0"
+        },
+        {
+          "name": "CIS Controls"
+        },
+        {
+          "name": "Microsoft Secure Score"
+        }
+      ],
+      "order": 1
+    },
+    {
+      "id": "business-continuity",
+      "name": "Business Continuity and Disaster Recovery",
+      "shortDescription": "Ability to keep operating through outages, data loss, and vendor failures.",
+      "businessExplanation": "Continuity planning determines whether the business can recover critical systems quickly enough to avoid unacceptable revenue, service, or reputation damage.",
+      "weight": 15,
+      "standards": [
+        {
+          "name": "ISO 22301"
+        },
+        {
+          "name": "AWS Well-Architected Framework"
+        },
+        {
+          "name": "Azure Well-Architected Framework"
+        }
+      ],
+      "order": 2
+    },
+    {
+      "id": "identity-access",
+      "name": "Identity and Access Management",
+      "shortDescription": "Controls for who can access business systems and administrative tools.",
+      "businessExplanation": "Access management reduces the chance that a lost password, former employee account, or shared administrator login becomes a business incident.",
+      "weight": 12,
+      "standards": [
+        {
+          "name": "CIS Controls"
+        },
+        {
+          "name": "Microsoft Entra security recommendations"
+        },
+        {
+          "name": "Google Workspace security recommendations"
+        }
+      ],
+      "order": 3
+    },
+    {
+      "id": "technology-operations",
+      "name": "Technology Operations",
+      "shortDescription": "Day-to-day reliability, ownership, documentation, monitoring, and support.",
+      "businessExplanation": "Operations health shows whether technology issues are handled predictably or depend on heroics and undocumented knowledge.",
+      "weight": 12,
+      "standards": [
+        {
+          "name": "ITIL"
+        },
+        {
+          "name": "NIST Cybersecurity Framework 2.0"
+        }
+      ],
+      "order": 4
+    },
+    {
+      "id": "productivity-collaboration",
+      "name": "Productivity and Collaboration",
+      "shortDescription": "How effectively teams use communication, document, and workflow tools.",
+      "businessExplanation": "Collaboration health indicates whether tools make work faster and clearer or create duplicated effort and information silos.",
+      "weight": 10,
+      "standards": [
+        {
+          "name": "Microsoft Secure Score"
+        },
+        {
+          "name": "Google Workspace security recommendations"
+        }
+      ],
+      "order": 5
+    },
+    {
+      "id": "cloud-infrastructure",
+      "name": "Cloud and Infrastructure",
+      "shortDescription": "Reliability, maintainability, and security of hosting and core infrastructure.",
+      "businessExplanation": "Infrastructure health reflects whether the systems running the business are understandable, supportable, secure, and resilient.",
+      "weight": 10,
+      "standards": [
+        {
+          "name": "AWS Well-Architected Framework"
+        },
+        {
+          "name": "Azure Well-Architected Framework"
+        },
+        {
+          "name": "Google Cloud Architecture Framework"
+        }
+      ],
+      "order": 6
+    },
+    {
+      "id": "governance-risk",
+      "name": "Governance and Risk Management",
+      "shortDescription": "Decision ownership, policies, vendor accountability, and risk visibility.",
+      "businessExplanation": "Governance health shows whether leaders can see technology risk clearly and make informed investment decisions.",
+      "weight": 8,
+      "standards": [
+        {
+          "name": "ISO 27001 concepts"
+        },
+        {
+          "name": "NIST Cybersecurity Framework 2.0"
+        }
+      ],
+      "order": 7
+    },
+    {
+      "id": "ai-readiness",
+      "name": "AI Readiness",
+      "shortDescription": "Preparedness to use AI tools safely, productively, and responsibly.",
+      "businessExplanation": "AI readiness measures whether the business can capture productivity gains without exposing sensitive data or creating unmanaged risk.",
+      "weight": 7,
+      "standards": [
+        {
+          "name": "NIST Cybersecurity Framework 2.0"
+        },
+        {
+          "name": "ISO 27001 concepts"
+        }
+      ],
+      "order": 8
+    },
+    {
+      "id": "cost-optimization",
+      "name": "Cost Optimization",
+      "shortDescription": "Visibility and control over software, cloud, and vendor spend.",
+      "businessExplanation": "Cost health indicates whether technology spending is intentional, reviewed, and tied to business value.",
+      "weight": 5,
+      "standards": [
+        {
+          "name": "FinOps Framework"
+        },
+        {
+          "name": "AWS Well-Architected Framework"
+        }
+      ],
+      "order": 9
+    },
+    {
+      "id": "vendor-strategy",
+      "name": "Vendor and Technology Strategy",
+      "shortDescription": "Fit, ownership, and lifecycle planning for key vendors and platforms.",
+      "businessExplanation": "Technology strategy health shows whether vendor decisions support the business or create avoidable lock-in, fragility, or duplicated tools.",
+      "weight": 3,
+      "standards": [
+        {
+          "name": "ITIL"
+        },
+        {
+          "name": "ISO 27001 concepts"
+        }
+      ],
+      "order": 10
+    }
+  ],
+  "questions": [
+    {
+      "id": "cyber-admin-mfa",
+      "categoryId": "cybersecurity",
+      "prompt": "Are administrators required to use multi-factor authentication when accessing critical systems?",
+      "description": "Include cloud consoles, email administration, finance systems, and remote access tools.",
+      "businessImpact": "Administrator accounts are high-value targets. Missing MFA can turn one stolen password into a business-wide incident.",
+      "responseType": "single-choice",
+      "options": [
+        {
+          "id": "yes",
+          "label": "Yes",
+          "maturityScore": 4
+        },
+        {
+          "id": "partial",
+          "label": "Partially",
+          "maturityScore": 2
+        },
+        {
+          "id": "no",
+          "label": "No",
+          "maturityScore": 0
+        }
+      ],
+      "allowUnknown": true,
+      "unknownBehavior": {
+        "maturityScore": 1,
+        "note": "Unknown admin MFA status indicates limited security visibility."
+      },
+      "importance": 5,
+      "severity": "critical",
+      "foundational": true,
+      "criticalFindingRule": {
+        "optionIds": [
+          "no"
+        ],
+        "findingTitle": "Administrative accounts are not protected by MFA"
+      },
+      "standards": [
+        {
+          "name": "CIS Controls",
+          "reference": "Account Management"
+        },
+        {
+          "name": "Microsoft Entra security recommendations"
+        }
+      ],
+      "recommendation": {
+        "title": "Require MFA for administrative access",
+        "action": "Enable MFA for all administrative accounts and review exceptions monthly.",
+        "businessImpact": "Reduces the likelihood that a stolen password becomes a major incident."
+      }
+    },
+    {
+      "id": "cyber-device-patching",
+      "categoryId": "cybersecurity",
+      "prompt": "How consistently are laptops, servers, and business devices patched?",
+      "responseType": "single-choice",
+      "options": [
+        {
+          "id": "none",
+          "label": "No consistent process",
+          "maturityScore": 1
+        },
+        {
+          "id": "manual",
+          "label": "Manual updates when issues arise",
+          "maturityScore": 2
+        },
+        {
+          "id": "scheduled",
+          "label": "Scheduled patching with basic tracking",
+          "maturityScore": 3
+        },
+        {
+          "id": "managed",
+          "label": "Managed patching with reporting",
+          "maturityScore": 4
+        },
+        {
+          "id": "optimized",
+          "label": "Managed, measured, and exception-reviewed",
+          "maturityScore": 5
+        }
+      ],
+      "allowUnknown": true,
+      "unknownBehavior": {
+        "maturityScore": 1,
+        "note": "Unknown patch status may indicate unmanaged exposure."
+      },
+      "importance": 4,
+      "severity": "high",
+      "foundational": true,
+      "standards": [
+        {
+          "name": "CIS Controls"
+        },
+        {
+          "name": "NIST Cybersecurity Framework 2.0"
+        }
+      ],
+      "recommendation": {
+        "title": "Create a patch management routine",
+        "action": "Define patch ownership, cadence, reporting, and exception handling for critical devices.",
+        "businessImpact": "Reduces exposure to known vulnerabilities and avoids emergency remediation."
+      }
+    },
+    {
+      "id": "bcdr-backup-test",
+      "categoryId": "business-continuity",
+      "prompt": "When was the last successful test of restoring critical business data from backup?",
+      "responseType": "single-choice",
+      "options": [
+        {
+          "id": "never",
+          "label": "Never",
+          "maturityScore": 0
+        },
+        {
+          "id": "over-year",
+          "label": "More than a year ago",
+          "maturityScore": 1
+        },
+        {
+          "id": "year",
+          "label": "Within the last year",
+          "maturityScore": 3
+        },
+        {
+          "id": "quarter",
+          "label": "Within the last quarter",
+          "maturityScore": 4
+        },
+        {
+          "id": "routine",
+          "label": "Tested routinely with documented results",
+          "maturityScore": 5
+        }
+      ],
+      "allowUnknown": true,
+      "unknownBehavior": {
+        "maturityScore": 0,
+        "note": "Unknown restore history should be treated as a serious recovery risk."
+      },
+      "importance": 5,
+      "severity": "critical",
+      "foundational": true,
+      "criticalFindingRule": {
+        "optionIds": [
+          "never"
+        ],
+        "maturityAtOrBelow": 0,
+        "findingTitle": "Critical business data does not have tested backups"
+      },
+      "standards": [
+        {
+          "name": "ISO 22301"
+        },
+        {
+          "name": "AWS Well-Architected Framework"
+        }
+      ],
+      "recommendation": {
+        "title": "Test backup restoration",
+        "action": "Run and document a restore test for critical systems, then schedule recurring tests.",
+        "businessImpact": "Confirms the business can recover data before an outage or ransomware event forces the issue."
+      }
+    },
+    {
+      "id": "bcdr-recovery-owner",
+      "categoryId": "business-continuity",
+      "prompt": "Is there a named owner and written recovery process for your most critical systems?",
+      "responseType": "single-choice",
+      "options": [
+        {
+          "id": "yes",
+          "label": "Yes",
+          "maturityScore": 4
+        },
+        {
+          "id": "partial",
+          "label": "Partially",
+          "maturityScore": 2
+        },
+        {
+          "id": "no",
+          "label": "No",
+          "maturityScore": 0
+        }
+      ],
+      "allowUnknown": true,
+      "unknownBehavior": {
+        "maturityScore": 1,
+        "note": "Unknown ownership can slow recovery during an incident."
+      },
+      "importance": 4,
+      "severity": "high",
+      "standards": [
+        {
+          "name": "ISO 22301"
+        },
+        {
+          "name": "ITIL"
+        }
+      ],
+      "recommendation": {
+        "title": "Document recovery ownership",
+        "action": "Assign recovery owners and capture the first-hour recovery checklist for critical systems.",
+        "businessImpact": "Improves decision speed and accountability during outages."
+      }
+    },
+    {
+      "id": "iam-offboarding",
+      "categoryId": "identity-access",
+      "prompt": "How quickly are former employees and contractors removed from business systems?",
+      "responseType": "single-choice",
+      "options": [
+        {
+          "id": "unknown",
+          "label": "Not tracked",
+          "maturityScore": 1
+        },
+        {
+          "id": "manual",
+          "label": "Manual, often delayed",
+          "maturityScore": 2
+        },
+        {
+          "id": "same-week",
+          "label": "Usually within the same week",
+          "maturityScore": 3
+        },
+        {
+          "id": "same-day",
+          "label": "Same day for core systems",
+          "maturityScore": 4
+        },
+        {
+          "id": "automated",
+          "label": "Checklist or automation with verification",
+          "maturityScore": 5
+        }
+      ],
+      "allowUnknown": true,
+      "unknownBehavior": {
+        "maturityScore": 1,
+        "note": "Unknown offboarding status is an access governance risk."
+      },
+      "importance": 5,
+      "severity": "critical",
+      "foundational": true,
+      "criticalFindingRule": {
+        "optionIds": [
+          "unknown",
+          "manual"
+        ],
+        "maturityAtOrBelow": 2,
+        "findingTitle": "Former employees or contractors may retain access"
+      },
+      "standards": [
+        {
+          "name": "CIS Controls"
+        },
+        {
+          "name": "Microsoft Entra security recommendations"
+        },
+        {
+          "name": "Google Workspace security recommendations"
+        }
+      ],
+      "recommendation": {
+        "title": "Tighten access offboarding",
+        "action": "Create a same-day offboarding checklist for email, productivity, finance, cloud, and line-of-business systems.",
+        "businessImpact": "Reduces insider and account takeover risk after role changes or departures."
+      }
+    },
+    {
+      "id": "iam-shared-admin",
+      "categoryId": "identity-access",
+      "prompt": "Do people use shared administrator accounts for important systems?",
+      "responseType": "single-choice",
+      "options": [
+        {
+          "id": "yes",
+          "label": "Yes",
+          "maturityScore": 0
+        },
+        {
+          "id": "some",
+          "label": "Only in a few systems",
+          "maturityScore": 2
+        },
+        {
+          "id": "no",
+          "label": "No, admins use named accounts",
+          "maturityScore": 4
+        },
+        {
+          "id": "controlled",
+          "label": "No, with privileged access controls",
+          "maturityScore": 5
+        }
+      ],
+      "allowUnknown": true,
+      "unknownBehavior": {
+        "maturityScore": 1,
+        "note": "Unknown shared-account use weakens accountability."
+      },
+      "importance": 4,
+      "severity": "high",
+      "criticalFindingRule": {
+        "optionIds": [
+          "yes"
+        ],
+        "findingTitle": "Shared administrator accounts are in use"
+      },
+      "standards": [
+        {
+          "name": "CIS Controls"
+        },
+        {
+          "name": "ISO 27001 concepts"
+        }
+      ],
+      "recommendation": {
+        "title": "Eliminate shared administrator accounts",
+        "action": "Move administrators to named accounts and retain emergency access separately.",
+        "businessImpact": "Improves accountability and reduces broad password-sharing risk."
+      }
+    },
+    {
+      "id": "ops-system-inventory",
+      "categoryId": "technology-operations",
+      "prompt": "Does the business maintain a current list of important systems, owners, and support contacts?",
+      "responseType": "single-choice",
+      "options": [
+        {
+          "id": "yes",
+          "label": "Yes",
+          "maturityScore": 4
+        },
+        {
+          "id": "partial",
+          "label": "Partially",
+          "maturityScore": 2
+        },
+        {
+          "id": "no",
+          "label": "No",
+          "maturityScore": 0
+        }
+      ],
+      "allowUnknown": true,
+      "unknownBehavior": {
+        "maturityScore": 1,
+        "note": "Unknown ownership increases operational risk."
+      },
+      "importance": 4,
+      "severity": "high",
+      "foundational": true,
+      "standards": [
+        {
+          "name": "ITIL"
+        },
+        {
+          "name": "NIST Cybersecurity Framework 2.0"
+        }
+      ],
+      "recommendation": {
+        "title": "Create a critical systems inventory",
+        "action": "Document key systems, owners, vendors, renewal dates, and support paths.",
+        "businessImpact": "Makes outages, vendor changes, and audits easier to manage."
+      }
+    },
+    {
+      "id": "ops-incident-review",
+      "categoryId": "technology-operations",
+      "prompt": "After meaningful outages or technology incidents, does the team review what happened and assign follow-up actions?",
+      "responseType": "single-choice",
+      "options": [
+        {
+          "id": "yes",
+          "label": "Yes",
+          "maturityScore": 4
+        },
+        {
+          "id": "partial",
+          "label": "Partially",
+          "maturityScore": 2
+        },
+        {
+          "id": "no",
+          "label": "No",
+          "maturityScore": 0
+        }
+      ],
+      "allowUnknown": true,
+      "unknownBehavior": {
+        "maturityScore": 2,
+        "note": "Unknown review practice suggests inconsistent learning."
+      },
+      "importance": 3,
+      "severity": "moderate",
+      "standards": [
+        {
+          "name": "ITIL"
+        }
+      ],
+      "recommendation": {
+        "title": "Run lightweight incident reviews",
+        "action": "Create a short review process for causes, impact, customer communication, and prevention actions.",
+        "businessImpact": "Turns recurring problems into managed improvement work."
+      }
+    },
+    {
+      "id": "prod-doc-control",
+      "categoryId": "productivity-collaboration",
+      "prompt": "Can staff reliably find the current version of important documents and policies?",
+      "responseType": "single-choice",
+      "options": [
+        {
+          "id": "yes",
+          "label": "Yes",
+          "maturityScore": 4
+        },
+        {
+          "id": "partial",
+          "label": "Partially",
+          "maturityScore": 2
+        },
+        {
+          "id": "no",
+          "label": "No",
+          "maturityScore": 0
+        }
+      ],
+      "allowUnknown": true,
+      "unknownBehavior": {
+        "maturityScore": 2,
+        "note": "Unknown document ownership may indicate collaboration friction."
+      },
+      "importance": 3,
+      "severity": "moderate",
+      "standards": [
+        {
+          "name": "Microsoft Secure Score"
+        },
+        {
+          "name": "Google Workspace security recommendations"
+        }
+      ],
+      "recommendation": {
+        "title": "Clarify document ownership",
+        "action": "Define where official documents live, who owns them, and how obsolete copies are handled.",
+        "businessImpact": "Reduces rework, confusion, and policy drift."
+      }
+    },
+    {
+      "id": "prod-external-sharing",
+      "categoryId": "productivity-collaboration",
+      "prompt": "Is external file sharing reviewed or restricted for sensitive information?",
+      "responseType": "single-choice",
+      "options": [
+        {
+          "id": "yes",
+          "label": "Yes",
+          "maturityScore": 4
+        },
+        {
+          "id": "partial",
+          "label": "Partially",
+          "maturityScore": 2
+        },
+        {
+          "id": "no",
+          "label": "No",
+          "maturityScore": 0
+        }
+      ],
+      "allowUnknown": true,
+      "unknownBehavior": {
+        "maturityScore": 1,
+        "note": "Unknown external sharing settings may expose sensitive files."
+      },
+      "importance": 4,
+      "severity": "high",
+      "standards": [
+        {
+          "name": "Microsoft Secure Score"
+        },
+        {
+          "name": "Google Workspace security recommendations"
+        }
+      ],
+      "recommendation": {
+        "title": "Review external sharing controls",
+        "action": "Set sharing defaults, review public links, and define sensitive-data sharing rules.",
+        "businessImpact": "Reduces accidental disclosure through collaboration tools."
+      }
+    },
+    {
+      "id": "cloud-critical-owner",
+      "categoryId": "cloud-infrastructure",
+      "prompt": "Is there a clearly identifiable owner for core domains, DNS, cloud accounts, and hosting?",
+      "responseType": "single-choice",
+      "options": [
+        {
+          "id": "yes",
+          "label": "Yes",
+          "maturityScore": 4
+        },
+        {
+          "id": "partial",
+          "label": "Partially",
+          "maturityScore": 2
+        },
+        {
+          "id": "no",
+          "label": "No",
+          "maturityScore": 0
+        }
+      ],
+      "allowUnknown": true,
+      "unknownBehavior": {
+        "maturityScore": 0,
+        "note": "Unknown ownership of core accounts is a serious business continuity risk."
+      },
+      "importance": 5,
+      "severity": "critical",
+      "criticalFindingRule": {
+        "optionIds": [
+          "no"
+        ],
+        "findingTitle": "No identifiable owner for core domains or cloud accounts"
+      },
+      "standards": [
+        {
+          "name": "AWS Well-Architected Framework"
+        },
+        {
+          "name": "Google Cloud Architecture Framework"
+        }
+      ],
+      "recommendation": {
+        "title": "Confirm ownership of core infrastructure accounts",
+        "action": "Document account owners, recovery contacts, MFA status, and billing ownership for domains, DNS, cloud, and hosting.",
+        "businessImpact": "Prevents avoidable lockout, downtime, and vendor escalation delays."
+      }
+    },
+    {
+      "id": "cloud-internet-exposure",
+      "categoryId": "cloud-infrastructure",
+      "prompt": "Are internet-facing servers and services reviewed for unsupported software or unnecessary exposure?",
+      "responseType": "single-choice",
+      "options": [
+        {
+          "id": "yes",
+          "label": "Yes",
+          "maturityScore": 4
+        },
+        {
+          "id": "partial",
+          "label": "Partially",
+          "maturityScore": 2
+        },
+        {
+          "id": "no",
+          "label": "No",
+          "maturityScore": 0
+        }
+      ],
+      "allowUnknown": true,
+      "unknownBehavior": {
+        "maturityScore": 1,
+        "note": "Unknown exposure can hide high-risk infrastructure."
+      },
+      "importance": 4,
+      "severity": "high",
+      "standards": [
+        {
+          "name": "CIS Benchmarks"
+        },
+        {
+          "name": "AWS Well-Architected Framework"
+        }
+      ],
+      "recommendation": {
+        "title": "Review internet-facing infrastructure",
+        "action": "Inventory public services, remove unnecessary exposure, and patch or replace unsupported systems.",
+        "businessImpact": "Reduces the risk of preventable compromise through exposed infrastructure."
+      }
+    },
+    {
+      "id": "gov-risk-register",
+      "categoryId": "governance-risk",
+      "prompt": "Do leaders maintain a simple list of known technology risks and planned actions?",
+      "responseType": "single-choice",
+      "options": [
+        {
+          "id": "yes",
+          "label": "Yes",
+          "maturityScore": 4
+        },
+        {
+          "id": "partial",
+          "label": "Partially",
+          "maturityScore": 2
+        },
+        {
+          "id": "no",
+          "label": "No",
+          "maturityScore": 0
+        }
+      ],
+      "allowUnknown": true,
+      "unknownBehavior": {
+        "maturityScore": 1,
+        "note": "Unknown risk ownership limits executive visibility."
+      },
+      "importance": 4,
+      "severity": "high",
+      "standards": [
+        {
+          "name": "NIST Cybersecurity Framework 2.0"
+        },
+        {
+          "name": "ISO 27001 concepts"
+        }
+      ],
+      "recommendation": {
+        "title": "Create a technology risk register",
+        "action": "Track material risks, owners, likely impact, and next actions in a leadership-reviewed list.",
+        "businessImpact": "Helps leaders prioritize technology investment based on business risk."
+      }
+    },
+    {
+      "id": "gov-policy-review",
+      "categoryId": "governance-risk",
+      "prompt": "Are key technology policies reviewed at least annually?",
+      "responseType": "single-choice",
+      "options": [
+        {
+          "id": "yes",
+          "label": "Yes",
+          "maturityScore": 4
+        },
+        {
+          "id": "partial",
+          "label": "Partially",
+          "maturityScore": 2
+        },
+        {
+          "id": "no",
+          "label": "No",
+          "maturityScore": 0
+        }
+      ],
+      "allowUnknown": true,
+      "unknownBehavior": {
+        "maturityScore": 2,
+        "note": "Unknown policy review cadence suggests governance drift."
+      },
+      "importance": 2,
+      "severity": "moderate",
+      "standards": [
+        {
+          "name": "ISO 27001 concepts"
+        }
+      ],
+      "recommendation": {
+        "title": "Review core technology policies",
+        "action": "Schedule an annual review of security, access, acceptable use, backup, and vendor policies.",
+        "businessImpact": "Keeps expectations current as the business changes."
+      }
+    },
+    {
+      "id": "ai-sensitive-data",
+      "categoryId": "ai-readiness",
+      "prompt": "Has the business told employees what company or customer data may be used with AI tools?",
+      "responseType": "single-choice",
+      "options": [
+        {
+          "id": "yes",
+          "label": "Yes",
+          "maturityScore": 4
+        },
+        {
+          "id": "partial",
+          "label": "Partially",
+          "maturityScore": 2
+        },
+        {
+          "id": "no",
+          "label": "No",
+          "maturityScore": 0
+        }
+      ],
+      "allowUnknown": true,
+      "unknownBehavior": {
+        "maturityScore": 1,
+        "note": "Unknown AI data rules create preventable confidentiality risk."
+      },
+      "importance": 4,
+      "severity": "high",
+      "foundational": true,
+      "standards": [
+        {
+          "name": "NIST Cybersecurity Framework 2.0"
+        },
+        {
+          "name": "ISO 27001 concepts"
+        }
+      ],
+      "recommendation": {
+        "title": "Define AI data-use rules",
+        "action": "Publish practical guidance for what data can and cannot be entered into AI tools.",
+        "businessImpact": "Allows productivity gains while reducing confidentiality and contractual risk."
+      }
+    },
+    {
+      "id": "ai-approved-tools",
+      "categoryId": "ai-readiness",
+      "prompt": "Are approved AI tools and use cases documented for employees?",
+      "responseType": "single-choice",
+      "options": [
+        {
+          "id": "yes",
+          "label": "Yes",
+          "maturityScore": 4
+        },
+        {
+          "id": "partial",
+          "label": "Partially",
+          "maturityScore": 2
+        },
+        {
+          "id": "no",
+          "label": "No",
+          "maturityScore": 0
+        }
+      ],
+      "allowUnknown": true,
+      "unknownBehavior": {
+        "maturityScore": 2,
+        "note": "Unknown AI usage can lead to unmanaged shadow tools."
+      },
+      "importance": 3,
+      "severity": "moderate",
+      "standards": [
+        {
+          "name": "NIST Cybersecurity Framework 2.0"
+        }
+      ],
+      "recommendation": {
+        "title": "Create an approved AI tool list",
+        "action": "Identify approved AI tools, acceptable use cases, and escalation paths for new use cases.",
+        "businessImpact": "Improves adoption while reducing shadow technology risk."
+      }
+    },
+    {
+      "id": "cost-software-review",
+      "categoryId": "cost-optimization",
+      "prompt": "How often does the business review software subscriptions for unused licenses or duplicate tools?",
+      "responseType": "single-choice",
+      "options": [
+        {
+          "id": "never",
+          "label": "Never or rarely",
+          "maturityScore": 1
+        },
+        {
+          "id": "annual",
+          "label": "Annually",
+          "maturityScore": 3
+        },
+        {
+          "id": "quarterly",
+          "label": "Quarterly",
+          "maturityScore": 4
+        },
+        {
+          "id": "managed",
+          "label": "Routinely with owners and usage data",
+          "maturityScore": 5
+        }
+      ],
+      "allowUnknown": true,
+      "unknownBehavior": {
+        "maturityScore": 1,
+        "note": "Unknown subscription usage may indicate overspending."
+      },
+      "importance": 3,
+      "severity": "moderate",
+      "standards": [
+        {
+          "name": "FinOps Framework"
+        }
+      ],
+      "recommendation": {
+        "title": "Review recurring software spend",
+        "action": "Compare subscriptions, owners, usage, and renewal dates at least quarterly.",
+        "businessImpact": "Reduces waste and improves budgeting visibility."
+      }
+    },
+    {
+      "id": "cost-cloud-budget",
+      "categoryId": "cost-optimization",
+      "prompt": "Are cloud or hosting costs monitored against budgets or expected usage?",
+      "responseType": "single-choice",
+      "options": [
+        {
+          "id": "yes",
+          "label": "Yes",
+          "maturityScore": 4
+        },
+        {
+          "id": "partial",
+          "label": "Partially",
+          "maturityScore": 2
+        },
+        {
+          "id": "no",
+          "label": "No",
+          "maturityScore": 0
+        }
+      ],
+      "allowUnknown": true,
+      "allowNotApplicable": true,
+      "unknownBehavior": {
+        "maturityScore": 1,
+        "note": "Unknown cloud spending controls may hide waste."
+      },
+      "importance": 3,
+      "severity": "moderate",
+      "standards": [
+        {
+          "name": "FinOps Framework"
+        },
+        {
+          "name": "AWS Well-Architected Framework"
+        }
+      ],
+      "recommendation": {
+        "title": "Set cloud cost visibility",
+        "action": "Add budget alerts, ownership tags, and recurring cost review for cloud and hosting spend.",
+        "businessImpact": "Prevents surprise bills and connects infrastructure spend to business value."
+      }
+    },
+    {
+      "id": "vendor-critical-review",
+      "categoryId": "vendor-strategy",
+      "prompt": "Are critical technology vendors reviewed for fit, risk, support quality, and renewal terms?",
+      "responseType": "single-choice",
+      "options": [
+        {
+          "id": "yes",
+          "label": "Yes",
+          "maturityScore": 4
+        },
+        {
+          "id": "partial",
+          "label": "Partially",
+          "maturityScore": 2
+        },
+        {
+          "id": "no",
+          "label": "No",
+          "maturityScore": 0
+        }
+      ],
+      "allowUnknown": true,
+      "unknownBehavior": {
+        "maturityScore": 2,
+        "note": "Unknown vendor review cadence can create renewal and lock-in risk."
+      },
+      "importance": 3,
+      "severity": "moderate",
+      "standards": [
+        {
+          "name": "ITIL"
+        },
+        {
+          "name": "ISO 27001 concepts"
+        }
+      ],
+      "recommendation": {
+        "title": "Review critical vendors",
+        "action": "Create a short annual review for critical vendors covering cost, fit, risk, support, and renewal terms.",
+        "businessImpact": "Improves leverage and reduces avoidable vendor dependency."
+      }
+    },
+    {
+      "id": "vendor-roadmap",
+      "categoryId": "vendor-strategy",
+      "prompt": "Is there a simple technology roadmap tied to business priorities?",
+      "responseType": "single-choice",
+      "options": [
+        {
+          "id": "yes",
+          "label": "Yes",
+          "maturityScore": 4
+        },
+        {
+          "id": "partial",
+          "label": "Partially",
+          "maturityScore": 2
+        },
+        {
+          "id": "no",
+          "label": "No",
+          "maturityScore": 0
+        }
+      ],
+      "allowUnknown": true,
+      "unknownBehavior": {
+        "maturityScore": 2,
+        "note": "Unknown roadmap alignment may indicate reactive technology spending."
+      },
+      "importance": 3,
+      "severity": "moderate",
+      "standards": [
+        {
+          "name": "ITIL"
+        }
+      ],
+      "recommendation": {
+        "title": "Create a pragmatic technology roadmap",
+        "action": "Map the next 6-12 months of technology work to business outcomes, risks, and dependencies.",
+        "businessImpact": "Helps technology investment support business priorities instead of reacting to the loudest issue."
+      }
+    }
+  ]
+}

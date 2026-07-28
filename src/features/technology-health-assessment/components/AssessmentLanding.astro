@@ -1,0 +1,62 @@
+---
+import { assessmentQuestionSetLabel } from '../index.ts';
+---
+
+<section class="assessment-hero hero-card focused-hero">
+  <div class="hero-copy">
+    <p class="kicker">Fractional Technology Partner</p>
+    <h1>Technology Health Assessment</h1>
+    <p class="lede">
+      A guided assessment for owners and leadership teams who need a clear first read on technology risk, resilience, cost, and AI readiness.
+    </p>
+    <div class="actions">
+      <a class="button primary" href="/assessment/start">Start assessment</a>
+      <a class="button secondary resume-link" href="/assessment/questionnaire" data-resume-link hidden>Resume progress</a>
+    </div>
+  </div>
+  <aside class="hero-summary" aria-label="Assessment summary">
+    <span>Preliminary report includes</span>
+    <strong>Score + risks</strong>
+    <p>Health score, critical findings, priority recommendations, and confidence level.</p>
+  </aside>
+</section>
+
+<section class="path-grid" aria-label="Assessment process">
+  <article>
+    <span>01</span>
+    <h2>Profile</h2>
+    <p>Give enough company context to make the report useful.</p>
+  </article>
+  <article>
+    <span>02</span>
+    <h2>Assess</h2>
+    <p>Answer practical questions across the major technology health areas.</p>
+  </article>
+  <article>
+    <span>03</span>
+    <h2>Review</h2>
+    <p>Get a preliminary score, prioritized risks, and recommended next steps.</p>
+  </article>
+</section>
+
+<section class="panel-grid landing-grid">
+  <article class="panel outputs-panel">
+    <h2>Built for business decisions</h2>
+    <p>
+      This is closer to a diligence review than a generic IT checklist. It is written in plain language and separates health from evidence confidence.
+    </p>
+  </article>
+  <article class="panel process-panel">
+    <h2>Designed as an MVP</h2>
+    <p>
+      Most teams can complete this initial demonstration set in 10-15 minutes. The question bank is intentionally small while the workflow and scoring model are validated.
+    </p>
+  </article>
+  <article class="panel wide disclaimer-panel">
+    <h2>Important scope note</h2>
+    <p>
+      This assessment provides preliminary advisory guidance. It is not a certification, legal opinion, compliance attestation, penetration test, or formal security audit.
+    </p>
+    <p class="muted">{assessmentQuestionSetLabel}</p>
+  </article>
+</section>

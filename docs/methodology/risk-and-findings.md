@@ -1,0 +1,10 @@
+# Risk and findings
+
+Health is a maturity/implementation result. A finding is a risk, visibility gap, or improvement condition; a low score is not automatically a critical finding. A critical label should require a documented, observable basis such as confirmed absence of a foundational safeguard, dangerous observed exposure, demonstrated inability to recover a critical service, uncontrolled access, or material business impact with credible near-term likelihood.
+
+The authored model supports finding conditions with `all` or `any`, operators `equals`, `in`, `unknown`, `not-applicable`, `lte`, and `gte`, severities, business impact, and recommendation IDs. However, the current runtime does not evaluate `FindingDefinition.conditions`; it uses legacy question-level recommendation and `criticalFindingRule` values after flattening. This is a material architecture gap and is recorded in the audit and traceability matrix.
+
+Current findings are emitted when a question is applicable, maturity is below 4, and a recommendation exists. Critical rules may be option- or maturity-based; unknown answers only become critical when the read-model rule translates a matching critical modular finding into a legacy rule. Findings are sorted with critical first, then priority. There is no general deduplication beyond one generated finding per question and no multi-finding interaction model.
+
+A finding may be confirmed, provisional, or visibility-oriented in future report language. Today `requiresVerification` is true when confidence is below 0.65 or the answer is unknown. Contradictory evidence is not resolved automatically; it must be surfaced for professional review.
+

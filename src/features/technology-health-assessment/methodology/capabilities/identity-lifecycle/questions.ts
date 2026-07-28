@@ -1,0 +1,23 @@
+import type { CapabilityQuestion } from '../../types.ts';
+
+export const identityLifecycleQuestions: CapabilityQuestion[] = [
+  {
+    id: 'iam-offboarding',
+    capabilityId: 'identity-lifecycle',
+    prompt: 'How quickly are former employees and contractors removed from business systems?',
+    responseType: 'single-choice',
+    options: [
+      { id: 'unknown', label: 'Not tracked', maturityScore: 1 },
+      { id: 'manual', label: 'Manual, often delayed', maturityScore: 2 },
+      { id: 'same-week', label: 'Usually within the same week', maturityScore: 3 },
+      { id: 'same-day', label: 'Same day for core systems', maturityScore: 4 },
+      { id: 'automated', label: 'Checklist or automation with verification', maturityScore: 5 },
+    ],
+    allowUnknown: true,
+    unknownBehavior: { type: 'visibility-finding', findingId: 'access-offboarding-delayed' },
+    importance: 5,
+    severity: 'critical',
+    foundational: true,
+    standardMappingIds: ['identity-lifecycle-cis', 'identity-lifecycle-entra', 'identity-lifecycle-google'],
+  },
+];

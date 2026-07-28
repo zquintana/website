@@ -87,6 +87,7 @@ const technologies = ['Go', 'Python', 'AWS', 'EKS', 'Terraform', 'Docker', 'Kube
       <div class="nav-links" id="nav-links">
         <a href="#top">Home</a>
         <a href="#services">Services</a>
+        <a href="/assessment">Assessment</a>
         <a href="#results">Results</a>
         <a href="#about">About</a>
         <a href="#contact">Contact</a>
@@ -106,10 +107,11 @@ const technologies = ['Go', 'Python', 'AWS', 'EKS', 'Terraform', 'Docker', 'Kube
             <div class="hero-content">
               <div class="eyebrow">Architecture · Cloud · Engineering leadership</div>
               <h1>Systems and delivery built for growth.</h1>
-              <div class="hero-actions">
-                <a class="button primary hero-primary" href="#services">See how I work</a>
-                <a class="button secondary" href="https://calendly.com/zach-quintana/30min" target="_blank" rel="noopener noreferrer">Book a call</a>
-              </div>
+          <div class="hero-actions">
+            <a class="button primary hero-primary" href="#services">See how I work</a>
+            <a class="button secondary" href="/assessment">Take the assessment</a>
+            <a class="button secondary" href="https://calendly.com/zach-quintana/30min" target="_blank" rel="noopener noreferrer">Book a call</a>
+          </div>
             </div>
           </div>
           <div class="hero-proof" aria-label="Consulting focus areas">
@@ -130,6 +132,20 @@ const technologies = ['Go', 'Python', 'AWS', 'EKS', 'Terraform', 'Docker', 'Kube
           <span>Medallia</span>
           <span>CBS Interactive</span>
         </div>
+      </section>
+
+      <section class="assessment-cta section-tight reveal" aria-labelledby="assessment-heading">
+        <div>
+          <p class="section-kicker">
+            <span class="section-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+            Technology Health Assessment
+          </p>
+          <h2 id="assessment-heading">Find the technology risks worth fixing first.</h2>
+          <p>
+            Complete a structured assessment and receive a preliminary Technology Health Score, category scores, critical risks, prioritized recommendations, and next steps.
+          </p>
+        </div>
+        <a class="button primary" href="/assessment">Start the assessment</a>
       </section>
 
       <section class="section split-heading reveal" id="services">
@@ -646,6 +662,32 @@ const technologies = ['Go', 'Python', 'AWS', 'EKS', 'Terraform', 'Docker', 'Kube
     padding-top: 42px;
   }
 
+  .assessment-cta {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 28px;
+    align-items: center;
+    margin-top: 26px;
+    border: 1px solid var(--line);
+    border-radius: 30px;
+    background: linear-gradient(145deg, var(--panel-strong), var(--panel));
+    box-shadow: var(--shadow);
+    padding: 30px;
+    backdrop-filter: blur(18px);
+  }
+
+  .assessment-cta h2 {
+    max-width: 780px;
+    margin-bottom: 12px;
+    font-size: clamp(1.8rem, 3vw, 3rem);
+  }
+
+  .assessment-cta p:not(.section-kicker) {
+    max-width: 760px;
+    color: var(--muted);
+    font-size: 1.04rem;
+  }
+
   .trust p {
     color: var(--muted);
     font-weight: 700;
@@ -909,6 +951,7 @@ const technologies = ['Go', 'Python', 'AWS', 'EKS', 'Terraform', 'Docker', 'Kube
 
     .split-heading,
     .hero-grid,
+    .assessment-cta,
     .about {
       grid-template-columns: 1fr;
     }

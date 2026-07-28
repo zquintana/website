@@ -1,0 +1,128 @@
+---
+const employeeRanges = ['', '1-10', '11-50', '51-200', '201-500', '500+'];
+const revenueRanges = ['', 'Under $1M', '$1M-$5M', '$5M-$25M', '$25M-$100M', '$100M+'];
+const workforceModels = ['', 'Remote', 'Hybrid', 'Office-based'];
+const platforms = ['', 'Microsoft 365', 'Google Workspace', 'Mixed', 'Other'];
+const yesNoPartial = ['', 'Yes', 'No', 'Part-time or informal'];
+const yesNoUnsure = ['', 'Yes', 'No', 'Not sure'];
+
+const selectOptions = (options: string[]) => options.map((option) => ({ value: option, label: option || 'Select one' }));
+---
+
+<section class="page-heading start-heading">
+  <p class="kicker">Profile setup</p>
+  <h1>Business profile</h1>
+  <p class="lede">
+    These details make the report more useful without asking for sensitive exact values. Only the marked fields are required.
+  </p>
+</section>
+
+<div class="wizard-progress" aria-label="Profile progress">
+  <button type="button" class="is-active" data-step-jump="0"><span>1</span>Contact</button>
+  <button type="button" data-step-jump="1"><span>2</span>Company</button>
+  <button type="button" data-step-jump="2"><span>3</span>Technology</button>
+  <button type="button" data-step-jump="3"><span>4</span>Concerns</button>
+</div>
+
+<form class="assessment-form profile-card" id="profile-form">
+  <section class="form-section required-section wizard-step is-active" data-profile-step="0" aria-labelledby="required-heading">
+    <div class="form-section-heading">
+      <p class="kicker">Required</p>
+      <h2 id="required-heading">Who is this assessment for?</h2>
+    </div>
+    <div class="field-grid">
+      <label class="field">
+        <span class="field-label">Business name <em>required</em></span>
+        <input name="businessName" type="text" required autocomplete="organization" />
+      </label>
+      <label class="field">
+        <span class="field-label">Respondent name <em>required</em></span>
+        <input name="respondentName" type="text" required autocomplete="name" />
+      </label>
+      <label class="field">
+        <span class="field-label">Respondent email <em>required</em></span>
+        <input name="respondentEmail" type="email" required autocomplete="email" />
+      </label>
+      <label class="field">
+        <span class="field-label">Respondent role</span>
+        <input name="respondentRole" type="text" autocomplete="organization-title" />
+      </label>
+    </div>
+  </section>
+
+  <section class="form-section wizard-step" data-profile-step="1" aria-labelledby="context-heading">
+    <div class="form-section-heading">
+      <p class="kicker">Optional</p>
+      <h2 id="context-heading">Company context</h2>
+      <p>Ranges are enough. These inputs help tailor the preliminary interpretation.</p>
+    </div>
+    <div class="field-grid">
+      <label class="field">
+        <span class="field-label">Industry</span>
+        <input name="industry" type="text" />
+      </label>
+      <label class="field select-field">
+        <span class="field-label">Approximate employee count</span>
+        <select name="employeeCount">{selectOptions(employeeRanges).map((option) => <option value={option.value}>{option.label}</option>)}</select>
+      </label>
+      <label class="field select-field">
+        <span class="field-label">Approximate annual revenue range</span>
+        <select name="revenueRange">{selectOptions(revenueRanges).map((option) => <option value={option.value}>{option.label}</option>)}</select>
+      </label>
+      <label class="field">
+        <span class="field-label">Number of locations</span>
+        <input name="locations" type="text" inputmode="numeric" />
+      </label>
+    </div>
+  </section>
+
+  <section class="form-section wizard-step" data-profile-step="2" aria-labelledby="technology-heading">
+    <div class="form-section-heading">
+      <p class="kicker">Optional</p>
+      <h2 id="technology-heading">Technology environment</h2>
+      <p>This helps frame recommendations without requiring a detailed inventory.</p>
+    </div>
+    <div class="field-grid">
+      <label class="field select-field">
+        <span class="field-label">Workforce model</span>
+        <select name="workforceModel">{selectOptions(workforceModels).map((option) => <option value={option.value}>{option.label}</option>)}</select>
+      </label>
+      <label class="field select-field">
+        <span class="field-label">Primary productivity platform</span>
+        <select name="productivityPlatform">{selectOptions(platforms).map((option) => <option value={option.value}>{option.label}</option>)}</select>
+      </label>
+      <label class="field select-field">
+        <span class="field-label">Internal IT staff?</span>
+        <select name="hasInternalIt">{selectOptions(yesNoPartial).map((option) => <option value={option.value}>{option.label}</option>)}</select>
+      </label>
+      <label class="field select-field">
+        <span class="field-label">Outside IT provider?</span>
+        <select name="hasOutsideProvider">{selectOptions(yesNoUnsure).map((option) => <option value={option.value}>{option.label}</option>)}</select>
+      </label>
+    </div>
+  </section>
+
+  <section class="form-section wizard-step" data-profile-step="3" aria-labelledby="concerns-heading">
+    <div class="form-section-heading">
+      <p class="kicker">Optional</p>
+      <h2 id="concerns-heading">Concerns and critical systems</h2>
+      <p>Capture what leadership already worries about before answering the assessment questions.</p>
+    </div>
+    <div class="field-grid">
+      <label class="field full">
+        <span class="field-label">Primary business concerns</span>
+        <textarea name="primaryConcerns" rows="4"></textarea>
+      </label>
+      <label class="field full">
+        <span class="field-label">Critical systems or applications</span>
+        <textarea name="criticalSystems" rows="4"></textarea>
+      </label>
+    </div>
+  </section>
+
+  <p class="form-error" id="profile-error" role="alert"></p>
+  <div class="form-actions">
+    <button class="button ghost" type="button" id="profile-back">Back to overview</button>
+    <button class="button primary" type="button" id="profile-next">Continue</button>
+  </div>
+</form>
