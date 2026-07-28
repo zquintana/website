@@ -6,8 +6,8 @@
 - Runtime export: `activeAssessmentVersion` in `src/features/technology-health-assessment/methodology/index.ts`
 - Hash: `methodology-0.1.0-hash-placeholder` (placeholder, not reproducibility-grade)
 - Catalog: 142 capabilities across 14 domains
-- Implemented modules: `business-service-criticality`, `recovery-requirements`, `technology-asset-inventory`, `recovery-capability`, `identity-lifecycle`, `privileged-access`
-- UI/read-model questions: 28 total, 13 migrated and 15 legacy
+- Implemented modules: `business-service-criticality`, `recovery-requirements`, `technology-asset-inventory`, `identity-inventory`, `recovery-capability`, `identity-lifecycle`, `privileged-access`
+- UI/read-model questions: 31 total, 16 migrated and 15 legacy
 - Intended use: pilot/demo advisory workflow only
 - Foundational treatment: `metadata-only`; foundational flags are displayed as metadata and do not alter scoring or automatically create findings
 
