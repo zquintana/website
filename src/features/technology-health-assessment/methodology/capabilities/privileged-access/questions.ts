@@ -8,6 +8,9 @@ export const privilegedAccessQuestions: CapabilityQuestion[] = [
     description: 'Include cloud consoles, email administration, finance systems, and remote access tools.',
     businessImpact: 'Administrator accounts are high-value targets. Missing MFA can turn one stolen password into a business-wide incident.',
     responseType: 'single-choice',
+    evidenceRequirements: [
+      { id: 'admin-mfa-coverage', label: 'Administrative MFA coverage', description: 'Configuration report or review showing MFA coverage for administrative accounts.', preferredSource: 'screenshot' },
+    ],
     options: [
       { id: 'yes', label: 'Yes', maturityScore: 4 },
       { id: 'partial', label: 'Partially', maturityScore: 2 },
@@ -25,6 +28,10 @@ export const privilegedAccessQuestions: CapabilityQuestion[] = [
     capabilityId: 'privileged-access',
     prompt: 'Do people use shared administrator accounts for important systems?',
     responseType: 'single-choice',
+    evidenceRequirements: [
+      { id: 'admin-account-inventory', label: 'Administrative account inventory', description: 'List or review of administrative accounts, including shared or emergency accounts.', preferredSource: 'documentation' },
+      { id: 'admin-activity-attribution', label: 'Administrative activity attribution', description: 'Sample showing administrative activity can be attributed to named people.', preferredSource: 'manual-review' },
+    ],
     options: [
       { id: 'yes', label: 'Yes', maturityScore: 0 },
       { id: 'some', label: 'Only in a few systems', maturityScore: 2 },

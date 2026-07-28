@@ -93,6 +93,16 @@ test('capability questions reference the owning capability', () => {
   assert.ok(backupRecoveryModule.questions.every((question) => question.capabilityId === backupRecoveryModule.capability.id));
 });
 
+test('pilot questions define evidence expectations', () => {
+  for (const capability of activeAssessmentVersion.capabilities) {
+    assert.ok(capability.questionIds.length > 0);
+    for (const questionId of capability.questionIds) {
+      const question = activeAssessmentVersion.questions.find((item) => item.id === questionId);
+      assert.ok(question?.evidenceRequirements?.length, `Missing evidence requirements for ${questionId}`);
+    }
+  }
+});
+
 test('unknown-answer behavior supports visibility findings and provisional scores', () => {
   const backupTest = backupRecoveryModule.questions.find((question) => question.id === 'bcdr-backup-test');
   const recoveryOwner = backupRecoveryModule.questions.find((question) => question.id === 'bcdr-recovery-owner');

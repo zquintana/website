@@ -34,6 +34,12 @@ const optionSchema = z.object({
   label: z.string().min(1),
   maturityScore: z.number().min(0).max(5).optional(),
 }).passthrough();
+const evidenceRequirementSchema = z.object({
+  id: z.string().min(1),
+  label: z.string().min(1),
+  description: z.string().min(1),
+  preferredSource: z.enum(['questionnaire', 'interview', 'documentation', 'screenshot', 'manual-review', 'integration']).optional(),
+});
 
 const assessmentVersionSchema = z.object({
   version: z.string().min(1),
@@ -49,6 +55,7 @@ const assessmentVersionSchema = z.object({
     secondaryCategoryIds: z.array(z.string()).optional(),
     implementationStatus: z.enum(['cataloged', 'implemented']),
     applicability: applicabilitySchema.optional(),
+    evidenceRequirements: z.array(evidenceRequirementSchema).optional(),
     readiness: z.object({
       status: z.enum(['proposed', 'structured', 'draft-questions', 'pilot', 'active', 'deprecated']),
       owner: z.string().nullable(),

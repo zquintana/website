@@ -4,6 +4,8 @@ Add or refine one capability as an independently reviewable module. The required
 
 Questions must test one concept, use observable answer states, avoid compound controls and company-size assumptions, distinguish unknown from absent, support N/A when genuinely applicable, produce an actionable interpretation, be understandable to business respondents, and be verifiable by evidence where practical. Prefer “When was the last successful restore test?” over “Do you have secure backups and a recovery plan?” The latter combines backup coverage, security, recovery planning, and test evidence while leaving “secure” undefined. A better sequence tests critical-system coverage, restore testing, what was restored, verification, and demonstrated recovery time.
 
+Each pilot question also declares evidence requirements. An evidence requirement identifies a specific artifact or review activity, explains what it demonstrates, and may name a preferred source. This is review guidance, not a claim that the current browser collects or verifies the artifact.
+
 Choose `control-status` for presence/coverage of a safeguard, `process-maturity` for repeatability and management of a process, and `business-capability` for the ability to produce a business outcome. Do not use a model merely because its labels sound useful; document the interpretation and score anchors.
 
 Implementation sequence:
@@ -16,4 +18,3 @@ Implementation sequence:
 6. Update taxonomy status, active-version notes, limitations, traceability, and the change checklist.
 
 Never embed finding or recommendation semantics in an Astro component. Never silently rename a question used by saved responses.
-

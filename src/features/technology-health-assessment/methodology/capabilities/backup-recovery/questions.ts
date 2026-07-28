@@ -6,6 +6,10 @@ export const backupRecoveryQuestions: CapabilityQuestion[] = [
     capabilityId: 'recovery-capability',
     prompt: 'When was the last successful test of restoring critical business data from backup?',
     responseType: 'single-choice',
+    evidenceRequirements: [
+      { id: 'restore-test-record', label: 'Restore-test record', description: 'Date, scope, result, and verification of the most recent restore test.', preferredSource: 'documentation' },
+      { id: 'restored-data-sample', label: 'Restored-data sample', description: 'A representative restoration result or screenshot showing what was successfully restored.', preferredSource: 'screenshot' },
+    ],
     options: [
       { id: 'never', label: 'Never', maturityScore: 0 },
       { id: 'over-year', label: 'More than a year ago', maturityScore: 1 },
@@ -25,6 +29,9 @@ export const backupRecoveryQuestions: CapabilityQuestion[] = [
     capabilityId: 'recovery-capability',
     prompt: 'Is there a named owner and written recovery process for your most critical systems?',
     responseType: 'single-choice',
+    evidenceRequirements: [
+      { id: 'recovery-owner-record', label: 'Recovery ownership record', description: 'Named owner and documented first steps for the most critical systems.', preferredSource: 'documentation' },
+    ],
     options: [
       { id: 'yes', label: 'Yes', maturityScore: 4 },
       { id: 'partial', label: 'Partially', maturityScore: 2 },

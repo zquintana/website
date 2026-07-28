@@ -32,6 +32,13 @@ export type AssessmentOption = {
   maturityScore?: 0 | 1 | 2 | 3 | 4 | 5;
 };
 
+export type EvidenceRequirement = {
+  id: string;
+  label: string;
+  description: string;
+  preferredSource?: EvidenceSource;
+};
+
 export type UnknownBehavior = {
   maturityScore: 0 | 1 | 2 | 3 | 4 | 5;
   note: string;
@@ -45,6 +52,7 @@ export type AssessmentQuestion = {
   businessImpact?: string;
   responseType: ResponseType;
   applicability?: ApplicabilityRule;
+  evidenceRequirements?: EvidenceRequirement[];
   options?: AssessmentOption[];
   allowUnknown?: boolean;
   allowNotApplicable?: boolean;

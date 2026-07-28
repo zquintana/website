@@ -6,6 +6,10 @@ export const identityLifecycleQuestions: CapabilityQuestion[] = [
     capabilityId: 'identity-lifecycle',
     prompt: 'How quickly are former employees and contractors removed from business systems?',
     responseType: 'single-choice',
+    evidenceRequirements: [
+      { id: 'offboarding-sample', label: 'Offboarding sample', description: 'A recent deprovisioning record showing timing and systems covered, with personal information redacted.', preferredSource: 'documentation' },
+      { id: 'lifecycle-process', label: 'Lifecycle process', description: 'Joiner, mover, and leaver procedure or workflow description.', preferredSource: 'documentation' },
+    ],
     options: [
       { id: 'unknown', label: 'Not tracked', maturityScore: 1 },
       { id: 'manual', label: 'Manual, often delayed', maturityScore: 2 },
