@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 
 import { backupRecoveryModule } from '../src/features/technology-health-assessment/methodology/capabilities/backup-recovery/index.ts';
-import { activeAssessmentVersion, assessmentReadModel, createAssessmentReadModel, createLegacyFindingRecords, evaluateFindingCondition, evaluateFindingDefinition, evaluateMethodologyFindings, getCapabilityReadinessSummary, isCapabilityReadyForActivation, validateAssessmentVersion } from '../src/features/technology-health-assessment/methodology/index.ts';
+import { activeAssessmentVersion, aggregateCapabilityResults, assessmentReadModel, calculateCapabilityResults, createAssessmentReadModel, createLegacyFindingRecords, evaluateFindingCondition, evaluateFindingDefinition, evaluateMethodologyFindings, getCapabilityReadinessSummary, isCapabilityReadyForActivation, validateAssessmentVersion } from '../src/features/technology-health-assessment/methodology/index.ts';
 import type { AssessmentAnswer } from '../src/features/technology-health-assessment/types.ts';
 import type { FindingDefinition } from '../src/features/technology-health-assessment/methodology/types.ts';
 
@@ -157,6 +157,26 @@ test('legacy demonstration findings use the shared finding contract', () => {
   assert.equal(evaluateFindingDefinition(patching.finding, {
     'cyber-device-patching': { questionId: 'cyber-device-patching', value: 'manual', evidenceLevel: 'self-reported' },
   }), true);
+});
+
+test('capability results aggregate through primary categories only', () => {
+  const answers = {
+    'bcdr-backup-test': { questionId: 'bcdr-backup-test', value: 'routine', evidenceLevel: 'manually-verified' as const },
+    'bcdr-recovery-owner': { questionId: 'bcdr-recovery-owner', value: 'yes', evidenceLevel: 'manually-verified' as const },
+  };
+  const results = calculateCapabilityResults(activeAssessmentVersion, answers);
+  const recovery = results.find((result) => result.capabilityId === 'recovery-capability');
+  assert.ok(recovery);
+  assert.equal(recovery.score, 91);
+  assert.equal(recovery.confidence, 0.8);
+
+  const categories = aggregateCapabilityResults(activeAssessmentVersion.categories, activeAssessmentVersion.capabilities, results);
+  const continuity = categories.find((category) => category.categoryId === 'business-continuity');
+  const operations = categories.find((category) => category.categoryId === 'technology-operations');
+  assert.ok(continuity);
+  assert.ok(operations);
+  assert.equal(continuity.score, recovery.score);
+  assert.equal(operations.score, 0);
 });
 
 test('compatibility read model preserves category order and stable question IDs', () => {

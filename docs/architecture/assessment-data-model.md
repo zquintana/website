@@ -18,7 +18,7 @@ The executable structural source of truth is [`methodology/types.ts`](../../src/
 | BusinessProfile | business/respondent fields and optional context | Stored in session; email is sensitive personal data |
 | AssessmentSession | assessment ID, customer/subject identity, methodology version, timestamps, status, profile, answers, prior-assessment relationship | Current implementation is local-only and one key; the model should support repeat baseline/follow-up assessments |
 | AssessmentResponse | question ID, value/status, evidence level, optional evidence source/date/reference/reviewer, notes | Record keyed by question ID; provenance fields are typed but not yet collected by the MVP UI |
-| CapabilityResult | intended health/risk/confidence result | No current typed result entity |
+| CapabilityResult | capability ID, score/maturity, confidence, counts, question weight, findings, foundational flag | Implemented in `methodology/capability-results.ts`; current browser report still uses flat question aggregation |
 | CategoryResult | category ID, score, maturity, confidence, counts, findings | `CategoryScore` is current analogue |
 | ReportModel | intended stable report projection | Current report is assembled inline in browser |
 

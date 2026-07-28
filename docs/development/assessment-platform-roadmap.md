@@ -57,8 +57,8 @@ Implement the architecture required for every capability module.
 - Replace the flat question-first findings path with a capability-aware runtime.
 - Evaluate modular finding condition operators and `all`/`any` modes.
 - Attach findings and recommendations through stable IDs.
-- Implement capability-level health, risk, and confidence results.
-- Define one primary-category aggregation rule and prevent secondary double counting.
+- Implement capability-level health, risk, and confidence results. (Implemented in `methodology/capability-results.ts`; browser report adoption remains.)
+- Define one primary-category aggregation rule and prevent secondary double counting. (Implemented for capability results; browser report adoption remains.)
 - Decide and test foundational capability effects.
 - Add applicability and conditional-question evaluation. (The typed business-profile applicability evaluator is now present; wiring and authored rules remain.)
 - Remove or isolate the temporary legacy read-model adapter.

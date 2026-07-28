@@ -147,6 +147,18 @@ export type AssessmentReadModel = {
   questions: AssessmentQuestion[];
 };
 
+export type CapabilityResult = {
+  capabilityId: CapabilityId;
+  score: number;
+  maturityScore: number;
+  confidence: number;
+  answered: number;
+  applicable: number;
+  questionWeight: number;
+  findings: number;
+  foundational: boolean;
+};
+
 export function recommendationToLegacy(recommendation: CapabilityRecommendation): RecommendationDefinition {
   return {
     title: recommendation.title,
