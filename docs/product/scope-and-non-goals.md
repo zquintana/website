@@ -7,7 +7,7 @@ The business direction is defined in [Business goals](business-goals.md). This p
 - A browser-based Astro assessment at `/assessment`.
 - Required business and respondent profile fields plus optional context.
 - Ten weighted report categories totaling 100.
-- Twenty-five questions: 10 migrated capability questions and 15 legacy demonstration questions.
+- Twenty-eight questions: 13 migrated capability questions and 15 legacy demonstration questions.
 - Preliminary 0–100 health scoring, maturity labels, confidence averages, findings, recommendations, strengths, printable results, and a consultation mailto link.
 - Local-only save/resume through one localStorage record.
 - A versioned modular methodology manifest with a read-model adapter for the current flat UI.

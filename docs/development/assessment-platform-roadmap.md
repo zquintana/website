@@ -85,7 +85,7 @@ For each capability:
 11. Add unit, manifest, scoring, finding, and compatibility tests.
 12. Review with a methodology owner and, where appropriate, a subject-matter reviewer.
 
-The five existing modules—`business-service-criticality`, `recovery-requirements`, `recovery-capability`, `identity-lifecycle`, and `privileged-access`—should be used as pilots for this process, but must still pass the production readiness gate. Catalog entries with generic generated descriptions are not complete until their content is reviewed. Business Service Criticality and Recovery Requirements establish the business-priority foundation for recovery and investment decisions.
+The six existing modules—`business-service-criticality`, `recovery-requirements`, `technology-asset-inventory`, `recovery-capability`, `identity-lifecycle`, and `privileged-access`—should be used as pilots for this process, but must still pass the production readiness gate. Catalog entries with generic generated descriptions are not complete until their content is reviewed. Business Service Criticality and Recovery Requirements establish the business-priority foundation, while Technology Asset Inventory establishes environment visibility for recovery, security, and modernization decisions.
 
 ## Phase 3: Build the executive baseline experience
 

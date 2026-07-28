@@ -17,7 +17,7 @@ const foundationalCapabilityIds = new Set([
   'technology-documentation',
 ]);
 
-const implementedCapabilityIds = new Set(['business-service-criticality', 'recovery-requirements', 'recovery-capability', 'identity-lifecycle', 'privileged-access']);
+const implementedCapabilityIds = new Set(['business-service-criticality', 'recovery-requirements', 'recovery-capability', 'technology-asset-inventory', 'identity-lifecycle', 'privileged-access']);
 
 function capability(id: string, name: string, domainId: DomainId, primaryCategoryId: CategoryId, scoringModel: ScoringModel, secondaryCategoryIds: CategoryId[] = []): CapabilityCatalogEntry {
   const implementationStatus = implementedCapabilityIds.has(id) ? 'implemented' : 'cataloged';
