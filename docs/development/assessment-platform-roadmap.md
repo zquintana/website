@@ -41,8 +41,8 @@ Apply to all 142 capabilities before expanding customer activation.
 
 - Add capability readiness metadata and review ownership.
 - Define authoritative terminology and executive report language.
-- Add internal-to-executive evidence mapping: Reported, Observed, Verified.
-- Define evidence provenance: source, date, reviewer, artifact reference, and contradiction state.
+- Add internal-to-executive evidence mapping: Reported, Observed, Verified. (Implemented in `lib/confidence-labels.ts`.)
+- Define evidence provenance: source, date, reviewer, artifact reference, and contradiction state. (Source/date/reference/reviewer are now optional answer fields; collection policy and contradiction state remain.)
 - Define capability ID, question ID, finding ID, recommendation ID, and mapping ID stability rules.
 - Define version, hash, migration, deprecation, and historical-report requirements.
 - Define a baseline capability completion gate and PR checklist enforcement.

@@ -1,5 +1,7 @@
 export type Severity = 'low' | 'moderate' | 'high' | 'critical';
 export type EvidenceLevel = 'self-reported' | 'documentation-reviewed' | 'manually-verified' | 'automatically-verified';
+export type ExecutiveConfidenceLabel = 'reported' | 'observed' | 'verified';
+export type EvidenceSource = 'questionnaire' | 'interview' | 'documentation' | 'screenshot' | 'manual-review' | 'integration';
 export type ResponseType = 'single-choice' | 'multi-choice' | 'yes-no' | 'numeric-range' | 'text';
 
 export type StandardReference = {
@@ -83,6 +85,10 @@ export type AssessmentAnswer = {
   isUnknown?: boolean;
   isNotApplicable?: boolean;
   evidenceLevel: EvidenceLevel;
+  evidenceSource?: EvidenceSource;
+  evidenceCapturedAt?: string;
+  evidenceReference?: string;
+  evidenceReviewer?: string;
   notes?: string;
 };
 

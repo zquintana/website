@@ -4,6 +4,7 @@ import test from 'node:test';
 import { assessmentCategories, categoryWeightTotal } from '../src/features/technology-health-assessment/data/categories.ts';
 import { assessmentQuestions } from '../src/features/technology-health-assessment/data/questions.ts';
 import { evidenceConfidence } from '../src/features/technology-health-assessment/lib/confidence.ts';
+import { getExecutiveConfidenceLabel } from '../src/features/technology-health-assessment/lib/confidence-labels.ts';
 import { generateFindings } from '../src/features/technology-health-assessment/lib/findings.ts';
 import { calculatePriorityScore, calculateScores, scoreQuestion } from '../src/features/technology-health-assessment/lib/scoring.ts';
 import { parseAssessment, serializeAssessment, createAssessmentState } from '../src/features/technology-health-assessment/lib/storage.ts';
@@ -113,4 +114,11 @@ test('local-storage serialization and recovery handle invalid data safely', () =
   assert.equal(parsed?.assessmentId, state.assessmentId);
   assert.equal(parseAssessment('{not-json'), null);
   assert.equal(parseAssessment(JSON.stringify({ version: 'old' })), null);
+});
+
+test('technical evidence levels map to executive confidence labels', () => {
+  assert.equal(getExecutiveConfidenceLabel('self-reported'), 'reported');
+  assert.equal(getExecutiveConfidenceLabel('documentation-reviewed'), 'observed');
+  assert.equal(getExecutiveConfidenceLabel('manually-verified'), 'observed');
+  assert.equal(getExecutiveConfidenceLabel('automatically-verified'), 'verified');
 });
