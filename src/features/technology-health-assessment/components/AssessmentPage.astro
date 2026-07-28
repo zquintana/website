@@ -54,6 +54,8 @@ const methodologyFindings = activeAssessmentVersion.findings.map((finding) => ({
     <script type="application/json" id="assessment-methodology-findings" set:html={JSON.stringify(methodologyFindings)}></script>
     <script type="application/json" id="assessment-modular-question-ids" set:html={JSON.stringify(modularQuestionIds)}></script>
     <script>
+      import { evaluateFindingDefinition } from '../methodology/findings.ts';
+
       const categories = JSON.parse(document.querySelector('#assessment-categories').textContent);
       const questions = JSON.parse(document.querySelector('#assessment-questions').textContent);
       const methodologyFindings = JSON.parse(document.querySelector('#assessment-methodology-findings').textContent);
@@ -125,32 +127,8 @@ const methodologyFindings = activeAssessmentVersion.findings.map((finding) => ({
         return (5 - maturityScore) * question.importance * severityMultiplier[question.severity] * categoryWeight;
       }
 
-      function findingAnswerValues(answer) {
-        if (Array.isArray(answer?.value)) return answer.value;
-        return answer?.value === undefined ? [] : [answer.value];
-      }
-
-      function evaluateMethodologyCondition(condition, answers) {
-        const answer = answers[condition.questionId];
-        if (condition.operator === 'unknown') return !answer || answer.isUnknown === true;
-        if (condition.operator === 'not-applicable') return answer?.isNotApplicable === true;
-        if (!answer || answer.isUnknown || answer.isNotApplicable) return false;
-        const values = findingAnswerValues(answer);
-        if (condition.operator === 'equals') return values.includes(condition.value);
-        if (condition.operator === 'in') return values.some((value) => (condition.values ?? []).includes(value));
-        const numericValues = values.filter((value) => typeof value === 'number');
-        if (condition.operator === 'lte' && typeof condition.value === 'number') return numericValues.some((value) => value <= condition.value);
-        if (condition.operator === 'gte' && typeof condition.value === 'number') return numericValues.some((value) => value >= condition.value);
-        return false;
-      }
-
-      function evaluateMethodologyFinding(finding, answers) {
-        const results = finding.conditions.map((condition) => evaluateMethodologyCondition(condition, answers));
-        return results.length > 0 && (finding.conditionMode === 'all' ? results.every(Boolean) : results.some(Boolean));
-      }
-
       function generateMethodologyFindings(answers) {
-        return methodologyFindings.filter((finding) => evaluateMethodologyFinding(finding, answers)).map((finding) => {
+        return methodologyFindings.filter((finding) => evaluateFindingDefinition(finding, answers)).map((finding) => {
           const conditionQuestionIds = [...new Set(finding.conditions.map((condition) => condition.questionId))];
           const relatedQuestions = questions.filter((question) => conditionQuestionIds.includes(question.id));
           const relatedScores = relatedQuestions.map((question) => scoreQuestion(question, answers[question.id]));
