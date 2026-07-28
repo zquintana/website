@@ -11,7 +11,7 @@ The executable structural source of truth is [`methodology/types.ts`](../../src/
 | Question | id, capability, prompt, response type, options, importance, severity | 20 read-model questions; legacy shape at UI boundary |
 | Option | id, label, optional maturity score | Score range 0–5 when present |
 | Evidence requirement | intended evidence guidance | Not a first-class current entity; only level/notes on answers |
-| Finding | id, capability/question relation, conditions, severity, impact, recommendation IDs | Conditions validated, not runtime-evaluated |
+| Finding | id, capability/question relation, conditions, severity, impact, recommendation IDs | Conditions are validated and evaluated; legacy findings use a compatibility adapter |
 | Recommendation | id, capability, title, actions, outcome | Flattened to legacy text for UI |
 | Standard | id, name, optional version/publisher/source | Source and review date missing in current type |
 | StandardMapping | id, capability, standard, relationship | Referential integrity validated |

@@ -1,6 +1,6 @@
 # System overview
 
-The site is a static Astro application. Assessment pages render a shell and serialize categories/questions into the page; browser JavaScript owns the interactive session, localStorage, scoring, findings, results, and print view. The exported TypeScript libraries are used by tests and are the intended reusable boundary, but the current browser page duplicates the runtime logic.
+The site is a static Astro application. Assessment pages render a shell and serialize categories/questions/methodology records into the page; browser JavaScript owns the interactive session, localStorage, scoring, findings, results, and print view. The browser imports the shared finding evaluator, while scoring and some presentation logic remain duplicated in the current client runtime.
 
 ```mermaid
 flowchart LR
@@ -18,5 +18,4 @@ flowchart LR
   State --> Storage
 ```
 
-`methodology/versions/v0.1.0.ts` assembles framework data, three capability modules, and legacy questions. `createAssessmentReadModel()` adds legacy category/standards/recommendation fields so the flat UI can consume modular questions. The browser currently runs equivalent inline functions rather than importing the engine. There is no server API, database, authentication, uploaded evidence store, or integration boundary today. Lead capture is a `mailto:` link.
-
+`methodology/versions/v0.1.0.ts` assembles framework data, three capability modules, and legacy questions. `createAssessmentReadModel()` adds legacy category/standards/recommendation fields so the flat UI can consume modular questions. The browser imports the shared finding evaluator but still runs inline scoring and report-presentation functions. There is no server API, database, authentication, uploaded evidence store, or integration boundary today. Lead capture is a `mailto:` link.

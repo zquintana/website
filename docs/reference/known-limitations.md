@@ -11,7 +11,7 @@
 - Methodology hash is a placeholder; published immutable artifacts and historical loading are absent.
 - Local persistence uses `mvp-1`, has no migrations/hash, stores respondent email, and has no server backup or multi-session support.
 - A temporary flat read-model adapter and duplicated browser scoring runtime can drift from modular code.
-- Modular finding conditions and category contribution metadata are validated but not fully executed.
+- Category contribution metadata is validated but not used by current aggregation; modular finding conditions are now executed through the shared evaluator.
 - Standards mappings are broad in places and lack systematic source URLs/review dates.
 - No dedicated lint/typecheck scripts, component tests, or end-to-end browser tests exist.
 - `npx astro check` currently reports 23 existing diagnostics, including inline client-script typing and an import-extension diagnostic.
