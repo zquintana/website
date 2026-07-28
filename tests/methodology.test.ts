@@ -28,7 +28,7 @@ test('capability taxonomy includes stable domains, foundational markers, and rec
 
 test('implemented capability modules are represented in the taxonomy catalog', () => {
   const implemented = activeAssessmentVersion.capabilityCatalog.filter((capability) => capability.implementationStatus === 'implemented').map((capability) => capability.id).sort();
-  assert.deepEqual(implemented, ['business-service-criticality', 'identity-lifecycle', 'privileged-access', 'recovery-capability'].sort());
+  assert.deepEqual(implemented, ['business-service-criticality', 'identity-lifecycle', 'privileged-access', 'recovery-capability', 'recovery-requirements'].sort());
 });
 
 test('every catalog capability has readiness tracking', () => {
@@ -38,8 +38,8 @@ test('every catalog capability has readiness tracking', () => {
   assert.ok(activeAssessmentVersion.capabilityCatalog.every((capability) => capability.readiness.lastReviewedAt === null));
 
   const summary = getCapabilityReadinessSummary(activeAssessmentVersion.capabilityCatalog);
-  assert.equal(summary.structured, 138);
-  assert.equal(summary.pilot, 4);
+  assert.equal(summary.structured, 137);
+  assert.equal(summary.pilot, 5);
   assert.equal(summary.active, 0);
   assert.equal(activeAssessmentVersion.capabilityCatalog.filter(isCapabilityReadyForActivation).length, 0);
 });
@@ -47,7 +47,7 @@ test('every catalog capability has readiness tracking', () => {
 test('validation rejects pilot or active catalog entries without implementation', () => {
   const invalid = {
     ...activeAssessmentVersion,
-    capabilityCatalog: activeAssessmentVersion.capabilityCatalog.map((capability) => capability.id === 'recovery-requirements'
+    capabilityCatalog: activeAssessmentVersion.capabilityCatalog.map((capability) => capability.id === 'backup-coverage'
       ? { ...capability, readiness: { ...capability.readiness, status: 'active' as const } }
       : capability),
   };
@@ -208,6 +208,6 @@ test('compatibility read model preserves category order and stable question IDs'
 
 test('active read model remains consumable by existing UI adapters', () => {
   assert.equal(assessmentReadModel.categories.length, 10);
-  assert.equal(assessmentReadModel.questions.length, 23);
+  assert.equal(assessmentReadModel.questions.length, 25);
   assert.ok(assessmentReadModel.questions.every((question) => question.categoryId));
 });

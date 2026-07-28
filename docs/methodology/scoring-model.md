@@ -12,6 +12,8 @@ Missing answers use the question’s unknown maturity score, defaulting to 1, ar
 
 Applicability rules are evaluated before scoring. A question with a business-profile or prior-answer rule that evaluates false is omitted from the question and category denominator. The active version has no authored conditional rules yet, so this currently behaves like the legacy all-applicable flow.
 
+Capability aggregation has one additional guard: a modular capability with zero answered questions does not contribute to its primary category. Once a capability has an answer, its applicable owned questions—including unknown responses—participate according to the capability scoring model.
+
 For category `c`:
 
 ```text

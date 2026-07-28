@@ -46,7 +46,7 @@ export function aggregateCapabilityResults(
   results: CapabilityResult[],
 ): CategoryScore[] {
   return categories.map((category) => {
-    const primaryResults = results.filter((result) => capabilities.find((capability) => capability.id === result.capabilityId)?.primaryCategoryId === category.id && result.applicable > 0);
+    const primaryResults = results.filter((result) => capabilities.find((capability) => capability.id === result.capabilityId)?.primaryCategoryId === category.id && result.answered > 0);
     const totalWeight = primaryResults.reduce((total, result) => total + result.questionWeight, 0);
     const weightedScore = primaryResults.reduce((total, result) => total + result.score * result.questionWeight, 0);
     return {
