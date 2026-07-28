@@ -55,6 +55,9 @@ const methodologyFindings = activeAssessmentVersion.findings.map((finding) => ({
     <script type="application/json" id="assessment-legacy-findings" set:html={JSON.stringify(legacyFindingRecords)}></script>
     <script>
       import { evaluateFindingDefinition } from '../methodology/findings.ts';
+      import { calculatePriorityScore, calculateScores, getMaturityLabel, scoreQuestion } from '../lib/scoring-core.ts';
+
+      const maturityLabel = getMaturityLabel;
 
       const categories = JSON.parse(document.querySelector('#assessment-categories').textContent);
       const questions = JSON.parse(document.querySelector('#assessment-questions').textContent);
@@ -64,12 +67,8 @@ const methodologyFindings = activeAssessmentVersion.findings.map((finding) => ({
       const page = document.body.dataset.assessmentPage;
       const storageKey = 'technology-health-assessment:v1';
       const version = 'mvp-1';
-      const evidenceConfidence = { 'self-reported': 0.4, 'documentation-reviewed': 0.65, 'manually-verified': 0.8, 'automatically-verified': 1 };
-      const severityMultiplier = { low: 1, moderate: 1.5, high: 2, critical: 3 };
 
       const escapeHtml = (value) => String(value ?? '').replace(/[&<>"]/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[char]));
-      const maturityLabel = (score) => score < 20 ? 'Critical' : score < 40 ? 'Reactive' : score < 60 ? 'Developing' : score < 80 ? 'Managed' : 'Resilient';
-      const normalize = (score) => Math.round((Math.max(0, Math.min(5, score)) / 5) * 100);
       const track = (eventName, metadata = {}) => window.dispatchEvent(new CustomEvent('assessment:event', { detail: { eventName, metadata } }));
 
       function parseAssessment(raw) {
@@ -107,26 +106,6 @@ const methodologyFindings = activeAssessmentVersion.findings.map((finding) => ({
         return next;
       }
 
-      function scoreQuestion(question, answer) {
-        if (!answer) {
-          const maturityScore = question.unknownBehavior?.maturityScore ?? 1;
-          return { questionId: question.id, categoryId: question.categoryId, maturityScore, normalizedScore: normalize(maturityScore), confidence: 0, applicable: true, unknown: true };
-        }
-        if (answer.isNotApplicable && question.allowNotApplicable) return { questionId: question.id, categoryId: question.categoryId, maturityScore: 0, normalizedScore: 0, confidence: evidenceConfidence[answer.evidenceLevel] ?? 0.4, applicable: false, unknown: false };
-        if (answer.isUnknown) {
-          const maturityScore = question.unknownBehavior?.maturityScore ?? 1;
-          return { questionId: question.id, categoryId: question.categoryId, maturityScore, normalizedScore: normalize(maturityScore), confidence: evidenceConfidence[answer.evidenceLevel] ?? 0.4, applicable: true, unknown: true };
-        }
-        const selected = Array.isArray(answer.value) ? answer.value : [answer.value];
-        const scores = (question.options ?? []).filter((option) => selected.includes(option.id)).map((option) => option.maturityScore).filter((value) => typeof value === 'number');
-        const maturityScore = scores.length ? scores.reduce((total, value) => total + value, 0) / scores.length : 0;
-        return { questionId: question.id, categoryId: question.categoryId, maturityScore, normalizedScore: normalize(maturityScore), confidence: evidenceConfidence[answer.evidenceLevel] ?? 0.4, applicable: true, unknown: false };
-      }
-
-      function priorityScore(question, maturityScore, categoryWeight) {
-        return (5 - maturityScore) * question.importance * severityMultiplier[question.severity] * categoryWeight;
-      }
-
       function generateMethodologyFindings(answers) {
         return methodologyFindings.filter((finding) => evaluateFindingDefinition(finding, answers)).map((finding) => {
           const conditionQuestionIds = [...new Set(finding.conditions.map((condition) => condition.questionId))];
@@ -137,7 +116,7 @@ const methodologyFindings = activeAssessmentVersion.findings.map((finding) => ({
           const maturityScore = relatedScores.length ? relatedScores.reduce((total, score) => total + score.maturityScore, 0) / relatedScores.length : 0;
           const confidence = relatedScores.length ? relatedScores.reduce((total, score) => total + score.confidence, 0) / relatedScores.length : 0;
           const critical = finding.severity === 'critical';
-          const calculatedPriority = (5 - maturityScore) * (primaryQuestion?.importance ?? 1) * severityMultiplier[finding.severity] * (category?.weight ?? 1);
+          const calculatedPriority = calculatePriorityScore({ ...primaryQuestion, severity: finding.severity }, maturityScore, category?.weight ?? 1);
           const priorityLevel = critical ? 'critical' : calculatedPriority >= 240 ? 'high' : calculatedPriority >= 120 ? 'medium' : 'low';
           const timeframe = priorityLevel === 'critical' ? 'Immediate Attention' : priorityLevel === 'high' ? 'Next 30 Days' : priorityLevel === 'medium' ? 'Next 90 Days' : 'Longer-Term Improvements';
           const recommendation = finding.recommendations[0];
@@ -169,7 +148,7 @@ const methodologyFindings = activeAssessmentVersion.findings.map((finding) => ({
           const optionCritical = question.criticalFindingRule?.optionIds?.some((id) => selected.includes(id));
           const maturityCritical = typeof question.criticalFindingRule?.maturityAtOrBelow === 'number' && score.maturityScore <= question.criticalFindingRule.maturityAtOrBelow;
           const critical = Boolean(optionCritical || maturityCritical);
-          const calculatedPriority = priorityScore(question, score.maturityScore, category?.weight ?? 1);
+          const calculatedPriority = calculatePriorityScore(question, score.maturityScore, category?.weight ?? 1);
           const priorityLevel = critical ? 'critical' : calculatedPriority >= 240 ? 'high' : calculatedPriority >= 120 ? 'medium' : 'low';
           const timeframe = priorityLevel === 'critical' ? 'Immediate Attention' : priorityLevel === 'high' ? 'Next 30 Days' : priorityLevel === 'medium' ? 'Next 90 Days' : 'Longer-Term Improvements';
           return {
@@ -196,21 +175,10 @@ const methodologyFindings = activeAssessmentVersion.findings.map((finding) => ({
         return [...modularFindings, ...legacyFindings].sort((a, b) => Number(b.critical) - Number(a.critical) || b.priorityScore - a.priorityScore);
       }
 
-      function calculateScores(answers) {
+      function calculateAssessmentScores(answers) {
         const findings = generateFindings(answers);
-        const categoryScores = categories.map((category) => {
-          const categoryQuestions = questions.filter((question) => question.categoryId === category.id);
-          const scores = categoryQuestions.map((question) => ({ question, score: scoreQuestion(question, answers[question.id]) })).filter((item) => item.score.applicable);
-          const weightedTotal = scores.reduce((total, item) => total + item.score.normalizedScore * item.question.importance, 0);
-          const weightTotal = scores.reduce((total, item) => total + item.question.importance, 0);
-          const score = weightTotal ? Math.round(weightedTotal / weightTotal) : 0;
-          const confidences = scores.map((item) => item.score.confidence).filter(Number.isFinite);
-          return { categoryId: category.id, score, maturityScore: score / 20, confidence: confidences.length ? confidences.reduce((total, value) => total + value, 0) / confidences.length : 0, answered: categoryQuestions.filter((question) => answers[question.id]).length, applicable: scores.length, findings: findings.filter((finding) => finding.categoryId === category.id).length };
-        });
-        const overallScore = Math.round(categoryScores.reduce((total, score) => total + score.score * (categories.find((category) => category.id === score.categoryId)?.weight ?? 0), 0) / categories.reduce((total, category) => total + category.weight, 0));
-        const confidenceValues = categoryScores.map((score) => score.confidence);
-        const overallConfidence = confidenceValues.reduce((total, value) => total + value, 0) / confidenceValues.length;
-        return { overallScore, overallMaturityScore: overallScore / 20, overallConfidence, categoryScores, findings };
+        const findingsByCategory = findings.reduce((counts, finding) => ({ ...counts, [finding.categoryId]: (counts[finding.categoryId] ?? 0) + 1 }), {});
+        return { ...calculateScores(answers, findingsByCategory, questions, categories), findings };
       }
 
       function getStrengths(answers) {
@@ -346,7 +314,7 @@ const methodologyFindings = activeAssessmentVersion.findings.map((finding) => ({
       function renderResults(printMode = false) {
         const state = loadState();
         if (!state) { location.href = '/assessment/start'; return; }
-        const results = calculateScores(state.answers);
+        const results = calculateAssessmentScores(state.answers);
         const strengths = getStrengths(state.answers);
         const criticalCount = results.findings.filter((finding) => finding.critical).length;
         const highCount = results.findings.filter((finding) => finding.priorityLevel === 'high').length;

@@ -82,6 +82,21 @@ test('overall weighted score uses category weights', () => {
   assert.equal(Math.round(scores.overallConfidence * 100), 100);
 });
 
+test('shared scoring accepts the serialized runtime read model', () => {
+  const question = assessmentQuestions.find((item) => item.id === 'cyber-admin-mfa');
+  const category = assessmentCategories.find((item) => item.id === question?.categoryId);
+  assert.ok(question);
+  assert.ok(category);
+
+  const scores = calculateScores({
+    [question.id]: { questionId: question.id, value: 'yes', evidenceLevel: 'manually-verified' },
+  }, {}, [question], [{ ...category, weight: 100 }]);
+
+  assert.equal(scores.overallScore, 80);
+  assert.equal(scores.categoryScores[0].score, 80);
+  assert.equal(scores.overallConfidence, evidenceConfidence['manually-verified']);
+});
+
 test('priority calculation accounts for maturity gap, importance, severity, and category weight', () => {
   const question = assessmentQuestions.find((item) => item.id === 'cyber-admin-mfa');
   const category = assessmentCategories.find((item) => item.id === 'cybersecurity');

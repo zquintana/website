@@ -62,7 +62,7 @@ Implement the architecture required for every capability module.
 - Decide and test foundational capability effects.
 - Add applicability and conditional-question evaluation.
 - Remove or isolate the temporary legacy read-model adapter.
-- Make browser and library scoring use one shared implementation.
+- Make browser and library scoring use one shared implementation. (Implemented through `scoring-core.ts`; integration tests remain.)
 
 Exit criteria: a capability module can be assembled, validated, scored, evaluated, and reported without embedding methodology semantics in Astro UI code.
 

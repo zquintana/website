@@ -1,6 +1,6 @@
 # Scoring model
 
-Current behavior is implemented in [`lib/scoring.ts`](../../src/features/technology-health-assessment/lib/scoring.ts) and duplicated in the inline browser runtime in `AssessmentPage.astro`.
+Current behavior is implemented in [`lib/scoring-core.ts`](../../src/features/technology-health-assessment/lib/scoring-core.ts), wrapped by [`lib/scoring.ts`](../../src/features/technology-health-assessment/lib/scoring.ts), and imported by the browser runtime. The browser still owns report-specific aggregation of findings for display.
 
 For a selected answer, option maturity scores are averaged (multi-select), clamped to 0–5, and normalized as:
 
@@ -30,4 +30,3 @@ Severity multipliers are low 1, moderate 1.5, high 2, critical 3. Finding levels
 Example: a maturity-4 answer normalizes to 80. A manually verified answer has confidence 0.8. A critical MFA question at maturity 0 in cybersecurity has priority `(5×5×3×18)=1350`, which is critical if its rule triggers.
 
 Foundational flags are metadata today. They do not suppress an overall score, impose a floor, or automatically add a finding. Such semantics require a versioned decision and tests.
-
