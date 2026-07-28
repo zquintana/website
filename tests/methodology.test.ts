@@ -2,7 +2,9 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 
 import { backupRecoveryModule } from '../src/features/technology-health-assessment/methodology/capabilities/backup-recovery/index.ts';
-import { activeAssessmentVersion, assessmentReadModel, createAssessmentReadModel, getCapabilityReadinessSummary, isCapabilityReadyForActivation, validateAssessmentVersion } from '../src/features/technology-health-assessment/methodology/index.ts';
+import { activeAssessmentVersion, assessmentReadModel, createAssessmentReadModel, evaluateFindingCondition, evaluateFindingDefinition, evaluateMethodologyFindings, getCapabilityReadinessSummary, isCapabilityReadyForActivation, validateAssessmentVersion } from '../src/features/technology-health-assessment/methodology/index.ts';
+import type { AssessmentAnswer } from '../src/features/technology-health-assessment/types.ts';
+import type { FindingDefinition } from '../src/features/technology-health-assessment/methodology/types.ts';
 
 test('modular methodology assembles into the active assessment version', () => {
   assert.equal(activeAssessmentVersion.version, '0.1.0');
@@ -97,6 +99,48 @@ test('unknown-answer behavior supports visibility findings and provisional score
 
   assert.deepEqual(backupTest?.unknownBehavior, { type: 'visibility-finding', findingId: 'backup-restore-untested' });
   assert.equal(recoveryOwner?.unknownBehavior?.type, 'provisional-score');
+});
+
+test('modular finding evaluator supports authored conditions and missing-answer visibility', () => {
+  const answers: Record<string, AssessmentAnswer> = {
+    'cyber-admin-mfa': { questionId: 'cyber-admin-mfa', value: 'no', evidenceLevel: 'self-reported' },
+    'iam-shared-admin': { questionId: 'iam-shared-admin', value: 'yes', evidenceLevel: 'self-reported' },
+  };
+
+  const findings = evaluateMethodologyFindings(activeAssessmentVersion, answers);
+  assert.ok(findings.some((finding) => finding.id === 'admin-mfa-missing'));
+  assert.ok(findings.some((finding) => finding.id === 'shared-admin-accounts-used'));
+  assert.ok(findings.some((finding) => finding.id === 'backup-restore-untested'));
+  assert.ok(!findings.some((finding) => finding.id === 'recovery-ownership-undefined'));
+});
+
+test('modular finding evaluator supports all/any, unknown, not-applicable, and numeric operators', () => {
+  const answers: Record<string, AssessmentAnswer> = {
+    first: { questionId: 'first', value: 'yes', evidenceLevel: 'self-reported' },
+    second: { questionId: 'second', value: 3, evidenceLevel: 'self-reported' },
+    unknown: { questionId: 'unknown', isUnknown: true, evidenceLevel: 'self-reported' },
+    excluded: { questionId: 'excluded', isNotApplicable: true, evidenceLevel: 'self-reported' },
+  };
+
+  assert.equal(evaluateFindingCondition({ questionId: 'first', operator: 'equals', value: 'yes' }, answers), true);
+  assert.equal(evaluateFindingCondition({ questionId: 'first', operator: 'in', values: ['no', 'yes'] }, answers), true);
+  assert.equal(evaluateFindingCondition({ questionId: 'second', operator: 'lte', value: 3 }, answers), true);
+  assert.equal(evaluateFindingCondition({ questionId: 'second', operator: 'gte', value: 4 }, answers), false);
+  assert.equal(evaluateFindingCondition({ questionId: 'unknown', operator: 'unknown' }, answers), true);
+  assert.equal(evaluateFindingCondition({ questionId: 'missing', operator: 'unknown' }, answers), true);
+  assert.equal(evaluateFindingCondition({ questionId: 'excluded', operator: 'not-applicable' }, answers), true);
+
+  const allFinding: FindingDefinition = {
+    id: 'test-all', capabilityId: 'test', title: 'All', summary: 'All', businessImpact: 'All', severity: 'low', conditionMode: 'all',
+    conditions: [
+      { questionId: 'first', operator: 'equals', value: 'yes' },
+      { questionId: 'second', operator: 'gte', value: 3 },
+    ], recommendationIds: [],
+  };
+  const anyFinding: FindingDefinition = { ...allFinding, id: 'test-any', conditionMode: 'any', conditions: [{ questionId: 'first', operator: 'equals', value: 'no' }, { questionId: 'unknown', operator: 'unknown' }] };
+
+  assert.equal(evaluateFindingDefinition(allFinding, answers), true);
+  assert.equal(evaluateFindingDefinition(anyFinding, answers), true);
 });
 
 test('compatibility read model preserves category order and stable question IDs', () => {
