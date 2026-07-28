@@ -7,8 +7,8 @@ The executable structural source of truth is [`methodology/types.ts`](../../src/
 | AssessmentVersion | version, status, methodologyHash, domains, categories, catalog, standards, modules, legacy set | Assembled immutable intent; hash placeholder |
 | Domain | stable `id`, name, description, order | 14 taxonomy domains |
 | ReportCategory | stable `id`, name, explanations, positive weight, order | 10 categories; weights total 100 |
-| Capability | id, name, definition, outcome, domain, primary category, scoring model, applicability, owned IDs, readiness metadata | Seven implemented; catalog has 142; readiness is executable |
-| Question | id, capability, prompt, response type, applicability, options, importance, severity, evidence requirements | 31 read-model questions; pilot module questions include evidence guidance; legacy shape at UI boundary |
+| Capability | id, name, definition, outcome, domain, primary category, scoring model, applicability, owned IDs, readiness metadata | Eight implemented; catalog has 142; readiness is executable |
+| Question | id, capability, prompt, response type, applicability, options, importance, severity, evidence requirements | 34 read-model questions; pilot module questions include evidence guidance; legacy shape at UI boundary |
 | Option | id, label, optional maturity score | Score range 0–5 when present |
 | Evidence requirement | stable ID, label, description, preferred source | Typed question-level guidance; not a persisted evidence artifact or collected UI entity |
 | Finding | id, capability/question relation, conditions, severity, impact, recommendation IDs | Conditions are validated and evaluated; legacy findings use a compatibility adapter |

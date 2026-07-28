@@ -4,6 +4,7 @@ import { businessServiceCriticalityModule } from '../capabilities/business-servi
 import { recoveryRequirementsModule } from '../capabilities/recovery-requirements/index.ts';
 import { technologyAssetInventoryModule } from '../capabilities/technology-asset-inventory/index.ts';
 import { identityInventoryModule } from '../capabilities/identity-inventory/index.ts';
+import { criticalDataInventoryModule } from '../capabilities/critical-data-inventory/index.ts';
 import { identityLifecycleModule } from '../capabilities/identity-lifecycle/index.ts';
 import { privilegedAccessModule } from '../capabilities/privileged-access/index.ts';
 import { categories } from '../framework/categories.ts';
@@ -21,6 +22,6 @@ export const assessmentV010 = validateAssessmentVersion(defineAssessmentVersion(
   categories,
   capabilityCatalog,
   standards,
-  capabilityModules: [businessServiceCriticalityModule, recoveryRequirementsModule, technologyAssetInventoryModule, identityInventoryModule, backupRecoveryModule, identityLifecycleModule, privilegedAccessModule],
+  capabilityModules: [businessServiceCriticalityModule, recoveryRequirementsModule, technologyAssetInventoryModule, identityInventoryModule, criticalDataInventoryModule, backupRecoveryModule, identityLifecycleModule, privilegedAccessModule],
   legacyQuestionSet: legacyDemonstrationQuestionSet,
 }));
