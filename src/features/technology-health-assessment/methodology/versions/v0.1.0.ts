@@ -1,5 +1,6 @@
 import { capabilityCatalog } from '../capabilities/catalog.ts';
 import { backupRecoveryModule } from '../capabilities/backup-recovery/index.ts';
+import { businessServiceCriticalityModule } from '../capabilities/business-service-criticality/index.ts';
 import { identityLifecycleModule } from '../capabilities/identity-lifecycle/index.ts';
 import { privilegedAccessModule } from '../capabilities/privileged-access/index.ts';
 import { categories } from '../framework/categories.ts';
@@ -17,6 +18,6 @@ export const assessmentV010 = validateAssessmentVersion(defineAssessmentVersion(
   categories,
   capabilityCatalog,
   standards,
-  capabilityModules: [backupRecoveryModule, identityLifecycleModule, privilegedAccessModule],
+  capabilityModules: [businessServiceCriticalityModule, backupRecoveryModule, identityLifecycleModule, privilegedAccessModule],
   legacyQuestionSet: legacyDemonstrationQuestionSet,
 }));
