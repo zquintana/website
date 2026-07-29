@@ -59,6 +59,7 @@ const measurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID ?? '';
 
     function setConsent(value) {
       localStorage.setItem(storageKey, value);
+      container.style.removeProperty('display');
       container.hidden = true;
       utility.hidden = false;
       if (value === 'accepted') configureAnalytics();
@@ -66,6 +67,7 @@ const measurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID ?? '';
 
     function showBanner() {
       container.hidden = false;
+      container.style.setProperty('display', 'block', 'important');
       banner.querySelector('[data-consent="accept"]')?.focus();
     }
 
@@ -91,10 +93,12 @@ const measurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID ?? '';
 
     const consent = getConsent();
     if (consent === 'accepted') {
+      container.style.removeProperty('display');
       container.hidden = true;
       utility.hidden = false;
       configureAnalytics();
     } else if (consent === 'rejected') {
+      container.style.removeProperty('display');
       container.hidden = true;
       utility.hidden = false;
     } else {
