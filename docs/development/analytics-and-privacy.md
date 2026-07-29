@@ -1,6 +1,6 @@
 # Analytics and Privacy
 
-The site uses an optional, consent-gated Google Analytics 4 integration. It is disabled unless `PUBLIC_GA_MEASUREMENT_ID` is configured at build time. Copy `.env.example` to the deployment environment and replace the placeholder with the GA4 measurement ID when the property is ready.
+The site uses an optional, consent-gated Google Analytics 4 integration. The privacy banner and settings control are always available, including local development, but GA itself is disabled unless `PUBLIC_GA_MEASUREMENT_ID` is configured at build time. Copy `.env.example` to the deployment environment and replace the placeholder with the GA4 measurement ID when the property is ready.
 
 ## Consent behavior
 
