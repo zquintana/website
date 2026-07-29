@@ -9,8 +9,23 @@ const answer = (questionId: string, optionId: string): HealthCheckAnswer => ({ q
 const answerMap = (entries: Array<[string, string]>): Record<string, HealthCheckAnswer> => Object.fromEntries(entries.map(([questionId, optionId]) => [questionId, answer(questionId, optionId)]));
 
 test('health check content has stable unique question IDs', () => {
-  assert.equal(healthCheckQuestions.length, 28);
+  assert.equal(healthCheckQuestions.length, 27);
   assert.equal(new Set(healthCheckQuestions.map((question) => question.id)).size, healthCheckQuestions.length);
+});
+
+test('planning question measures anticipation without a redundant spending question', () => {
+  const planning = healthCheckQuestions.find((question) => question.id === 'technology-planning');
+  assert.equal(planning?.question, 'Does your organization identify technology needs, replacements, and expected expenses before they become urgent?');
+  assert.deepEqual(planning?.options.map((option) => option.label), [
+    'Yes, through a regular review and budgeting process.',
+    'Usually, but the process is informal.',
+    'Sometimes.',
+    'Rarely.',
+    'Not sure',
+  ]);
+  assert.equal(healthCheckQuestions.some((question) => question.id === 'spending-behavior'), false);
+  assert.equal(planning?.options[0].strengthSignal, 'Technology needs are anticipated before they become urgent');
+  assert.equal(planning?.options[3].riskSignal, 'Technology spending is largely reactive');
 });
 
 test('conditional questions appear only when their parent answers require them', () => {

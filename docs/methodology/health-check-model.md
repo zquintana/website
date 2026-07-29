@@ -32,7 +32,7 @@ The engine evaluates conditions before rendering and removes answers for questio
 
 Risk signals create plain-language findings; recommendation signals are deduplicated and sorted by configured priority before the top three are shown. Findings may remain provisional because they are based on self-report. High-consequence signals such as missing administrative MFA, untested backups, prolonged recovery, insecure password sharing, or no disruption plan should be prominent, but the free screening should not call an answer “catastrophic” without evidence and context.
 
-The selected priority area influences recommendation ordering through an explicit mapping. It does not manufacture a finding or change the health score.
+Technology planning is intentionally represented by one question about anticipating needs, replacements, and expenses before they become urgent. The former separate spending-behavior question was removed because it measured substantially the same proactive-versus-reactive signal. The selected priority area influences recommendation ordering through an explicit mapping; it does not manufacture a finding or change the health score.
 
 ## Authoring and tests
 
