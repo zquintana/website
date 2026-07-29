@@ -1,0 +1,114 @@
+---
+const measurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID ?? '';
+---
+
+<div id="analytics-consent" data-measurement-id={measurementId} data-configured={measurementId ? 'true' : 'false'} hidden>
+  <div class="consent-message" role="dialog" aria-labelledby="consent-title" aria-describedby="consent-description">
+    <strong id="consent-title">Help improve this site</strong>
+    <p id="consent-description">May I use privacy-conscious analytics to understand which pages and assessment steps are useful? You can accept or decline. No assessment answers are sent to analytics.</p>
+    <div class="consent-actions">
+      <button type="button" data-consent="accept">Accept analytics</button>
+      <button type="button" data-consent="reject">Decline</button>
+    </div>
+  </div>
+</div>
+<button class="privacy-settings" type="button" aria-label="Open privacy settings" hidden>Privacy settings</button>
+
+<script is:inline>
+  (() => {
+    const container = document.querySelector('#analytics-consent');
+    if (!container || container.dataset.configured !== 'true') return;
+
+    const measurementId = container.dataset.measurementId;
+    const storageKey = 'site-analytics-consent:v1';
+    const banner = container.querySelector('.consent-message');
+    const settings = document.querySelector('.privacy-settings');
+    let analyticsLoaded = false;
+
+    const eventNames = {
+      'Health check started': 'health_check_started',
+      'Health check resumed': 'health_check_resumed',
+      'Health check question reached': 'health_check_question_reached',
+      'Health check completed': 'health_check_completed',
+      'Health check results viewed': 'health_check_results_viewed',
+      'Health check CTA selected': 'health_check_cta_selected',
+      'Health check contact form opened': 'health_check_contact_form_opened',
+      'Health check contact submitted': 'health_check_contact_submitted',
+    };
+
+    function getConsent() {
+      return localStorage.getItem(storageKey);
+    }
+
+    function configureAnalytics() {
+      if (analyticsLoaded || !measurementId) return;
+      analyticsLoaded = true;
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function gtag() { window.dataLayer.push(arguments); };
+      window.gtag('js', new Date());
+      window.gtag('config', measurementId, {
+        anonymize_ip: true,
+        allow_google_signals: false,
+        allow_ad_personalization_signals: false,
+      });
+      const script = document.createElement('script');
+      script.async = true;
+      script.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(measurementId)}`;
+      document.head.appendChild(script);
+    }
+
+    function setConsent(value) {
+      localStorage.setItem(storageKey, value);
+      container.hidden = true;
+      settings.hidden = false;
+      if (value === 'accepted') configureAnalytics();
+    }
+
+    function showBanner() {
+      container.hidden = false;
+      banner.querySelector('[data-consent="accept"]')?.focus();
+    }
+
+    document.addEventListener('click', (event) => {
+      const choice = event.target.closest('[data-consent]')?.dataset.consent;
+      if (choice === 'accept') setConsent('accepted');
+      if (choice === 'reject') setConsent('rejected');
+      if (event.target.closest('.privacy-settings')) showBanner();
+    });
+
+    window.addEventListener('health-check:event', (event) => {
+      if (getConsent() !== 'accepted' || !analyticsLoaded) return;
+      const detail = event.detail || {};
+      const eventName = eventNames[detail.eventName];
+      if (!eventName) return;
+      const metadata = detail.metadata || {};
+      const allowedMetadata = {};
+      for (const key of ['questionId', 'questionCount', 'healthRating', 'confidence']) {
+        if (metadata[key] !== undefined) allowedMetadata[key.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`)] = String(metadata[key]);
+      }
+      window.gtag('event', eventName, allowedMetadata);
+    });
+
+    const consent = getConsent();
+    if (consent === 'accepted') {
+      settings.hidden = false;
+      configureAnalytics();
+    } else if (consent === 'rejected') {
+      settings.hidden = false;
+    } else {
+      showBanner();
+    }
+  })();
+</script>
+
+<style>
+  #analytics-consent { position: fixed; inset: auto 1rem 1rem; z-index: 50; }
+  .consent-message { width: min(100%, 34rem); margin-left: auto; border: 1px solid rgba(216,255,104,.45); border-radius: 16px; background: #10141a; color: #f4f1ea; box-shadow: 0 16px 50px rgba(0,0,0,.35); padding: 1rem 1.1rem; font: 0.9rem/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .consent-message p { color: #aaa59c; margin: .4rem 0 .8rem; }
+  .consent-actions { display: flex; flex-wrap: wrap; gap: .6rem; }
+  .consent-actions button, .privacy-settings { border: 1px solid rgba(244,241,234,.2); border-radius: 999px; background: transparent; color: #f4f1ea; cursor: pointer; padding: .55rem .8rem; }
+  .consent-actions button:first-child { border-color: #d8ff68; background: #d8ff68; color: #161b0b; font-weight: 700; }
+  .consent-actions button:focus-visible, .privacy-settings:focus-visible { outline: 3px solid #d8ff68; outline-offset: 3px; }
+  .privacy-settings { position: fixed; right: 1rem; bottom: 1rem; z-index: 49; background: #10141a; font: .75rem Inter, ui-sans-serif, system-ui, sans-serif; }
+  @media (max-width: 520px) { #analytics-consent { inset: auto .6rem .6rem; } .privacy-settings { right: .6rem; bottom: .6rem; } }
+</style>

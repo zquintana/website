@@ -53,6 +53,8 @@ const results = [
 ];
 
 const technologies = ['Go', 'Python', 'AWS', 'EKS', 'Terraform', 'Docker', 'Kubernetes', 'Postgres', 'Kafka', 'CI/CD', 'TypeScript', 'React'];
+
+import ConsentAnalytics from '../features/analytics/components/ConsentAnalytics.astro';
 ---
 
 <!doctype html>
@@ -231,6 +233,7 @@ const technologies = ['Go', 'Python', 'AWS', 'EKS', 'Terraform', 'Docker', 'Kube
         <a href="https://www.linkedin.com/in/zachary-quintana-3bb77b68/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
       </div>
     </footer>
+    <ConsentAnalytics />
 
     <script is:inline>
       const nav = document.querySelector('.site-nav');
