@@ -2,7 +2,7 @@
 const measurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID ?? '';
 ---
 
-<div id="analytics-consent" data-measurement-id={measurementId}>
+<div id="analytics-consent" data-measurement-id={measurementId} style="display: block !important">
   <div class="consent-message" role="dialog" aria-labelledby="consent-title" aria-describedby="consent-description">
     <strong id="consent-title">Help improve this site</strong>
     <p id="consent-description">Can I use privacy-friendly analytics to help improve this site? I only collect anonymous usage information, and your assessment answers are never tracked. You can allow or decline at any time.</p>
@@ -12,7 +12,7 @@ const measurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID ?? '';
     </div>
   </div>
 </div>
-<div class="privacy-utility" hidden><span>Privacy choices</span><button class="privacy-settings" type="button">Manage analytics consent</button></div>
+<div class="privacy-utility" style="display: none !important"><span>Privacy choices</span><button class="privacy-settings" type="button">Manage analytics consent</button></div>
 
 <script is:inline>
   (() => {
@@ -59,14 +59,12 @@ const measurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID ?? '';
 
     function setConsent(value) {
       localStorage.setItem(storageKey, value);
-      container.style.removeProperty('display');
-      container.hidden = true;
-      utility.hidden = false;
+      container.style.setProperty('display', 'none', 'important');
+      utility.style.setProperty('display', 'flex', 'important');
       if (value === 'accepted') configureAnalytics();
     }
 
     function showBanner() {
-      container.hidden = false;
       container.style.setProperty('display', 'block', 'important');
       banner.querySelector('[data-consent="accept"]')?.focus();
     }
@@ -93,14 +91,12 @@ const measurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID ?? '';
 
     const consent = getConsent();
     if (consent === 'accepted') {
-      container.style.removeProperty('display');
-      container.hidden = true;
-      utility.hidden = false;
+      container.style.setProperty('display', 'none', 'important');
+      utility.style.setProperty('display', 'flex', 'important');
       configureAnalytics();
     } else if (consent === 'rejected') {
-      container.style.removeProperty('display');
-      container.hidden = true;
-      utility.hidden = false;
+      container.style.setProperty('display', 'none', 'important');
+      utility.style.setProperty('display', 'flex', 'important');
     } else {
       showBanner();
     }
