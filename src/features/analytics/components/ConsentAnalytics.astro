@@ -2,7 +2,7 @@
 const measurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID ?? '';
 ---
 
-<div id="analytics-consent" data-measurement-id={measurementId} hidden>
+<div id="analytics-consent" data-measurement-id={measurementId}>
   <div class="consent-message" role="dialog" aria-labelledby="consent-title" aria-describedby="consent-description">
     <strong id="consent-title">Help improve this site</strong>
     <p id="consent-description">Can I use privacy-friendly analytics to help improve this site? I only collect anonymous usage information, and your assessment answers are never tracked. You can allow or decline at any time.</p>
@@ -91,9 +91,11 @@ const measurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID ?? '';
 
     const consent = getConsent();
     if (consent === 'accepted') {
+      container.hidden = true;
       utility.hidden = false;
       configureAnalytics();
     } else if (consent === 'rejected') {
+      container.hidden = true;
       utility.hidden = false;
     } else {
       showBanner();
