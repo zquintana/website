@@ -5,7 +5,8 @@ Reviewed the active assessment set after the foundational pilot cohort was assem
 ## Resolved in this review
 
 - Modular questions no longer expose `unknown` as a normal answer option when they already support the explicit unknown status. Older saved values of `unknown` are normalized to `isUnknown: true`.
-- `business-recovery-priorities` now asks about business-impact priority tiers. `recovery-objectives-documented` owns measurable recovery-time and data-loss tolerances.
+- `business-recovery-priorities` now asks in business language which services must be restored first. `recovery-objectives-documented` owns measurable recovery-time and data-loss tolerances.
+- `recovery-objectives-validated` now asks whether the business has tested its agreed recovery limits, rather than asking respondents to interpret “approved recovery objectives.”
 - Findings that previously matched an `unknown` option now use an explicit unknown condition, preserving visibility behavior after the option cleanup.
 - The legacy system-inventory question is retired from the active read model without deleting its historical source record.
 
