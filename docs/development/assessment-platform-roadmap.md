@@ -2,7 +2,9 @@
 
 This roadmap covers the complete documented taxonomy: all 142 capability catalog entries across 14 domains. It does not imply that all capabilities should be activated at once. Every capability must pass the same readiness gates before it can become customer-facing methodology.
 
-The product direction is an executive-first Technology Maturity Platform whose initial commercial purpose is qualified consulting lead generation. The first production milestone is a trustworthy baseline assessment; repeat assessments, benchmarking, and continuous monitoring must be supported by the architecture but should not block that milestone.
+The product direction is an executive-first Technology Maturity Platform whose initial commercial purpose is qualified consulting lead generation. The existing deep assessment track is currently disabled while a simpler baseline experience is defined. The first production milestone is now a trustworthy, low-friction executive triage assessment; repeat assessments, benchmarking, and continuous monitoring must be supported by the architecture but should not block that milestone.
+
+The current capability work is preserved as future in-depth-track groundwork. Do not expand its catalog or promote capabilities to Active until the simpler assessment scope is approved.
 
 ## Capability readiness states
 

@@ -1,6 +1,6 @@
 # Methodology overview
 
-The methodology serves the business goal in [Business goals](../product/business-goals.md): measure technology maturity in business terms and turn the result into an improvement roadmap. It must remain understandable to the target SMB leadership audience while preserving enough structure for repeatable review.
+The methodology serves the business goal in [Business goals](../product/business-goals.md): measure technology maturity in business terms and turn the result into an improvement roadmap. This document describes the preserved in-depth assessment track, not the current public product experience. It must remain understandable to the target SMB leadership audience while preserving enough structure for repeatable review.
 
 The authoritative conceptual hierarchy is:
 

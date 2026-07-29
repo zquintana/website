@@ -1,6 +1,6 @@
 # System overview
 
-The site is a static Astro application. Assessment pages render a shell and serialize categories/questions/methodology records into the page; browser JavaScript owns the interactive session, localStorage, scoring, findings, results, and print view. The browser imports shared finding and scoring cores, while some report-presentation and persistence logic remains inline.
+The site is a static Astro application. The preserved assessment pages render a shell and serialize categories/questions/methodology records into the page; browser JavaScript owns the interactive session, localStorage, scoring, findings, results, and print view. The public assessment entry is currently disabled while a simpler executive experience is defined. The browser imports shared finding and scoring cores, while some report-presentation and persistence logic remains inline.
 
 ```mermaid
 flowchart LR

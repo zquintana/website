@@ -1,7 +1,7 @@
 # Active methodology version
 
 - Version: `0.1.0`
-- Status: `demonstration`
+- Status: `demonstration` (preserved future in-depth track; not publicly active)
 - Release date: not formally released
 - Runtime export: `activeAssessmentVersion` in `src/features/technology-health-assessment/methodology/index.ts`
 - Hash: `methodology-0.1.0-hash-placeholder` (placeholder, not reproducibility-grade)
