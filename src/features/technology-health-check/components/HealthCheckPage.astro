@@ -1,0 +1,168 @@
+---
+import { healthCheckQuestions } from '../data/questions';
+
+const questionData = JSON.stringify(healthCheckQuestions);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Free Technology Health Check | Zach Quintana</title>
+    <meta name="description" content="In less than 10 minutes, identify your organization's most important technology strengths, warning signs, and next priorities." />
+    <meta property="og:title" content="Free Technology Health Check" />
+    <meta property="og:description" content="A short, executive-friendly screening for technology health, business risk, resilience, and AI readiness." />
+    <link rel="icon" href="/favicon.png" />
+  </head>
+  <body>
+    <header class="check-nav">
+      <a class="brand" href="/"><span>ZQ</span><small>Zach Quintana</small></a>
+      <a href="/#contact">Contact</a>
+    </header>
+    <main id="health-check-root" class="health-check-shell"></main>
+    <script type="application/json" id="health-check-questions" set:html={questionData}></script>
+    <script>
+      import { getRecommendation, calculateHealthCheckResult } from '../lib/scoring';
+      import { getVisibleQuestions, removeStaleAnswers } from '../lib/engine';
+
+      const questions = JSON.parse(document.querySelector('#health-check-questions').textContent);
+      const root = document.querySelector('#health-check-root');
+      const storageKey = 'technology-health-check:v1';
+      const track = (eventName, metadata = {}) => window.dispatchEvent(new CustomEvent('health-check:event', { detail: { eventName, metadata } }));
+      const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
+
+      function loadState() {
+        try {
+          const parsed = JSON.parse(localStorage.getItem(storageKey) ?? 'null');
+          return parsed?.version === 'health-check-v1' && parsed.answers ? parsed : null;
+        } catch { return null; }
+      }
+
+      function saveState(state) {
+        state.answers = removeStaleAnswers(questions, state.answers);
+        localStorage.setItem(storageKey, JSON.stringify({ ...state, lastUpdatedAt: new Date().toISOString() }));
+      }
+
+      function createState() {
+        return { version: 'health-check-v1', answers: {}, currentIndex: 0, startedAt: new Date().toISOString() };
+      }
+
+      function renderLanding() {
+        const existing = loadState();
+        root.innerHTML = `<section class="intro-card"><p class="eyebrow">Free executive screening · 5–7 minutes</p><h1>How healthy is your business technology?</h1><p class="intro">In less than 10 minutes, identify your organization’s most important technology strengths, warning signs, and next priorities—without needing technical expertise.</p><div class="intro-grid"><div><strong>What you’ll get</strong><span>A directional Technology Health Score, business risk and resilience indicators, confidence in the answers, AI readiness, and practical next steps.</span></div><div><strong>What it is not</strong><span>This is self-reported screening. It does not prove security, validate configurations, determine compliance, or replace a comprehensive assessment.</span></div></div><button class="button primary" id="start-check">Start the free health check</button>${existing ? '<button class="button secondary" id="resume-check">Resume where you left off</button>' : ''}<p class="privacy-note">No email is required to see your results. Your answers stay in this browser unless you choose to share your results.</p></section>`;
+        document.querySelector('#start-check')?.addEventListener('click', () => { localStorage.removeItem(storageKey); renderQuestionnaire(createState()); track('Health check started'); });
+        document.querySelector('#resume-check')?.addEventListener('click', () => { renderQuestionnaire(existing); track('Health check resumed'); });
+      }
+
+      function renderQuestionnaire(state) {
+        const visible = getVisibleQuestions(questions, state.answers);
+        state.currentIndex = Math.max(0, Math.min(state.currentIndex, visible.length - 1));
+        const question = visible[state.currentIndex];
+        if (!question) return renderLanding();
+        const selected = state.answers[question.id]?.optionId;
+        const progress = Math.round(((state.currentIndex + 1) / visible.length) * 100);
+        root.innerHTML = `<section class="question-card" aria-labelledby="question-title"><div class="question-meta"><span>${escapeHtml(question.category)}</span><span aria-live="polite">Question ${state.currentIndex + 1} of ${visible.length}</span></div><div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${progress}" aria-label="Assessment progress"><span style="width:${progress}%"></span></div><form id="question-form"><h1 id="question-title">${escapeHtml(question.question)}</h1>${question.description ? `<p class="question-description">${escapeHtml(question.description)}</p>` : ''}<fieldset><legend class="sr-only">Choose one answer</legend><div class="answers">${question.options.map((option) => `<label class="answer ${selected === option.id ? 'is-selected' : ''}"><input type="radio" name="answer" value="${escapeHtml(option.id)}" ${selected === option.id ? 'checked' : ''}><span>${escapeHtml(option.label)}</span></label>`).join('')}</div></fieldset><p class="form-error" id="answer-error" role="alert" hidden>Please choose an answer to continue.</p><div class="actions"><button type="button" class="button ghost" id="back" ${state.currentIndex === 0 ? 'disabled' : ''}>Back</button><button type="submit" class="button primary">${state.currentIndex === visible.length - 1 ? 'See my results' : 'Continue'}</button><button type="button" class="text-button" id="restart">Start over</button></div></form><p class="screening-note">Answer based on what you know today. “Not sure” lowers confidence in the result; it does not automatically mean something is wrong.</p></section>`;
+        document.querySelectorAll('input[name="answer"]').forEach((input) => input.addEventListener('change', (event) => document.querySelectorAll('.answer').forEach((item) => item.classList.toggle('is-selected', item.querySelector('input').checked))));
+        document.querySelector('#back').addEventListener('click', () => { state.currentIndex -= 1; saveState(state); renderQuestionnaire(state); });
+        document.querySelector('#restart').addEventListener('click', () => { if (confirm('Start over and clear this health check?')) { localStorage.removeItem(storageKey); renderLanding(); } });
+        document.querySelector('#question-form').addEventListener('submit', (event) => {
+          event.preventDefault();
+          const optionId = new FormData(event.currentTarget as HTMLFormElement).get('answer');
+          if (!optionId) { document.querySelector<HTMLElement>('#answer-error').hidden = false; return; }
+          state.answers[question.id] = { questionId: question.id, optionId: String(optionId) };
+          const nextVisible = getVisibleQuestions(questions, state.answers);
+          if (state.currentIndex >= nextVisible.length - 1) { state.completedAt = new Date().toISOString(); saveState(state); track('Health check completed', { questionCount: Object.keys(state.answers).length }); renderResults(state); }
+          else { state.currentIndex += 1; saveState(state); track('Health check question reached', { questionId: question.id }); renderQuestionnaire(state); }
+        });
+        document.querySelector<HTMLInputElement>('input[name="answer"]')?.focus();
+      }
+
+      function renderResults(state) {
+        const result = calculateHealthCheckResult(questions, state.answers);
+        const recommendationCards = result.recommendationIds.map((id) => { const recommendation = getRecommendation(id); return recommendation ? `<article class="recommendation"><h3>${escapeHtml(recommendation.title)}</h3><p>${escapeHtml(recommendation.action)}</p><small>${escapeHtml(recommendation.why)}</small></article>` : ''; }).join('');
+        const findings = result.findings.length ? result.findings.map((finding) => `<article class="finding"><h3>${escapeHtml(finding.title)}</h3><p>${escapeHtml(finding.why)}</p><strong>Next step:</strong> <span>${escapeHtml(finding.nextStep)}</span></article>`).join('') : '<p class="muted">No major warning signals were identified in this screening. Continue reviewing your technology as the business changes.</p>';
+        const strengths = result.strengths.length ? result.strengths.map((strength) => `<li><strong>${escapeHtml(strength.title)}</strong><span>${escapeHtml(strength.detail)}</span></li>`).join('') : '<li><span>Strengths will become clearer as more practices are documented and verified.</span></li>';
+        const summary = result.findings.length ? `Your responses suggest a ${result.healthRating.toLowerCase()} technology foundation. The most important areas to review are ${result.findings.slice(0, 2).map((item) => item.title.toLowerCase()).join(' and ')}. This is a screening result based on self-reported information, so confidence matters alongside the score.` : `Your responses suggest a ${result.healthRating.toLowerCase()} technology foundation with no major warning signals identified in this screening. Use the priorities below to keep improving and validate important assumptions over time.`;
+        root.innerHTML = `<section class="results-heading"><p class="eyebrow">Your Technology Health Check</p><h1>${escapeHtml(result.healthRating)}</h1><p class="summary">${escapeHtml(summary)}</p><div class="result-actions"><button class="button secondary" id="print-results">Print results</button><button class="text-button" id="retake">Retake the health check</button></div></section><section class="score-grid"><article class="score-card primary-score"><span>Technology Health</span><strong>${result.healthScore}</strong><em>${escapeHtml(result.healthRating)}</em></article><article class="score-card"><span>Business Risk</span><strong>${escapeHtml(result.risk)}</strong><em>Directional indicator</em></article><article class="score-card"><span>Operational Resilience</span><strong>${escapeHtml(result.resilience)}</strong><em>Recovery and continuity</em></article><article class="score-card"><span>Confidence</span><strong>${escapeHtml(result.confidence)}</strong><em>Based on your answers</em></article><article class="score-card"><span>AI Readiness</span><strong>${escapeHtml(result.aiReadiness)}</strong><em>Separate from health score</em></article></section><section class="result-section"><h2>What looks strong</h2><ul class="strength-list">${strengths}</ul></section><section class="result-section"><h2>What deserves attention</h2><div class="finding-list">${findings}</div></section><section class="result-section"><h2>Three practical next priorities</h2><div class="recommendation-list">${recommendationCards || '<p class="muted">Your next step is to validate the assumptions behind this screening and identify the highest-value improvement with your team.</p>'}</div></section><section class="confidence-card"><h2>How much confidence should you place in this?</h2><p>Your confidence rating is <strong>${escapeHtml(result.confidence.toLowerCase())}</strong>. “Not sure” answers lower confidence because they identify areas that need validation; they do not prove that a control or practice is absent.</p></section><section class="screening-disclaimer"><strong>Screening limitation</strong><p>This Technology Health Check is based on the information provided. It identifies indicators that may warrant further investigation but does not independently verify your systems, security controls, or recovery capabilities. It is not a comprehensive assessment, cybersecurity audit, compliance determination, vulnerability scan, or complete technology roadmap.</p></section><section class="cta-card"><p class="eyebrow">Want to validate these findings?</p><h2>Turn the screening into a clear improvement plan.</h2><p>A comprehensive Technology Maturity Assessment examines the systems, evidence, processes, and dependencies behind these answers and turns them into a prioritized roadmap.</p><div class="actions"><a class="button primary" href="https://calendly.com/zach-quintana/30min" target="_blank" rel="noopener noreferrer" id="schedule-review">Schedule a Technology Health Review</a><a class="button secondary" href="mailto:zach.quintana@gmail.com?subject=Technology Health Check results&body=I completed the Technology Health Check. My result was ${encodeURIComponent(result.healthRating)} with ${encodeURIComponent(result.confidence.toLowerCase())} confidence.">Discuss my results</a></div></section>`;
+        document.querySelector('#print-results').addEventListener('click', () => window.print());
+        document.querySelector('#retake').addEventListener('click', () => { localStorage.removeItem(storageKey); renderLanding(); });
+        document.querySelector('#schedule-review').addEventListener('click', () => track('Health check CTA selected', { healthRating: result.healthRating, confidence: result.confidence }));
+        track('Health check results viewed', { healthRating: result.healthRating, confidence: result.confidence });
+      }
+
+      const existing = loadState();
+      if (existing?.completedAt) renderResults(existing); else renderLanding();
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  :root { color-scheme: dark; --bg: #080a0d; --bg-soft: #10141a; --panel: rgba(255,255,255,.06); --line: rgba(244,241,234,.16); --text: #f4f1ea; --muted: #aaa59c; --accent: #d8ff68; --accent-ink: #161b0b; --danger: #ff9d9d; font-family: Inter, ui-sans-serif, system-ui, sans-serif; }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-width: 320px; background: radial-gradient(circle at top left, rgba(216,255,104,.14), transparent 30rem), linear-gradient(180deg, var(--bg), var(--bg-soft)); color: var(--text); line-height: 1.6; }
+  a { color: inherit; text-decoration: none; }
+  button, input { font: inherit; }
+  .check-nav { max-width: 1120px; margin: 0 auto; padding: 1.25rem 1.25rem 0; display: flex; justify-content: space-between; align-items: center; }
+  .brand { display: flex; gap: .6rem; align-items: center; font-weight: 700; }
+  .brand span { display: grid; place-items: center; width: 2rem; height: 2rem; border: 1px solid var(--accent); color: var(--accent); font-size: .75rem; }
+  .brand small { color: var(--muted); font-weight: 500; }
+  .check-nav > a:last-child { color: var(--accent); font-size: .9rem; }
+  .health-check-shell { width: min(100% - 2rem, 900px); margin: 0 auto; padding: 4rem 0 6rem; }
+  .intro-card, .question-card, .result-section, .confidence-card, .screening-disclaimer, .cta-card { border: 1px solid var(--line); background: var(--panel); padding: clamp(1.25rem, 4vw, 3rem); }
+  .intro-card { max-width: 760px; margin: 3rem auto; }
+  .eyebrow { color: var(--accent); font-size: .76rem; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; }
+  h1, h2, h3, p { margin-top: 0; }
+  h1 { max-width: 760px; margin-bottom: 1.25rem; font-size: clamp(2.5rem, 7vw, 5.5rem); line-height: .98; letter-spacing: -.05em; }
+  h2 { font-size: clamp(1.45rem, 3vw, 2rem); line-height: 1.1; }
+  h3 { font-size: 1.05rem; line-height: 1.25; }
+  .intro, .summary { color: var(--muted); font-size: 1.2rem; max-width: 680px; }
+  .intro-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin: 2rem 0; }
+  .intro-grid div { border-top: 1px solid var(--line); padding-top: 1rem; display: grid; gap: .35rem; }
+  .intro-grid span, .privacy-note, .screening-note, .question-description, .muted, small { color: var(--muted); }
+  .privacy-note { margin: 1.25rem 0 0; font-size: .85rem; }
+  .button { display: inline-flex; justify-content: center; align-items: center; min-height: 3rem; padding: .7rem 1rem; border: 1px solid var(--line); cursor: pointer; }
+  .button.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 700; }
+  .button.secondary { background: transparent; color: var(--text); }
+  .button:focus-visible, .text-button:focus-visible, .answer:has(input:focus-visible) { outline: 3px solid var(--accent); outline-offset: 3px; }
+  .intro-card > .button { margin-right: .5rem; margin-top: .5rem; }
+  .question-card { max-width: 720px; margin: 2rem auto; }
+  .question-meta { display: flex; justify-content: space-between; gap: 1rem; color: var(--accent); font-size: .82rem; font-weight: 700; }
+  .progress { height: .4rem; background: rgba(255,255,255,.1); margin: 1rem 0 3rem; }
+  .progress span { display: block; height: 100%; background: var(--accent); transition: width .2s ease; }
+  .question-card h1 { font-size: clamp(2rem, 5vw, 3.8rem); }
+  .question-description { margin-top: -1rem; margin-bottom: 1.5rem; }
+  fieldset { border: 0; padding: 0; margin: 0; }
+  .answers { display: grid; gap: .7rem; }
+  .answer { display: flex; align-items: center; gap: .8rem; min-height: 3.6rem; padding: .85rem 1rem; border: 1px solid var(--line); cursor: pointer; background: rgba(0,0,0,.12); }
+  .answer:hover, .answer.is-selected { border-color: var(--accent); background: rgba(216,255,104,.1); }
+  .answer input { accent-color: var(--accent); width: 1.1rem; height: 1.1rem; flex: 0 0 auto; }
+  .actions { display: flex; flex-wrap: wrap; align-items: center; gap: .7rem; margin-top: 2rem; }
+  .text-button { border: 0; background: transparent; color: var(--muted); cursor: pointer; padding: .7rem .2rem; }
+  .text-button:hover { color: var(--text); }
+  .button:disabled { opacity: .35; cursor: not-allowed; }
+  .form-error { color: var(--danger); margin: .8rem 0 0; }
+  .screening-note { font-size: .85rem; margin: 2rem 0 0; }
+  .results-heading { padding: 3rem 0 2rem; }
+  .result-actions { display: flex; gap: 1rem; align-items: center; }
+  .score-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: .7rem; margin: 1rem 0; }
+  .score-card { min-height: 9rem; border: 1px solid var(--line); padding: 1rem; display: flex; flex-direction: column; justify-content: space-between; background: var(--panel); }
+  .score-card span, .score-card em { color: var(--muted); font-size: .8rem; font-style: normal; }
+  .score-card strong { font-size: 1.45rem; line-height: 1.1; }
+  .primary-score { border-color: var(--accent); }
+  .primary-score strong { font-size: 3.2rem; color: var(--accent); }
+  .result-section, .confidence-card, .screening-disclaimer, .cta-card { margin-top: 1rem; }
+  .strength-list { list-style: none; padding: 0; display: grid; gap: .8rem; }
+  .strength-list li { display: grid; gap: .2rem; border-left: 3px solid var(--accent); padding-left: 1rem; }
+  .strength-list span { color: var(--muted); }
+  .finding-list, .recommendation-list { display: grid; gap: .8rem; }
+  .finding, .recommendation { border-top: 1px solid var(--line); padding-top: 1rem; }
+  .finding p, .recommendation p, .recommendation small { color: var(--muted); }
+  .finding strong { color: var(--accent); }
+  .screening-disclaimer { font-size: .9rem; }
+  .cta-card { background: rgba(216,255,104,.08); }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+  @media (max-width: 720px) { .health-check-shell { padding-top: 2rem; } .intro-grid, .score-grid { grid-template-columns: 1fr; } .score-card { min-height: 6rem; } .results-heading h1 { font-size: 3rem; } .question-meta { align-items: flex-start; flex-direction: column; gap: .2rem; } .progress { margin-bottom: 2rem; } .actions .button { flex: 1 1 auto; } }
+  @media (prefers-reduced-motion: reduce) { .progress span { transition: none; } }
+  @media print { .check-nav, .result-actions, .cta-card { display: none; } body { background: white; color: black; } .health-check-shell { width: 100%; padding: 0; } .score-card, .result-section, .confidence-card, .screening-disclaimer { color: black; background: white; border-color: #ccc; } .score-card span, .score-card em, .muted, p { color: #333; } }
+</style>

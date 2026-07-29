@@ -1,10 +1,10 @@
 # Zach Quintana Consulting site
 
-Astro and TypeScript site for Zach Quintana Consulting. The site includes the preserved implementation of a future in-depth Technology Health Assessment track alongside the consulting site.
+Astro and TypeScript site for Zach Quintana Consulting. The site includes a public executive-friendly Technology Health Check and the preserved implementation of a future in-depth Technology Health Assessment track.
 
 ## Status
 
-The public assessment entry is currently disabled while the product is narrowed to a simpler executive-first experience. The existing capability-based assessment remains in the repository as a future in-depth advisory track; its methodology is `0.1.0` with status `demonstration` and is not the current customer offering. Do not describe its results as certification, compliance attestation, penetration testing, or an independent audit.
+The public `/health-check` is a self-reported screening tool for executive-level technology health, risk, resilience, confidence, and AI readiness. It is not a security audit, compliance determination, vulnerability scan, or comprehensive roadmap. The existing capability-based `/assessment/*` track remains in the repository as a future in-depth advisory track; its methodology is `0.1.0` with status `demonstration` and is not the current customer offering.
 
 ## Stack and commands
 
@@ -19,7 +19,8 @@ There are currently no dedicated `lint`, `format`, or `typecheck` scripts. `npx 
 
 ## Repository map
 
-- `src/pages/` — Astro routes; `/assessment/*` is a deferred future-track entry.
+- `src/pages/` — Astro routes; `/health-check` is the public screening and `/assessment/*` is a deferred future-track entry.
+- `src/features/technology-health-check/` — public screening questions, branching engine, scoring, recommendations, and results UI.
 - `src/features/technology-health-assessment/` — assessment UI, types, methodology modules, compatibility adapters, scoring, findings, confidence, and local persistence.
 - `src/features/technology-health-assessment/methodology/` — authoritative authored methodology and version assembly.
 - `tests/` — scoring, persistence, methodology, validation, and adapter tests.
@@ -27,4 +28,4 @@ There are currently no dedicated `lint`, `format`, or `typecheck` scripts. `npx 
 - `docs/` — product, methodology, architecture, development, and reference governance.
 - `CLAUDE.md` and `AGENTS.md` — agent/contributor instructions.
 
-Read [the business goals](docs/product/business-goals.md), [the assessment track status](docs/product/assessment-track-status.md), [the assessment platform roadmap](docs/development/assessment-platform-roadmap.md), [the documentation index](docs/documentation-audit.md), [the methodology overview](docs/methodology/methodology-overview.md), and [the change checklist](docs/development/assessment-change-checklist.md) before changing assessment behavior. The executable TypeScript types and runtime validation are the structural source of truth; published methodology modules and tests establish active configuration and verified behavior.
+Read [the business goals](docs/product/business-goals.md), [the free health-check product boundary](docs/product/technology-health-check.md), [the health-check model](docs/methodology/health-check-model.md), [the assessment track status](docs/product/assessment-track-status.md), [the assessment platform roadmap](docs/development/assessment-platform-roadmap.md), [the methodology overview](docs/methodology/methodology-overview.md), and [the change checklist](docs/development/assessment-change-checklist.md) before changing assessment behavior. The executable TypeScript types and tests are the source of truth for the public check’s current behavior.
