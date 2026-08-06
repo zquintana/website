@@ -1,0 +1,92 @@
+---
+import WorkLayout from '../../features/work/components/WorkLayout.astro';
+import { caseStudies, getCaseStudy, type CaseStudy } from '../../features/work/data/caseStudies';
+
+interface Props {
+  caseStudy: CaseStudy;
+}
+
+export function getStaticPaths() {
+  return caseStudies.map((caseStudy) => ({
+    params: { slug: caseStudy.slug },
+    props: { caseStudy },
+  }));
+}
+
+const { caseStudy } = Astro.props as Props;
+const fallback = getCaseStudy(Astro.params.slug ?? '');
+const study = (caseStudy ?? fallback) as CaseStudy | undefined;
+
+if (!study) {
+  throw new Error(`Unknown case study: ${Astro.params.slug}`);
+}
+---
+
+<WorkLayout
+  title={`${study.title} | Zach Quintana`}
+  description={study.summary}
+  canonicalPath={`/work/${study.slug}/`}
+>
+  <article>
+    <header class="work-hero">
+      <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/work/">Work</a><span aria-hidden="true">/</span><span aria-current="page">{study.title}</span></nav>
+      <p class="eyebrow">{study.eyebrow}</p>
+      <h1>{study.title}</h1>
+      <p class="summary">{study.summary}</p>
+    </header>
+
+    <div class="outcome-card">
+      <p class="eyebrow">Outcome</p>
+      <strong>{study.outcome}</strong>
+      <p>{study.result}</p>
+    </div>
+
+    <div class="case-grid">
+      <div>
+        <section class="case-section" aria-labelledby="context-title">
+          <p class="section-kicker">Context</p>
+          <h2 id="context-title">The system and the situation</h2>
+          <p>{study.context}</p>
+        </section>
+        <section class="case-section" aria-labelledby="challenge-title">
+          <p class="section-kicker">Challenge</p>
+          <h2 id="challenge-title">What needed to change</h2>
+          <p>{study.challenge}</p>
+        </section>
+        <section class="case-section" aria-labelledby="approach-title">
+          <p class="section-kicker">Approach</p>
+          <h2 id="approach-title">How the work moved forward</h2>
+          <ul>
+            {study.approach.map((step: string) => <li>{step}</li>)}
+          </ul>
+        </section>
+        <section class="case-section" aria-labelledby="result-title">
+          <p class="section-kicker">Result</p>
+          <h2 id="result-title">What changed</h2>
+          <p>{study.result}</p>
+        </section>
+      </div>
+
+      <aside class="case-aside" aria-label="Case study details">
+        <section class="case-section">
+          <p class="section-kicker">Role</p>
+          <p>{study.role}</p>
+        </section>
+        <section class="case-section">
+          <p class="section-kicker">Technologies and areas</p>
+          <ul class="tag-list">
+            {study.technologies.map((technology: string) => <li>{technology}</li>)}
+          </ul>
+        </section>
+      </aside>
+    </div>
+
+    <nav class="next-work" aria-label="More selected work">
+      <div>
+        <p class="eyebrow">Continue exploring</p>
+        <h2>See the rest of the selected work.</h2>
+      </div>
+      <a class="button secondary" href="/work/">Back to selected work</a>
+    </nav>
+  </article>
+</WorkLayout>
