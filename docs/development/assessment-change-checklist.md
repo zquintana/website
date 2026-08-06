@@ -29,7 +29,6 @@
 
 ## Release
 
-- [ ] Manifest validates; `npm test` and `npm run build` pass.
+- [ ] Manifest validates; `pnpm test` and `pnpm build` pass.
 - [ ] Active version and migration path are correct.
 - [ ] Documentation, traceability, and known limitations are updated.
-

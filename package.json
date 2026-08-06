@@ -2,6 +2,7 @@
   "name": "zachquintana-consulting-site",
   "version": "1.0.0",
   "private": true,
+  "packageManager": "pnpm@9.15.0",
   "type": "module",
   "scripts": {
     "dev": "astro dev",

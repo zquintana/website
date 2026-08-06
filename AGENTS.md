@@ -7,7 +7,7 @@ Before changing assessment behavior, read [the methodology overview](docs/method
 - Preserve historical methodology versions and keep health, risk, evidence, and confidence separate.
 - Prefer observable, single-concept answer states. Keep unknown distinct from absent and support not-applicable where appropriate.
 - Keep findings and recommendations in methodology modules, not UI components.
-- Run `npm test` and `npm run build`; manifest validation happens during methodology import. Update docs and tests when behavior changes.
+- Run `pnpm test` and `pnpm build`; manifest validation happens during methodology import. Update docs and tests when behavior changes.
 - Use the assessment change checklist and record significant architectural decisions in `docs/architecture/decisions/`.
 - Treat demonstration questions as provisional, never as finalized methodology. Never imply compliance certification.
 - The public `/health-check` is a separate short self-reported screening; keep its executive-friendly content and scoring separate from the deferred capability-based assessment track.

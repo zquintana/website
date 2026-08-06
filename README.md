@@ -9,13 +9,13 @@ The public `/health-check` is a self-reported screening tool for executive-level
 ## Stack and commands
 
 - Astro 5, TypeScript 5, Zod 3, and Node’s built-in test runner.
-- `npm ci` — install dependencies.
-- `npm run dev` — start local development.
-- `npm test` — run the repository tests, including methodology validation and scoring behavior.
-- `npm run build` — build the static site into `dist/`.
-- `npm run preview` — preview the build.
+- `pnpm install` — install dependencies.
+- `pnpm dev` — start local development.
+- `pnpm test` — run the repository tests, including methodology validation and scoring behavior.
+- `pnpm build` — build the static site into `dist/`.
+- `pnpm preview` — preview the build.
 
-There are currently no dedicated `lint`, `format`, or `typecheck` scripts. `npx astro check` is available through the installed dependency but currently reports 23 existing diagnostics in the assessment Astro/client code; it is not a passing gate yet. Manifest validation runs when the active methodology module is imported and is covered by `npm test`.
+There are currently no dedicated `lint`, `format`, or `typecheck` scripts. `pnpm exec astro check` is available through the installed dependency but currently reports 23 existing diagnostics in the assessment Astro/client code; it is not a passing gate yet. Manifest validation runs when the active methodology module is imported and is covered by `pnpm test`.
 
 ## Repository map
 

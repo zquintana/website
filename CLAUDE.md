@@ -11,9 +11,9 @@ The repository includes a modular Technology Health Assessment demonstration. Be
 ## Development Commands
 
 ### Building and Serving
-- `npm run dev` - Start the Astro development server
-- `npm run build` - Build the site to the `dist/` directory
-- `npm run preview` - Preview the production build locally
+- `pnpm dev` - Start the Astro development server
+- `pnpm build` - Build the site to the `dist/` directory
+- `pnpm preview` - Preview the production build locally
 
 ## Project Structure
 
@@ -27,4 +27,4 @@ The repository includes a modular Technology Health Assessment demonstration. Be
 
 ## Deployment
 
-AWS Amplify runs `npm ci` followed by `npm run build` and deploys the generated `dist/` directory.
+AWS Amplify runs `pnpm install --frozen-lockfile` followed by `pnpm build` and deploys the generated `dist/` directory.

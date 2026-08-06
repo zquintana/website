@@ -44,4 +44,4 @@ The required product, methodology, architecture, development, reference, ADR, ag
 - No applicability engine, evidence artifact collection, typed report model, server persistence, export format, or standards source URLs/review dates.
 - Category contribution metadata is not used by current aggregation; finding conditions are now runtime-evaluated.
 - No dedicated typecheck/lint/format scripts; no component or browser end-to-end test suite.
-- `npx astro check` is available but currently fails with 23 existing diagnostics; the successful build does not constitute a clean type check.
+- `pnpm exec astro check` is available but currently fails with 23 existing diagnostics; the successful build does not constitute a clean type check.

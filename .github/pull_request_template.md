@@ -17,7 +17,6 @@
 
 ## Verification
 
-- [ ] `npm test`
-- [ ] `npm run build`
+- [ ] `pnpm test`
+- [ ] `pnpm build`
 - [ ] Relevant docs and traceability entries reviewed
-
