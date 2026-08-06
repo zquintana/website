@@ -2,65 +2,90 @@ export const caseStudies = [
   {
     slug: 'aws-kubernetes-migration',
     eyebrow: 'Cloud modernization',
-    title: 'Production migration from colocation to AWS EKS',
+    metadataTitle: 'AWS and Kubernetes Platform Migration | Zach Quintana',
+    title: 'Replatforming a legacy SaaS platform to AWS and Kubernetes',
     summary:
-      'Replatforming a long-lived SaaS platform with AWS, Kubernetes, Terraform, and modern deployment practices while maintaining continuity for active operations.',
+      'Played a central technical role in moving a long-lived production SaaS platform from colocated infrastructure to AWS EKS while maintaining continuity for active business operations.',
     outcome: 'Production migration from colocation to AWS EKS',
-    context:
-      'The work involved a long-lived SaaS platform moving from colocated infrastructure toward a production environment built around AWS EKS.',
-    challenge:
-      'The migration had to support active operations while changing the infrastructure and deployment foundation underneath an established product.',
-    approach: [
-      'Played a central technical role in the replatforming effort.',
-      'Used AWS, Kubernetes, Terraform, and modern deployment practices as the foundation for the new environment.',
-      'Stayed close to the operational details required to maintain continuity while the platform changed underneath active users.',
+    situation:
+      'An established enterprise SaaS platform was operating in a self-managed colocated environment. The organization needed a more maintainable infrastructure foundation while continuing to support active production workloads and ongoing product delivery.',
+    constraints: [
+      'The platform was already supporting active customers and business operations.',
+      'Modernization could not assume a clean-sheet rewrite.',
+      'Product delivery and operational support had to continue during the migration.',
+      'Infrastructure, application behavior, deployment processes, networking, observability, and security were interconnected.',
+      'The internal team needed to understand and operate the resulting environment.',
+    ],
+    technicalWork: [
+      'Contributed to AWS architecture and Amazon EKS platform design within the broader migration.',
+      'Implemented Terraform-based infrastructure automation and Kubernetes deployment practices.',
+      'Worked across networking and connectivity, CI/CD modernization, observability, and production troubleshooting.',
+      'Contributed to backend and platform changes required by the migration, along with documentation and team knowledge transfer.',
     ],
     result:
-      'The platform moved from colocation to AWS EKS with a more maintainable cloud and deployment foundation. This case study intentionally does not claim zero downtime or a single-owner delivery model.',
-    role: 'Played a central technical role in the replatforming effort.',
-    technologies: ['AWS', 'EKS', 'Kubernetes', 'Terraform'],
+      'The organization transitioned production infrastructure to AWS and Kubernetes while maintaining continuity for active operations. The work created a stronger foundation for repeatable deployment, infrastructure ownership, observability, reliability, and continued platform modernization.',
+    role: 'As Lead Software Engineer, I played a central technical role across architecture and hands-on implementation. The overall migration was a team effort involving engineering, infrastructure, leadership, and external dependencies.',
+    ownership: 'Direct architecture and implementation contribution within a broader team-led business and infrastructure migration.',
+    technologies: ['AWS', 'Amazon EKS', 'Kubernetes', 'Terraform', 'CI/CD', 'Networking', 'Observability'],
   },
   {
     slug: 'search-performance-modernization',
     eyebrow: 'Search and AI-assisted retrieval',
-    title: '99.67% measured search-performance improvement',
+    metadataTitle: 'Search Performance Modernization | Zach Quintana',
+    title: 'Improving enterprise search performance by 99.67%',
     summary:
-      'Modernizing search for an enterprise RFP platform by combining improved retrieval with AI-assisted capabilities and materially reducing response time.',
+      'Modernized search for an enterprise RFP platform, combining improvements to retrieval and system behavior with practical AI-assisted capabilities.',
     outcome: '99.67% measured search-performance improvement',
-    context:
-      'The project focused on search for an enterprise RFP platform where response time directly affected how quickly users could find and work with relevant information.',
-    challenge:
-      'Search needed to become materially more responsive while also supporting improved retrieval and practical AI-assisted capabilities.',
-    approach: [
-      'Modernized the search experience and underlying retrieval approach.',
-      'Combined improved retrieval with AI-assisted capabilities where they supported the product outcome.',
-      'Focused the work on measurable search performance rather than adding AI terminology without a useful result.',
+    situation:
+      'Search was an important part of an enterprise RFP workflow, but existing performance made retrieving relevant information slower than users and the product required.',
+    constraints: [
+      'The search capability existed inside an established production platform.',
+      'Improvements had to fit the existing application and data environment.',
+      'Search quality and response performance both mattered.',
+      'AI-assisted functionality could not compensate for weak retrieval or inefficient system design.',
+      'Changes needed to be understandable and supportable by the engineering team.',
+    ],
+    technicalWork: [
+      'Analyzed the existing retrieval path and improved query and data-flow behavior.',
+      'Worked on search-result selection and ranking at an appropriate level for the established platform.',
+      'Integrated practical AI-assisted capabilities without treating AI as a substitute for sound retrieval or system design.',
+      'Contributed to testing, measurement, and production integration while balancing response usefulness with system performance.',
     ],
     result:
-      'The measured result was a 99.67% improvement in search performance. The available project record does not specify the benchmark, baseline, or test conditions, so this page does not infer a response-time figure or a particular measurement method.',
-    role: 'Hands-on engineering and architecture work across the search and retrieval initiative.',
-    technologies: ['Search', 'Retrieval', 'AI-assisted capabilities'],
+      'Improved measured search performance by 99.67% while supporting more useful search and AI-assisted workflows. The exact benchmark, baseline, and test conditions still require owner verification, so this page does not infer a response-time figure or a particular measurement method.',
+    role: 'I worked directly on the search modernization and the integration of AI-assisted retrieval capabilities within the established platform.',
+    ownership: 'Direct technical contribution to search architecture and implementation within a broader product and platform environment.',
+    technologies: ['Backend services', 'Search and retrieval', 'AI-assisted engineering', 'Production measurement'],
+    verificationTodo: 'Verify the exact definition, baseline, and test conditions for the 99.67% search-performance measurement before publishing.',
   },
   {
     slug: 'high-volume-processing',
     eyebrow: 'Backend platform performance',
-    title: '100× processing-performance improvement',
+    metadataTitle: '100× Processing Performance Improvement | Zach Quintana',
+    title: 'Producing a 100× processing-performance improvement',
     summary:
-      'Reworking a critical processing path in a high-volume SaaS messaging system to restore operating headroom and improve responsiveness.',
+      'Reworked a critical processing path inside a high-volume SaaS messaging platform, producing a measured 100× performance improvement and restoring operating headroom.',
     outcome: '100× processing-performance improvement',
-    context:
-      'The work centered on a high-volume SaaS messaging system with a critical processing path that constrained responsiveness and available operating headroom.',
-    challenge:
-      'A bottleneck in the processing path needed to be addressed without losing sight of the production system and the teams operating it.',
-    approach: [
-      'Reworked the critical processing path rather than treating the symptom as a general scaling problem.',
-      'Used hands-on backend engineering to remove the bottleneck and improve responsiveness.',
-      'Kept the result tied to operating headroom, not just an isolated benchmark.',
+    situation:
+      'A critical processing path inside a SaaS messaging platform had become a material bottleneck. The platform handled millions of messages per month, so inefficient processing consumed operating headroom and affected system responsiveness.',
+    constraints: [
+      'The system was already operating at meaningful production volume.',
+      'Correctness and production behavior had to be preserved.',
+      'Changes had to fit a broader team-owned platform.',
+      'Processing improvements could not destabilize message delivery or dependent workflows.',
+      'The solution needed to remain maintainable by the engineering organization.',
+    ],
+    technicalWork: [
+      'Analyzed the processing path and identified unnecessary work and bottlenecks.',
+      'Refactored critical code to reduce avoidable processing overhead.',
+      'Measured the performance change and validated the result in production.',
+      'Coordinated the improvement with surrounding services and workflows.',
     ],
     result:
-      'The processing path achieved a 100× performance improvement, restoring operating headroom and improving responsiveness for the SaaS messaging system.',
-    role: 'Hands-on backend engineering and technical leadership for the processing improvement.',
-    technologies: ['SaaS platforms', 'Messaging systems', 'Backend processing'],
+      'The resulting implementation achieved a measured 100× improvement in processing performance and gave the platform substantially more operating capacity.',
+    role: 'I drove architectural and code-level improvements within a broader team-owned and team-operated platform.',
+    ownership: 'Direct technical ownership of the processing improvement within a larger team-operated SaaS platform.',
+    technologies: ['Backend processing', 'Event-driven architecture', 'Distributed SaaS systems', 'Performance profiling'],
   },
 ] as const;
 

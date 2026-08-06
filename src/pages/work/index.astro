@@ -4,15 +4,16 @@ import { caseStudies } from '../../features/work/data/caseStudies';
 ---
 
 <WorkLayout
-  title="Selected Work | Zach Quintana"
-  description="Selected engineering work across SaaS modernization, AWS and Kubernetes infrastructure, search performance, and backend systems."
+  title="Selected Engineering Work | Zach Quintana"
+  description="Case studies covering SaaS modernization, AWS and Kubernetes infrastructure, backend performance, reliability, and difficult production engineering initiatives."
   canonicalPath="/work/"
 >
   <section class="work-hero">
     <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><span aria-current="page">Work</span></nav>
     <p class="eyebrow">Selected work</p>
-    <h1>Engineering outcomes from difficult systems.</h1>
-    <p class="summary">A focused set of modernization, infrastructure, search, and backend platform initiatives. These are concise accounts of the problem, the work, and the result, with ownership described carefully.</p>
+    <h1>Selected engineering work</h1>
+    <p class="summary">Most of my work has been performed inside proprietary production systems. These case studies focus on the technical situation, my role, the work performed, and the measurable outcome without exposing confidential implementation details.</p>
+    <p class="summary">Where an initiative involved a larger team, I state that directly.</p>
   </section>
 
   <section aria-labelledby="case-studies-title">
@@ -23,6 +24,8 @@ import { caseStudies } from '../../features/work/data/caseStudies';
           <p class="eyebrow">{caseStudy.eyebrow}</p>
           <h2>{caseStudy.title}</h2>
           <p>{caseStudy.summary}</p>
+          <p class="card-outcome"><strong>Outcome:</strong> {caseStudy.outcome}</p>
+          <p class="card-areas"><strong>Technical areas:</strong> {caseStudy.technologies.join(', ')}</p>
           <span class="read-link">Read case study <span aria-hidden="true">→</span></span>
         </a>
       ))}
@@ -37,6 +40,9 @@ import { caseStudies } from '../../features/work/data/caseStudies';
   .work-index-card:hover { border-color: color-mix(in srgb, var(--accent) 70%, var(--line)); }
   .work-index-card h2 { margin-bottom: 16px; }
   .work-index-card > p:not(.eyebrow) { color: var(--muted); }
+  .work-index-card .card-outcome { margin-top: 8px; color: var(--text); }
+  .work-index-card .card-areas { margin-top: 0; font-size: 0.92rem; }
+  .work-index-card strong { color: var(--text); }
   .read-link { margin-top: auto; color: var(--text); font-weight: 800; text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 5px; }
   @media (max-width: 900px) { .work-index-grid { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 640px) { .work-index-grid { grid-template-columns: 1fr; } .work-index-card { min-height: 280px; } }

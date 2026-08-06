@@ -20,10 +20,13 @@ const study = (caseStudy ?? fallback) as CaseStudy | undefined;
 if (!study) {
   throw new Error(`Unknown case study: ${Astro.params.slug}`);
 }
+
+// TODO: Verify the exact search-performance measurement definition before publishing the case study claim.
+const otherCaseStudies = caseStudies.filter((caseStudy) => caseStudy.slug !== study.slug);
 ---
 
 <WorkLayout
-  title={`${study.title} | Zach Quintana`}
+  title={study.metadataTitle}
   description={study.summary}
   canonicalPath={`/work/${study.slug}/`}
 >
@@ -43,21 +46,23 @@ if (!study) {
 
     <div class="case-grid">
       <div>
-        <section class="case-section" aria-labelledby="context-title">
-          <p class="section-kicker">Context</p>
-          <h2 id="context-title">The system and the situation</h2>
-          <p>{study.context}</p>
+        <section class="case-section" aria-labelledby="situation-title">
+          <p class="section-kicker">Situation</p>
+          <h2 id="situation-title">The system and the situation</h2>
+          <p>{study.situation}</p>
         </section>
-        <section class="case-section" aria-labelledby="challenge-title">
-          <p class="section-kicker">Challenge</p>
-          <h2 id="challenge-title">What needed to change</h2>
-          <p>{study.challenge}</p>
-        </section>
-        <section class="case-section" aria-labelledby="approach-title">
-          <p class="section-kicker">Approach</p>
-          <h2 id="approach-title">How the work moved forward</h2>
+        <section class="case-section" aria-labelledby="constraints-title">
+          <p class="section-kicker">Constraints</p>
+          <h2 id="constraints-title">What the work had to respect</h2>
           <ul>
-            {study.approach.map((step: string) => <li>{step}</li>)}
+            {study.constraints.map((constraint: string) => <li>{constraint}</li>)}
+          </ul>
+        </section>
+        <section class="case-section" aria-labelledby="technical-work-title">
+          <p class="section-kicker">Technical work</p>
+          <h2 id="technical-work-title">How the work moved forward</h2>
+          <ul>
+            {study.technicalWork.map((step: string) => <li>{step}</li>)}
           </ul>
         </section>
         <section class="case-section" aria-labelledby="result-title">
@@ -73,6 +78,10 @@ if (!study) {
           <p>{study.role}</p>
         </section>
         <section class="case-section">
+          <p class="section-kicker">Ownership and collaboration</p>
+          <p>{study.ownership}</p>
+        </section>
+        <section class="case-section">
           <p class="section-kicker">Technologies and areas</p>
           <ul class="tag-list">
             {study.technologies.map((technology: string) => <li>{technology}</li>)}
@@ -81,12 +90,18 @@ if (!study) {
       </aside>
     </div>
 
-    <nav class="next-work" aria-label="More selected work">
-      <div>
+    <nav class="next-work" aria-label="More selected work and contact">
+      <div class="next-work-heading">
         <p class="eyebrow">Continue exploring</p>
         <h2>See the rest of the selected work.</h2>
       </div>
-      <a class="button secondary" href="/work/">Back to selected work</a>
+      <ul class="other-work-links">
+        {otherCaseStudies.map((otherCaseStudy) => <li><a href={`/work/${otherCaseStudy.slug}/`}>{otherCaseStudy.title}</a></li>)}
+      </ul>
+      <div class="next-work-actions">
+        <a class="button secondary" href="/#contact">Discuss a role or technical initiative</a>
+        <a class="text-link" href="/work/">Back to selected work</a>
+      </div>
     </nav>
   </article>
 </WorkLayout>
