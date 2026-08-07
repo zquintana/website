@@ -31,6 +31,16 @@ import { caseStudies } from '../../features/work/data/caseStudies';
       ))}
     </div>
   </section>
+
+  <section class="opportunity-cta" aria-labelledby="opportunity-title">
+    <p class="eyebrow">Current opportunities</p>
+    <h2 id="opportunity-title">Need someone who can do this kind of work?</h2>
+    <p>I'm open to Staff/Principal-level engineering roles and a limited number of high-impact contract engagements.</p>
+    <div class="opportunity-actions">
+      <a class="button secondary" href="/documents/zach-quintana-staff-principal-resume.pdf" target="_blank" rel="noopener noreferrer" aria-label="View resume PDF (opens in a new tab)">View resume</a>
+      <a class="button primary" href="/#contact">Discuss an opportunity</a>
+    </div>
+  </section>
 </WorkLayout>
 
 <style>
@@ -44,6 +54,10 @@ import { caseStudies } from '../../features/work/data/caseStudies';
   .work-index-card .card-areas { margin-top: 0; font-size: 0.92rem; }
   .work-index-card strong { color: var(--text); }
   .read-link { margin-top: auto; color: var(--text); font-weight: 800; text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 5px; }
+  .opportunity-cta { margin-top: 72px; padding: clamp(26px, 4vw, 42px); border: 1px solid var(--line); border-radius: 28px; background: rgba(216, 255, 104, 0.07); box-shadow: var(--shadow); }
+  .opportunity-cta h2 { margin-bottom: 14px; }
+  .opportunity-cta > p:not(.eyebrow) { max-width: 680px; color: var(--muted); }
+  .opportunity-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
   @media (max-width: 900px) { .work-index-grid { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 640px) { .work-index-grid { grid-template-columns: 1fr; } .work-index-card { min-height: 280px; } }
 </style>

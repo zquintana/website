@@ -21,7 +21,6 @@ if (!study) {
   throw new Error(`Unknown case study: ${Astro.params.slug}`);
 }
 
-// TODO: Verify the exact search-performance measurement definition before publishing the case study claim.
 const otherCaseStudies = caseStudies.filter((caseStudy) => caseStudy.slug !== study.slug);
 ---
 
@@ -95,10 +94,12 @@ const otherCaseStudies = caseStudies.filter((caseStudy) => caseStudy.slug !== st
         <p class="eyebrow">Continue exploring</p>
         <h2>See the rest of the selected work.</h2>
       </div>
+      <p class="opportunity-note">I'm open to Staff/Principal engineering roles and select high-impact contract engagements.</p>
       <ul class="other-work-links">
         {otherCaseStudies.map((otherCaseStudy) => <li><a href={`/work/${otherCaseStudy.slug}/`}>{otherCaseStudy.title}</a></li>)}
       </ul>
       <div class="next-work-actions">
+        <a class="text-link" href="/documents/zach-quintana-staff-principal-resume.pdf" target="_blank" rel="noopener noreferrer" aria-label="View resume PDF (opens in a new tab)">View resume</a>
         <a class="button secondary" href="/#contact">Discuss a role or technical initiative</a>
         <a class="text-link" href="/work/">Back to selected work</a>
       </div>

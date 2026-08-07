@@ -34,10 +34,9 @@ const canonicalUrl = new URL(canonicalPath, Astro.site ?? 'https://zachquintana.
     <nav class="site-nav" aria-label="Primary navigation">
       <a class="brand" href="/" aria-label="Zach Quintana home"><span>ZQ</span><small>Zach Quintana</small></a>
       <div class="nav-links">
-        <a href="/">Home</a>
         <a href="/work/">Work</a>
-        <a href="/#experience">Experience</a>
-        <a href="/#consulting">Consulting</a>
+        <a href="/documents/zach-quintana-staff-principal-resume.pdf" target="_blank" rel="noopener noreferrer" aria-label="View resume PDF (opens in a new tab)">Resume</a>
+        <a href="/consulting/">Consulting</a>
         <a href="/#about">About</a>
         <a href="/#contact">Contact</a>
       </div>
@@ -50,11 +49,12 @@ const canonicalUrl = new URL(canonicalPath, Astro.site ?? 'https://zachquintana.
     <footer class="site-footer">
       <p>© {new Date().getFullYear()} Zach Quintana</p>
       <div>
-        <a href="/">Home</a>
-        <a href="https://github.com/zquintana" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="/work/">Work</a>
+        <a href="/documents/zach-quintana-staff-principal-resume.pdf" target="_blank" rel="noopener noreferrer" aria-label="View resume PDF (opens in a new tab)">Resume</a>
+        <a href="/consulting/">Consulting</a>
+        <a href="/#contact">Contact</a>
         <a href="https://www.linkedin.com/in/zachary-quintana-3bb77b68/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
         <a href="/health-check">Technology Health Check</a>
-        <a href="/documents/zach-quintana-staff-principal-resume.pdf" target="_blank" rel="noopener noreferrer" aria-label="Download resume PDF (opens in a new tab)">Download resume (PDF)</a>
       </div>
     </footer>
     <ConsentAnalytics />
@@ -261,6 +261,8 @@ const canonicalUrl = new URL(canonicalPath, Astro.site ?? 'https://zachquintana.
 
   .other-work-links a,
   .text-link { color: var(--text); font-weight: 800; text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 5px; }
+
+  .opportunity-note { max-width: 260px; margin: 0; color: var(--muted); font-size: 0.94rem; }
 
   .next-work-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 16px; }
 

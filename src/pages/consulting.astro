@@ -1,0 +1,115 @@
+---
+import WorkLayout from '../features/work/components/WorkLayout.astro';
+
+const strongFits = [
+  {
+    title: 'SaaS and legacy-platform modernization',
+    text: 'An important production platform needs to evolve without destabilizing customers, revenue, or ongoing product delivery.',
+  },
+  {
+    title: 'AWS and Kubernetes modernization',
+    text: 'Cloud infrastructure has become difficult to operate, difficult to change, poorly understood, or is blocking future engineering work.',
+  },
+  {
+    title: 'Backend architecture and platform constraints',
+    text: 'A backend system, processing workflow, integration layer, or architecture decision has become a bottleneck for reliability, performance, or delivery.',
+  },
+  {
+    title: 'Reliability and operational problems',
+    text: 'Recurring failures, weak observability, deployment risk, or performance issues are consuming engineering capacity and need senior technical ownership.',
+  },
+  {
+    title: 'Authentication, SSO, and multi-tenant systems',
+    text: 'Enterprise identity, authentication, authorization, or tenant architecture needs to be designed or modernized inside an existing SaaS platform.',
+  },
+  {
+    title: 'Difficult technical initiatives',
+    text: 'A migration, modernization, performance effort, or platform redesign needs temporary Principal-level technical leadership from someone who will also participate directly in implementation.',
+  },
+];
+
+const engagementFormats = [
+  {
+    title: 'Technical assessment or architecture review',
+    text: 'A bounded review of a system, architecture, infrastructure environment, or modernization problem. The goal is to clarify the actual constraints, identify the highest-value risks and opportunities, and define a practical path forward.',
+  },
+  {
+    title: 'Defined technical initiative',
+    text: 'Hands-on technical leadership and implementation for a specific modernization, migration, reliability, performance, authentication, or platform initiative.',
+  },
+  {
+    title: 'Fractional Principal engineering support',
+    text: 'Ongoing senior engineering capacity for teams that need architecture, troubleshooting, mentoring, technical direction, and implementation without immediately adding another full-time senior role.',
+  },
+];
+---
+
+<WorkLayout
+  title="Consulting and Contract Engineering | Zach Quintana"
+  description="Selective Staff/Principal-level engineering support for SaaS modernization, AWS and Kubernetes infrastructure, backend architecture, reliability, and difficult technical initiatives."
+  canonicalPath="/consulting/"
+>
+  <header class="work-hero consulting-hero">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><span aria-current="page">Consulting</span></nav>
+    <p class="eyebrow">Consulting &amp; Contract Engineering</p>
+    <h1>Senior engineering help for difficult technical initiatives.</h1>
+    <p class="summary">I take on a limited number of contract and fractional engagements where a company needs experienced architectural judgment combined with hands-on implementation.</p>
+    <p class="summary">I am most useful when the system is important, the constraints are real, and the work crosses architecture, infrastructure, delivery, and production operations.</p>
+  </header>
+
+  <section class="consulting-section" aria-labelledby="strong-fits-title">
+    <p class="section-kicker">Strong-fit situations</p>
+    <h2 id="strong-fits-title">Where I am most useful.</h2>
+    <div class="consulting-grid">
+      {strongFits.map((fit) => (
+        <article class="consulting-card">
+          <h3>{fit.title}</h3>
+          <p>{fit.text}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="consulting-section" aria-labelledby="engagement-formats-title">
+    <p class="section-kicker">Engagement formats</p>
+    <h2 id="engagement-formats-title">Flexible ways to contribute.</h2>
+    <div class="consulting-grid engagement-grid">
+      {engagementFormats.map((format) => (
+        <article class="consulting-card">
+          <h3>{format.title}</h3>
+          <p>{format.text}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="not-fit-card" aria-labelledby="not-fit-title">
+    <p class="section-kicker">Qualification</p>
+    <h2 id="not-fit-title">What I do not offer.</h2>
+    <p>I am generally not a fit for generic feature-development outsourcing, low-cost staff augmentation, general IT support, outsourced engineering management, or strategy-only consulting disconnected from implementation.</p>
+  </section>
+
+  <section class="consulting-cta" aria-labelledby="consulting-cta-title">
+    <p class="eyebrow">Start with context</p>
+    <h2 id="consulting-cta-title">Have a difficult technical initiative?</h2>
+    <p>Send me enough context to understand the system, the constraints, why the problem matters, and what outcome you are trying to achieve. I will tell you directly whether the work looks like a strong fit.</p>
+    <a class="button primary" href="/#contact">Discuss an initiative</a>
+  </section>
+</WorkLayout>
+
+<style>
+  .consulting-section { margin-top: 72px; }
+  .consulting-section > h2 { margin-bottom: 24px; }
+  .consulting-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .consulting-card { min-height: 220px; padding: 26px; border: 1px solid var(--line); border-radius: 26px; background: linear-gradient(145deg, var(--panel-strong), var(--panel)); box-shadow: var(--shadow); }
+  .consulting-card h3 { margin-bottom: 14px; }
+  .consulting-card p, .not-fit-card p, .consulting-cta p { color: var(--muted); }
+  .engagement-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .not-fit-card, .consulting-cta { margin-top: 72px; padding: clamp(26px, 4vw, 42px); border: 1px solid var(--line); border-radius: 28px; background: linear-gradient(145deg, var(--panel-strong), var(--panel)); box-shadow: var(--shadow); }
+  .not-fit-card h2, .consulting-cta h2 { margin-bottom: 16px; }
+  .not-fit-card p, .consulting-cta p { max-width: 760px; }
+  .consulting-cta { background: rgba(216, 255, 104, 0.07); }
+  .consulting-cta .button { margin-top: 22px; }
+  @media (max-width: 900px) { .consulting-grid, .engagement-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 640px) { .consulting-section, .not-fit-card, .consulting-cta { margin-top: 48px; } .consulting-grid, .engagement-grid { grid-template-columns: 1fr; } .consulting-card { min-height: 0; } }
+</style>
