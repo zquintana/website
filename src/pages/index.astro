@@ -80,6 +80,17 @@ const audiencePaths = [
   },
 ];
 
+const personSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Zach Quintana',
+  url: 'https://www.zachquintana.com/',
+  image: 'https://www.zachquintana.com/images/profile.jpg',
+  jobTitle: 'Staff/Principal Software Engineer and Software Architect',
+  description: 'Hands-on software engineer and architect with 17+ years of experience in SaaS modernization, AWS and Kubernetes infrastructure, backend systems, reliability, and legacy platforms.',
+  sameAs: ['https://www.linkedin.com/in/zachary-quintana-3bb77b68/'],
+};
+
 import ConsentAnalytics from '../features/analytics/components/ConsentAnalytics.astro';
 ---
 
@@ -89,6 +100,7 @@ import ConsentAnalytics from '../features/analytics/components/ConsentAnalytics.
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Zach Quintana | Staff/Principal Software Engineer &amp; Architect</title>
+    <link rel="canonical" href="https://www.zachquintana.com/" />
     <meta
       name="description"
       content="Hands-on software engineer and architect with 17+ years of experience modernizing SaaS platforms, AWS and Kubernetes infrastructure, backend systems, and legacy applications."
@@ -99,12 +111,13 @@ import ConsentAnalytics from '../features/analytics/components/ConsentAnalytics.
       content="Hands-on software engineer and architect with 17+ years of experience modernizing SaaS platforms, AWS and Kubernetes infrastructure, backend systems, and legacy applications."
     />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://zachquintana.com/" />
-    <meta property="og:image" content="https://zachquintana.com/images/profile.jpg" />
+    <meta property="og:url" content="https://www.zachquintana.com/" />
+    <meta property="og:image" content="https://www.zachquintana.com/images/profile.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Zach Quintana | Staff/Principal Software Engineer &amp; Architect" />
     <meta name="twitter:description" content="Hands-on software engineer and architect with 17+ years of experience modernizing SaaS platforms, AWS and Kubernetes infrastructure, backend systems, and legacy applications." />
-    <meta name="twitter:image" content="https://zachquintana.com/images/profile.jpg" />
+    <meta name="twitter:image" content="https://www.zachquintana.com/images/profile.jpg" />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(personSchema)}></script>
     <link rel="icon" href="/favicon.png" />
   </head>
   <body>
@@ -141,7 +154,7 @@ import ConsentAnalytics from '../features/analytics/components/ConsentAnalytics.
               <div class="hero-actions">
                 <a class="button primary hero-primary" href="/work/">View selected work</a>
                 <a class="button secondary" href="#contact">Discuss a role or technical initiative</a>
-                <a class="button secondary" href="/documents/zach-quintana-staff-principal-resume.pdf" target="_blank" rel="noopener noreferrer" aria-label="Download resume PDF (opens in a new tab)">Download resume <span class="file-type">(PDF)</span></a>
+                <a class="button secondary" href="/documents/zach-quintana-staff-principal-resume.pdf" target="_blank" rel="noopener noreferrer" aria-label="View resume PDF (opens in a new tab)">View resume</a>
               </div>
               <p class="availability">Open to Staff/Principal engineering roles and select contract engagements.</p>
             </div>
